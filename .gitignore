@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+!.env.example
+!.env.docker.example
+/src/generated/
+/.care4all-data/
+/.care4all-test-data/
+/test-results/
+/playwright-report/
