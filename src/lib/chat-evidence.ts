@@ -14,8 +14,12 @@ const tierOrder: Tier[] = ["finland", "europe", "international"];
 const tiers: Record<string, Tier> = {
   "cancerregistry.fi": "finland", "syoparekisteri.fi": "finland", "www.terveyskirjasto.fi": "finland",
   "allaboutcancer.fi": "finland", "kaikkisyovasta.fi": "finland", "www.suomi.fi": "finland",
+  // Finnish clinical guidance and the Cancer Society, named by the design's risk overview (design v2).
+  "www.kaypahoito.fi": "finland", "www.syopajarjestot.fi": "finland", "www.stuk.fi": "finland", "thl.fi": "finland",
   "cancer-code-europe.iarc.who.int": "europe", "www.esmo.org": "europe", "digital-strategy.ec.europa.eu": "europe",
   "www.cancer.gov": "international",
+  // UK and WHO material, used only where Finnish and European sources give no figure (design v2).
+  "www.cancerresearchuk.org": "international", "www.nhs.uk": "international", "www.who.int": "international",
 };
 export function rankedSources(sources: Citation[]) {
   return [...new Map(sources.map(source => [source.url, source])).values()].flatMap(source => {

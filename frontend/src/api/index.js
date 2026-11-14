@@ -78,10 +78,39 @@ export const api = {
     remove: password => request("my-data", { method: "DELETE", body: { confirm: true, password } }),
   },
 
-  /** An AI review of the saved intake answers. The server removes everything that identifies the person before the model sees them (docs/ai-review.md). */
+  /** The earlier AI review of the saved intake answers. Superseded by the interview and the risk assessment below; the integrate package removes it. */
   assess: {
-    /** @param {{ language: "en" | "fi", step: "next" | "review", history: { q: string, options: { id: string, label: string }[], a: string }[] }} body The person has already agreed on screen. */
     send: body => request("assess", { method: "POST", body: { consent: true, ...body } }),
+  },
+
+  /**
+   * The AI interview: after the basic questions the model asks one question at a time, each based on all earlier answers
+   * (docs/design-v2.md section 5). The server keeps the whole transcript. The person has agreed on screen before any call.
+   */
+  interview: {
+    /** @returns {Promise<{ interview: object | null, basics: { complete: boolean }, enabled: boolean }>} */
+    get: () => request("interview"),
+    /** @param {{ language: "en" | "fi", action: "start" | "answer" | "undo" | "restart", position?: number, value?: string | string[] | number, marker?: "unsure" | "declined" }} body */
+    send: body => request("interview", { method: "POST", body: { consent: true, ...body } }),
+  },
+
+  /**
+   * The AI risk assessment worked out from the finished interview and Finnish guidance (docs/design-v2.md section 6). It runs
+   * in the background: start it, then read it until its status is "complete" or "failed".
+   */
+  risk: {
+    /** @returns {Promise<{ ready: boolean, enabled: boolean, assessment: object | null }>} */
+    get: () => request("risk"),
+    /** @param {{ language: "en" | "fi" }} body */
+    run: body => request("risk", { method: "POST", body: { consent: true, action: "run", ...body } }),
+  },
+
+  /** Close monitoring of a symptom note (docs/design-v2.md section 7). */
+  monitors: {
+    /** @returns {Promise<{ monitors: object[] }>} */
+    list: () => request("monitors"),
+    /** @param {{ action: "start" | "checkin" | "stop" | "snooze", observationId: string, trend?: string, level?: number | null, flags?: string[], serious?: boolean }} body */
+    send: body => request("monitors", { method: "POST", body }),
   },
 
   chat: {

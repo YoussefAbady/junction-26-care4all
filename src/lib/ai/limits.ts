@@ -41,7 +41,29 @@ export function createLimiter(limits: Limits, store = new Map<string, number[]>(
 }
 
 // One limiter per process, shared by every route that imports this module.
-const shared = globalThis as typeof globalThis & { careAiLimiter?: Allow };
+const shared = globalThis as typeof globalThis & { careAiLimiter?: Allow; careAiBuckets?: Map<string, Allow> };
 
 /** True when this account may generate another answer now, and counts it. A refused request is not counted. */
 export const allow: Allow = (shared.careAiLimiter ??= createLimiter(limitsFromEnv(process.env)));
+
+/**
+ * Separate allowances for the two long AI features, so an interview of twenty questions or a risk assessment does not use up
+ * the chat's. INTERVIEW_RATE_LIMIT is questions per 10 minutes (default 60) and RISK_RATE_LIMIT is assessments per hour
+ * (default 3). Each is counted per account, in memory, like the chat's.
+ */
+export type Bucket = "interview" | "risk";
+const bucketDefaults: Record<Bucket, { limit: number; windowMs: number; env: string }> = {
+  interview: { limit: 60, windowMs: 10 * 60_000, env: "INTERVIEW_RATE_LIMIT" },
+  risk: { limit: 3, windowMs: 60 * 60_000, env: "RISK_RATE_LIMIT" },
+};
+export function bucketLimits(bucket: Bucket, env: Readonly<Record<string, string | undefined>>): Limits {
+  const base = bucketDefaults[bucket];
+  const configured = Number(env[base.env]);
+  return { ...defaultLimits, windowMs: base.windowMs, limit: Number.isInteger(configured) && configured > 0 ? configured : base.limit };
+}
+export function allowIn(bucket: Bucket, key: string, now?: number): boolean {
+  const buckets = (shared.careAiBuckets ??= new Map<string, Allow>());
+  let limiter = buckets.get(bucket);
+  if (!limiter) buckets.set(bucket, limiter = createLimiter(bucketLimits(bucket, process.env)));
+  return limiter(key, now);
+}
