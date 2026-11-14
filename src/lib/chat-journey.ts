@@ -3,7 +3,7 @@ import { cancerTopic } from "./design-contract";
 import { bodyRegions } from "./intake/body";
 import { canDecline, canSkip, canUnsure, flow, helpOf, missing, optionsOf, titleOf } from "./intake/engine";
 import type { Field, Progress } from "./intake/types";
-import { careOptions, generalEvidence } from "./chat-evidence";
+import type { Evidence } from "./chat-evidence";
 import { tr, type Copy, type Language } from "./survey";
 
 const language = z.enum(["en", "fi"]);
@@ -85,8 +85,8 @@ export function symptomInteraction(id: string, draft: Draft, lang: Language) {
   };
 }
 
-export function nextAction(progress: Progress, facts: { symptom: boolean; checkTopic?: string; outsideFinland: boolean }, lang: Language) {
-  const response = (id: string, title: Copy, why: Copy, source = careOptions(lang, facts.outsideFinland).sources, topic?: string) =>
+export function nextAction(progress: Progress, facts: { symptom: boolean; checkTopic?: string; outsideFinland: boolean }, lang: Language, evidence: Evidence) {
+  const response = (id: string, title: Copy, why: Copy, source = evidence.careOptions(lang, facts.outsideFinland).sources, topic?: string) =>
     ({ id, version: "1.0.0", title: tr(lang, title), why: tr(lang, why), sources: source, ...(topic ? { topic } : {}) });
   if (!progress.complete || !progress.confirmed || missing(progress.answers).length) return response("complete_intake",
     ["Continue getting to know you", "Jatka esitietojen täyttämistä"],
@@ -99,5 +99,5 @@ export function nextAction(progress: Progress, facts: { symptom: boolean; checkT
     ["You saved a self-check. The library explains which changes to discuss with a healthcare professional.", "Tallensit omatarkkailumerkinnän. Kirjastosta löydät tietoa muutoksista, joista kannattaa keskustella ammattilaisen kanssa."], undefined, facts.checkTopic);
   return response("review_screening",
     ["Review official screening information", "Tutustu viralliseen seulontatietoon"],
-    ["Use official screening information and ask your screening provider which invitations or follow-up apply to you.", "Tutustu viralliseen seulontatietoon ja kysy seulontayksiköltä, mitkä kutsut tai seuranta koskevat sinua."], generalEvidence(lang, "screening").sources);
+    ["Use official screening information and ask your screening provider which invitations or follow-up apply to you.", "Tutustu viralliseen seulontatietoon ja kysy seulontayksiköltä, mitkä kutsut tai seuranta koskevat sinua."], evidence.generalEvidence(lang, "screening").sources);
 }

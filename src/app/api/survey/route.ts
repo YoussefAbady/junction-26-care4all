@@ -1,4 +1,4 @@
-import { currentAccount, privateJson, sameOrigin } from "@/lib/account-session";
+import { currentAccount, privateJson, refuseOrigin, sameOrigin } from "@/lib/account-session";
 import { loadSurvey, saveSurvey } from "@/lib/survey-store";
 
 export async function GET() {
@@ -9,7 +9,7 @@ export async function GET() {
 }
 
 export async function PUT(request: Request) {
-  if (!sameOrigin(request)) return privateJson({ error: "invalid" }, 403);
+  if (!sameOrigin(request)) return refuseOrigin(request);
   if (!request.headers.get("content-type")?.startsWith("application/json")) return privateJson({ error: "invalid" }, 415);
   try {
     const account = await currentAccount();

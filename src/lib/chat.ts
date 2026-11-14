@@ -1,9 +1,11 @@
 import { z } from "zod";
-import { cancerCards } from "./cancer-catalog";
+import { cancerCards } from "./content/catalog";
+import type { ContentStore } from "./content/types";
 import { tr } from "./survey";
 
 import { cancerTopic, cancerTopics as topics } from "./design-contract";
-import { additionalEvidence, additionalTopics, careOptions, counselling, emergencySource, europeanEmergencySource, evidence, generalEvidence, rankedSources, registry, visitPreparation, type Passage } from "./chat-evidence";
+import { createEvidence, rankedSources, type GeneralIntent, type Passage } from "./chat-evidence";
+import { mayWriteReply, type WrittenReply } from "./chat-model";
 import type { summarizeChatContext } from "./chat-personalization";
 const sections = ["awareness", "symptoms", "selfExamination", "homeKit", "riskFactors"] as const;
 export const chatInput = z.object({
@@ -12,7 +14,7 @@ export const chatInput = z.object({
   topic: cancerTopic.optional(),
   mode: z.enum(["education", "observation"]).default("education"),
 }).strict();
-type ChatInput = z.infer<typeof chatInput>;
+export type ChatInput = z.infer<typeof chatInput>;
 type Section = typeof sections[number];
 
 const topicTerms: Record<typeof topics[number], RegExp> = {
@@ -30,8 +32,14 @@ const sectionTerms: Record<Section, RegExp> = {
   homeKit: /\bfit\b|kit|stool sample|self.sampl|laborator|kotitest|ulostenäyt|näytteenot/,
   riskFactors: /risk|causes|aiheutta/,
 };
-type ChatContext = ReturnType<typeof summarizeChatContext>;
-type GeneralIntent = Parameters<typeof generalEvidence>[1];
+// Cancer types the chat answers about without a catalog card. Their passages and names are content in the database.
+const additionalTopicTerms = {
+  lung: /lung cancer|keuhkosyö/,
+  ovarian: /ovarian cancer|munasarjasyö/,
+  pancreatic: /pancreatic cancer|haimasyö/,
+};
+type AdditionalTopic = keyof typeof additionalTopicTerms;
+export type ChatContext = ReturnType<typeof summarizeChatContext>;
 
 export function planChat(input: ChatInput, context?: ChatContext) {
   const message = input.message.normalize("NFKC").toLowerCase();
@@ -44,7 +52,7 @@ export function planChat(input: ChatInput, context?: ChatContext) {
   if (/coping|counsell|counsel|emotional support|support group|peer support|vertaist|neuvont|jaksami/.test(message)) return general("support");
   if (/appointment|what (should|can) i ask|talk to (my|a) (doctor|nurse)|vastaanot|kysyä lääkär/.test(message)) return general("appointment");
   if (/survivorship|life after (cancer|treatment)|seuranta hoidon jälkeen|elämä syövän jälkeen/.test(message)) return general("follow-up");
-  const extraTopics = (Object.keys(additionalTopics) as (keyof typeof additionalTopics)[]).filter(topic => additionalTopics[topic].terms.test(message));
+  const extraTopics = (Object.keys(additionalTopicTerms) as AdditionalTopic[]).filter(topic => additionalTopicTerms[topic].test(message));
   if (extraTopics.length === 1) {
     const focus = sectionTerms.symptoms.test(message) ? "symptoms" : sectionTerms.riskFactors.test(message) ? "riskFactors" : "overview";
     return { kind: "additional", topic: extraTopics[0], focus } as const;
@@ -65,18 +73,27 @@ export function planChat(input: ChatInput, context?: ChatContext) {
   if (topic) return { kind: "education", topic, sections: ["awareness"] as Section[] } as const;
   return { kind: "unsupported" } as const;
 }
+export type Plan = ReturnType<typeof planChat>;
 
-export function answerChat(input: ChatInput, plan: ReturnType<typeof planChat>, ordered?: readonly Section[], context?: ChatContext) {
+/**
+ * The reply for a plan. With `generated`, a reply a model wrote from public passages (see chat-model.ts), the passages are
+ * exactly the ones it cites and the reply carries the written text. Without it, or for a kind a model never writes, the
+ * reply is the deterministic one, exactly as it was before models wrote replies.
+ */
+export async function answerChat(store: ContentStore, input: ChatInput, plan: Plan, ordered?: readonly Section[], context?: ChatContext, generated?: WrittenReply) {
+  const evidence = createEvidence(await store.loadEvidence());
+  const written = generated && mayWriteReply(plan.kind) ? generated : undefined;
+  const writtenPassages = written?.cited.map(item => item.passage);
   const t = (en: string, fi: string) => tr(input.language, [en, fi]);
   const safety = {
     text: t("This chat provides general information and is not monitored. In an emergency in Finland, call 112.", "Keskustelu tarjoaa yleistä tietoa, eikä sitä seurata. Soita Suomessa hätätilanteessa numeroon 112."),
-    source: emergencySource,
+    source: evidence.emergency(input.language, false).sources[0],
   };
   const outside = context?.outsideFinland ?? false;
-  const personalCare = careOptions(input.language, outside);
+  const careOptions = () => evidence.careOptions(input.language, outside);
   const nextSteps = plan.kind === "emergency" ? [] : [
-    personalCare,
-    ...(plan.kind === "personal" || plan.kind === "general" || context?.hasCareHistory || context?.patientReported.observations.length ? [visitPreparation(input.language)] : []),
+    careOptions(),
+    ...(plan.kind === "personal" || plan.kind === "general" || context?.hasCareHistory || context?.patientReported.observations.length ? [evidence.visitPreparation(input.language)] : []),
   ];
   function reply(message: string, passages: Passage[], topic: string | null = null, action: { type: string; phone?: string } | null = null) {
     const cite = (passage: Passage) => ({ ...passage, sources: rankedSources(passage.sources) });
@@ -88,35 +105,44 @@ export function answerChat(input: ChatInput, plan: ReturnType<typeof planChat>, 
       passages: citedPassages, nextSteps: citedNextSteps, sources,
       patientContext: plan.kind === "emergency" ? null : context?.patientReported ?? null,
       questionsForProfessional: plan.kind === "emergency" ? [] : context?.questionsForProfessional ?? [],
-      // Explicitly shareable copy excludes the account's records and prompts.
-      shareText: [message, ...[...citedPassages, ...citedNextSteps].flatMap(passage =>
+      // Explicitly shareable copy excludes the account's records and prompts. A written reply says so, with the cited sources.
+      shareText: (written ? [
+        written.text + " " + [...new Set(citedPassages.flatMap(passage => passage.sources.map(source => sources.findIndex(s => s.url === source.url) + 1)))]
+          .sort((a, b) => a - b).map(number => "[" + number + "]").join(" "),
+        t("Written by an AI from the sources listed here.", "Tekoäly kirjoitti tämän tässä lueteltujen lähteiden perusteella."),
+        safety.text + " [" + (sources.findIndex(source => source.url === safety.source.url) + 1) + "]",
+        ...sources.map((source, index) => "[" + (index + 1) + "] " + source.title + " — " + source.url),
+      ] : [message, ...[...citedPassages, ...citedNextSteps].flatMap(passage =>
         passage.items.map(item => item + " " + passage.sources.map(source => "[" + (sources.findIndex(s => s.url === source.url) + 1) + "]").join(" "))),
         safety.text + " [" + (sources.findIndex(source => source.url === safety.source.url) + 1) + "]",
         ...sources.map((source, index) => "[" + (index + 1) + "] " + source.title + " — " + source.url),
-      ].join("\n\n"),
+      ]).join("\n\n"),
+      ...(written ? { generated: { text: written.text, citations: written.cited.map(item => item.passage.id), provider: written.provider, model: written.model } } : {}),
     };
   }
   switch (plan.kind) {
     case "education": {
-      const [card] = cancerCards(input.language, plan.topic);
-      return reply(card.name, (ordered ?? plan.sections).map(id => ({ id, ...card[id] })), plan.topic);
+      const [card] = cancerCards(await store.loadCatalog(), input.language, plan.topic);
+      return reply(card.name, writtenPassages ?? (ordered ?? plan.sections).map(id => ({ id, ...card[id] })), plan.topic);
     }
     case "general":
-      return reply(t("Information and support", "Tietoa ja tukea"), [generalEvidence(input.language, plan.intent)]);
-    case "additional":
-      return reply(tr(input.language, additionalTopics[plan.topic].name), [additionalEvidence(input.language, plan.topic, plan.focus)], plan.topic);
+      return reply(t("Information and support", "Tietoa ja tukea"), writtenPassages ?? [evidence.generalEvidence(input.language, plan.intent)]);
+    case "additional": {
+      const { heading, passage } = evidence.additionalEvidence(input.language, plan.topic, plan.focus);
+      return reply(heading, writtenPassages ?? [passage], plan.topic);
+    }
     case "emergency":
-      return reply(t("Emergency help", "Hätäapu"), [evidence("emergency", input.language,
-        outside ? ["In an emergency, call the emergency number where you are. In the EU, call 112.", "Soita hätätilanteessa oleskelumaasi hätänumeroon. EU:ssa soita numeroon 112."] : ["If this is an emergency in Finland, call 112 now.", "Soita Suomessa hätätilanteessa heti numeroon 112."],
-        outside ? europeanEmergencySource : emergencySource)], null, outside ? { type: "emergency" } : { type: "emergency", phone: "112" });
+      return reply(t("Emergency help", "Hätäapu"), [evidence.emergency(input.language, outside)], null, outside ? { type: "emergency" } : { type: "emergency", phone: "112" });
     case "observation":
       return reply(t("You can save what you noticed as a private observation. Review your entry before saving.", "Voit tallentaa havaintosi yksityisenä merkintänä. Tarkista merkintä ennen tallennusta."),
-        [visitPreparation(input.language)], null, { type: "open_observation" });
+        [evidence.visitPreparation(input.language)], null, { type: "open_observation" });
     case "personal":
       return reply(t("A healthcare professional can assess your symptoms, results, or personal screening questions. This chat offers general information only.", "Terveydenhuollon ammattilainen voi arvioida oireesi, tuloksesi tai henkilökohtaiset seulontakysymyksesi. Tämä keskustelu tarjoaa vain yleistä tietoa."),
-        outside ? [personalCare] : [personalCare, counselling(input.language)]);
+        outside ? [careOptions()] : [careOptions(), evidence.counselling(input.language)]);
     default:
+      // A written reply to a question the planner could not route is headed by the first passage it cites, not by the apology.
+      if (written && writtenPassages) return reply(written.cited[0].heading, writtenPassages);
       return reply(t("I don’t have a sourced answer to that question. Ask about screening, possible symptoms, home sampling, or risk factors for a cancer topic in the library.", "Minulla ei ole lähteisiin perustuvaa vastausta tähän kysymykseen. Kysy kirjaston syöpäaiheiden seulonnasta, mahdollisista oireista, kotinäytteenotosta tai riskitekijöistä."),
-        [{ id: "screening", items: [], sources: [registry] }]);
+        [{ id: "screening", items: [], sources: evidence.generalEvidence(input.language, "screening").sources }]);
   }
 }

@@ -2,6 +2,7 @@ import "server-only";
 import { createHash } from "node:crypto";
 import { cookies } from "next/headers";
 import { database } from "./database";
+import { allowedOrigins, originAccepted } from "./origin";
 
 export const cookieName = "care4ll_login";
 export const sessionSeconds = 7 * 24 * 60 * 60;
@@ -10,10 +11,14 @@ export const hashToken = (token: string) => createHash("sha256").update(token).d
 export const privateJson = (data: unknown, status = 200) =>
   Response.json(data, { status, headers: { "Cache-Control": "private, no-store", Vary: "Cookie" } });
 
-export function sameOrigin(request: Request) {
-  return request.headers.get("origin") === (process.env.APP_ORIGIN || new URL(request.url).origin)
-    && request.headers.get("sec-fetch-site") !== "cross-site";
-}
+export const sameOrigin = (request: Request) => originAccepted(request.headers, process.env.APP_ORIGIN, request.url);
+
+/**
+ * The 403 for a write from an address the backend does not accept. It names the address that is accepted, which is the
+ * public address of the app and no secret, so the PWA can tell the person where to open it instead.
+ */
+export const refuseOrigin = (request: Request) =>
+  privateJson({ error: "origin", expected: allowedOrigins(process.env.APP_ORIGIN, request.url)[0] ?? null }, 403);
 
 export async function currentAccount() {
   const token = (await cookies()).get(cookieName)?.value;

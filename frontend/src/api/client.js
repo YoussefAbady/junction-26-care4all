@@ -1,16 +1,18 @@
 /*
  * Same-origin client for the care4all backend. Requests carry the HTTP-only session cookie and are never
- * cached by the browser or the service worker. Nothing here writes to browser storage.
+ * cached by the browser. The service worker keeps one response, the public content (GET /api/content), and no other.
+ * Nothing here writes to browser storage.
  */
 
 /** A failed backend call. `code` is the backend's error string, or "offline" when the server was unreachable. */
 export class ApiError extends Error {
-  /** @param {string} code @param {number} [status] */
-  constructor(code, status = 0) {
+  /** @param {string} code @param {number} [status] @param {string} [expected] For "origin": the address the backend accepts. */
+  constructor(code, status = 0, expected = "") {
     super(code);
     this.name = "ApiError";
     this.code = code;
     this.status = status;
+    this.expected = expected;
   }
 }
 
@@ -21,6 +23,9 @@ function codeFor(status, data) {
   if (status === 429) return "limited";
   return status >= 500 ? "unavailable" : "invalid";
 }
+
+/** The address the backend accepts writes from, when it refused this one. It is the app's public address, never a secret. */
+const expectedFrom = data => (data && data.error === "origin" && typeof data.expected === "string" ? data.expected : "");
 
 /**
  * @param {string} path  Path below /api/, for example "profile" or "library?lang=en".
@@ -41,7 +46,7 @@ export async function request(path, { method = "GET", body, signal } = {}) {
   }
   let data = null;
   try { data = await response.json(); } catch { /* an empty or non-JSON body */ }
-  if (!response.ok) throw new ApiError(codeFor(response.status, data), response.status);
+  if (!response.ok) throw new ApiError(codeFor(response.status, data), response.status, expectedFrom(data));
   return data;
 }
 

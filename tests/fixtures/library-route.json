@@ -1,0 +1,5672 @@
+[
+ {
+  "request": "/api/library",
+  "status": 200,
+  "cacheControl": "public, max-age=300",
+  "body": {
+   "version": "1.1.0",
+   "language": "en",
+   "requestedLanguage": "en",
+   "notice": "General education. Symptoms can have several causes. Ask a healthcare professional about new or persistent changes.",
+   "articles": [
+    {
+     "id": "breast-awareness",
+     "topic": "breast",
+     "title": "Breast cancer · Overview and screening",
+     "items": [
+      "Finland’s breast screening programme uses mammography."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Breast cancer screening",
+       "url": "https://cancerregistry.fi/screening/breast-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Duodecim · Breast cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00618",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "breast-symptoms",
+     "topic": "breast",
+     "title": "Breast cancer · Possible symptoms",
+     "items": [
+      "A new lump in the breast or armpit",
+      "New nipple discharge or a change in the nipple or breast skin"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Breast cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00618",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "breast-selfExamination",
+     "topic": "breast",
+     "title": "Breast cancer · Body awareness",
+     "status": "awareness_only",
+     "items": [
+      "Get familiar with how your breasts usually look and feel. Ask a healthcare professional about a new change. Breast awareness does not replace screening."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Breast cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00618",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Finnish Cancer Registry · Breast cancer screening",
+       "url": "https://cancerregistry.fi/screening/breast-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "breast-homeKit",
+     "topic": "breast",
+     "title": "Breast cancer · Home sampling",
+     "status": "unavailable",
+     "items": [
+      "This catalog has no verified home kit for breast screening. The Finnish programme uses mammography."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Breast cancer screening",
+       "url": "https://cancerregistry.fi/screening/breast-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "breast-riskFactors",
+     "topic": "breast",
+     "title": "Breast cancer · Risk factors",
+     "items": [
+      "Older age and inherited susceptibility"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Breast cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00618",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "colorectal-awareness",
+     "topic": "colorectal",
+     "title": "Colorectal cancer · Overview and screening",
+     "items": [
+      "Colorectal cancer affects the colon or rectum. Screening can detect changes before symptoms appear."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Colorectal cancer screening",
+       "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Duodecim · Bowel cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk01087",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "colorectal-symptoms",
+     "topic": "colorectal",
+     "title": "Colorectal cancer · Possible symptoms",
+     "items": [
+      "Blood in the stool or a change in bowel habits",
+      "Unexplained weight loss"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Bowel cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk01087",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "colorectal-selfExamination",
+     "topic": "colorectal",
+     "title": "Colorectal cancer · Body awareness",
+     "status": "awareness_only",
+     "items": [
+      "Notice changes in bowel habits or visible blood and discuss them with healthcare. Looking at stool cannot rule out colorectal cancer."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Bowel cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk01087",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Finnish Cancer Registry · Colorectal cancer screening",
+       "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "colorectal-homeKit",
+     "topic": "colorectal",
+     "title": "Colorectal cancer · Home sampling",
+     "status": "programme_information",
+     "items": [
+      "The Finnish programme sends invited participants a FIT kit for collecting a stool sample at home. Follow the instructions supplied with your kit and return the sample as directed for laboratory analysis.",
+      "FIT checks for hidden blood. The screening service communicates the result and any follow-up."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Colorectal cancer screening",
+       "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "colorectal-riskFactors",
+     "topic": "colorectal",
+     "title": "Colorectal cancer · Risk factors",
+     "items": [
+      "Family history and certain inherited conditions"
+     ],
+     "sources": [
+      {
+       "title": "NCI · Colorectal cancer prevention",
+       "url": "https://www.cancer.gov/types/colorectal/patient/colorectal-prevention-pdq",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "cervical-awareness",
+     "topic": "cervical",
+     "title": "Cervical cancer · Overview and screening",
+     "items": [
+      "Cervical screening looks for high-risk HPV or cervical cell changes, depending on the test."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Cervical cancer screening",
+       "url": "https://cancerregistry.fi/screening/cervical-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Duodecim · Cervical cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00144",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "cervical-symptoms",
+     "topic": "cervical",
+     "title": "Cervical cancer · Possible symptoms",
+     "items": [
+      "Unusual vaginal bleeding, such as after sex or between periods",
+      "Unusual vaginal discharge"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Cervical cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00144",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "NCI · Cervical cancer symptoms",
+       "url": "https://www.cancer.gov/types/cervical/symptoms",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "cervical-selfExamination",
+     "topic": "cervical",
+     "title": "Cervical cancer · Body awareness",
+     "status": "unavailable",
+     "items": [
+      "This catalog has no validated self-examination for cervical cancer. Discuss unusual bleeding or discharge with healthcare."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Cervical cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00144",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "cervical-homeKit",
+     "topic": "cervical",
+     "title": "Cervical cancer · Home sampling",
+     "status": "unavailable",
+     "items": [
+      "Home HPV sampling availability and instructions depend on the screening provider. This catalog has no verified kit instructions. Ask the service listed in your invitation."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Cervical cancer screening",
+       "url": "https://cancerregistry.fi/screening/cervical-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "cervical-riskFactors",
+     "topic": "cervical",
+     "title": "Cervical cancer · Risk factors",
+     "items": [
+      "Persistent infection with a high-risk type of HPV"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Cervical cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00144",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-awareness",
+     "topic": "skin",
+     "title": "Skin cancer and melanoma · Overview and screening",
+     "items": [
+      "Melanoma can develop in a new spot or in an existing mole."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Skin cancer and melanoma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-symptoms",
+     "topic": "skin",
+     "title": "Skin cancer and melanoma · Possible symptoms",
+     "items": [
+      "A mole that changes in size, shape or colour"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Skin cancer and melanoma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-selfExamination",
+     "topic": "skin",
+     "title": "Skin cancer and melanoma · Body awareness",
+     "status": "awareness_only",
+     "items": [
+      "Look for new or changing spots. Note the location and any change you notice, and ask healthcare about a concerning spot."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Skin cancer and melanoma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-homeKit",
+     "topic": "skin",
+     "title": "Skin cancer and melanoma · Home sampling",
+     "status": "unavailable",
+     "items": [
+      "This catalog has no verified home screening kit for this topic."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Skin cancer and melanoma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-riskFactors",
+     "topic": "skin",
+     "title": "Skin cancer and melanoma · Risk factors",
+     "items": [
+      "UV exposure and a family history of melanoma"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Skin cancer and melanoma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "prostate-awareness",
+     "topic": "prostate",
+     "title": "Prostate cancer · Overview and screening",
+     "items": [
+      "Finland has no national prostate cancer screening programme. Discuss PSA testing with a healthcare professional."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Prostate cancer",
+       "url": "https://www.terveyskirjasto.fi/khp00006",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "prostate-symptoms",
+     "topic": "prostate",
+     "title": "Prostate cancer · Possible symptoms",
+     "items": [
+      "Urinary changes can have many causes and should be discussed with healthcare."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Prostate cancer",
+       "url": "https://www.terveyskirjasto.fi/khp00006",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "prostate-selfExamination",
+     "topic": "prostate",
+     "title": "Prostate cancer · Body awareness",
+     "status": "awareness_only",
+     "items": [
+      "Note new urinary changes and discuss them with healthcare. Body awareness does not replace a clinical assessment."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Prostate cancer",
+       "url": "https://www.terveyskirjasto.fi/khp00006",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "prostate-homeKit",
+     "topic": "prostate",
+     "title": "Prostate cancer · Home sampling",
+     "status": "unavailable",
+     "items": [
+      "This catalog has no verified home screening kit for this topic."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Prostate cancer",
+       "url": "https://www.terveyskirjasto.fi/khp00006",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "prostate-riskFactors",
+     "topic": "prostate",
+     "title": "Prostate cancer · Risk factors",
+     "items": [
+      "Prostate cancer in a close relative"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Prostate cancer",
+       "url": "https://www.terveyskirjasto.fi/khp00006",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "testicular-awareness",
+     "topic": "testicular",
+     "title": "Testicular cancer · Overview and screening",
+     "items": [
+      "A testicular lump or change should be assessed by a healthcare professional."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Testicular cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00629",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "testicular-symptoms",
+     "topic": "testicular",
+     "title": "Testicular cancer · Possible symptoms",
+     "items": [
+      "A lump, swelling or change in the size of a testicle"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Testicular cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00629",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "testicular-selfExamination",
+     "topic": "testicular",
+     "title": "Testicular cancer · Body awareness",
+     "status": "awareness_only",
+     "items": [
+      "Get familiar with how your testicles usually look and feel, and tell a healthcare professional about new changes."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Testicular cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00629",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "testicular-homeKit",
+     "topic": "testicular",
+     "title": "Testicular cancer · Home sampling",
+     "status": "unavailable",
+     "items": [
+      "This catalog has no verified home screening kit for this topic."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Testicular cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00629",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "testicular-riskFactors",
+     "topic": "testicular",
+     "title": "Testicular cancer · Risk factors",
+     "items": [
+      "A history of an undescended testicle"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Testicular cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00629",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Finnish Cancer Registry · Breast cancer screening",
+     "url": "https://cancerregistry.fi/screening/breast-cancer-screening/",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Breast cancer",
+     "url": "https://www.terveyskirjasto.fi/dlk00618",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Finnish Cancer Registry · Colorectal cancer screening",
+     "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Bowel cancer",
+     "url": "https://www.terveyskirjasto.fi/dlk01087",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "NCI · Colorectal cancer prevention",
+     "url": "https://www.cancer.gov/types/colorectal/patient/colorectal-prevention-pdq",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Finnish Cancer Registry · Cervical cancer screening",
+     "url": "https://cancerregistry.fi/screening/cervical-cancer-screening/",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Cervical cancer",
+     "url": "https://www.terveyskirjasto.fi/dlk00144",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "NCI · Cervical cancer symptoms",
+     "url": "https://www.cancer.gov/types/cervical/symptoms",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Skin cancer and melanoma",
+     "url": "https://www.terveyskirjasto.fi/dlk00671",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Prostate cancer",
+     "url": "https://www.terveyskirjasto.fi/khp00006",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Testicular cancer",
+     "url": "https://www.terveyskirjasto.fi/dlk00629",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ],
+   "providerLinks": [
+    {
+     "topic": "colorectal",
+     "title": "Fimlab · Bowel screening and kit instructions",
+     "url": "https://fimlab.fi/suolistosyovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "topic": "cervical",
+     "title": "Fimlab · 2026 HPV self-sampling study",
+     "url": "https://fimlab.fi/kohdunkaulan-syovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ]
+  }
+ },
+ {
+  "request": "/api/library?lang=fi",
+  "status": 200,
+  "cacheControl": "public, max-age=300",
+  "body": {
+   "version": "1.1.0",
+   "language": "fi",
+   "requestedLanguage": "fi",
+   "notice": "Yleistä tietoa. Oireilla voi olla useita syitä. Kysy uusista tai jatkuvista muutoksista terveydenhuollon ammattilaiselta.",
+   "articles": [
+    {
+     "id": "breast-awareness",
+     "topic": "breast",
+     "title": "Rintasyöpä · Tietoa ja seulonta",
+     "items": [
+      "Suomessa rintasyöpäseulonnassa käytetään mammografiaa."
+     ],
+     "sources": [
+      {
+       "title": "Suomen Syöpärekisteri · Rintasyöpäseulonta",
+       "url": "https://cancerregistry.fi/screening/breast-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Duodecim · Rintasyöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk00618",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "breast-symptoms",
+     "topic": "breast",
+     "title": "Rintasyöpä · Mahdolliset oireet",
+     "items": [
+      "Uusi kyhmy rinnassa tai kainalossa",
+      "Uusi nännierite tai muutos nännissä tai rinnan ihossa"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Rintasyöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk00618",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "breast-selfExamination",
+     "topic": "breast",
+     "title": "Rintasyöpä · Omatarkkailu",
+     "status": "awareness_only",
+     "items": [
+      "Tutustu siihen, miltä rintasi tavallisesti näyttävät ja tuntuvat. Kysy uudesta muutoksesta terveydenhuollon ammattilaiselta. Rintojen omatarkkailu ei korvaa seulontaa."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Rintasyöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk00618",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Suomen Syöpärekisteri · Rintasyöpäseulonta",
+       "url": "https://cancerregistry.fi/screening/breast-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "breast-homeKit",
+     "topic": "breast",
+     "title": "Rintasyöpä · Kotinäytteenotto",
+     "status": "unavailable",
+     "items": [
+      "Tässä palvelussa ei ole varmennettua rintasyövän kotitestiä. Suomen seulontaohjelmassa käytetään mammografiaa."
+     ],
+     "sources": [
+      {
+       "title": "Suomen Syöpärekisteri · Rintasyöpäseulonta",
+       "url": "https://cancerregistry.fi/screening/breast-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "breast-riskFactors",
+     "topic": "breast",
+     "title": "Rintasyöpä · Riskitekijät",
+     "items": [
+      "Ikääntyminen ja perinnöllinen alttius"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Rintasyöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk00618",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "colorectal-awareness",
+     "topic": "colorectal",
+     "title": "Suolistosyöpä · Tietoa ja seulonta",
+     "items": [
+      "Suolistosyöpä voi kehittyä paksu- tai peräsuoleen. Seulonta voi havaita muutoksia ennen oireita."
+     ],
+     "sources": [
+      {
+       "title": "Suomen Syöpärekisteri · Suolistosyöpäseulonta",
+       "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Duodecim · Suolistosyöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk01087",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "colorectal-symptoms",
+     "topic": "colorectal",
+     "title": "Suolistosyöpä · Mahdolliset oireet",
+     "items": [
+      "Verta ulosteessa tai muutos suolen toiminnassa",
+      "Selittämätön laihtuminen"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Suolistosyöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk01087",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "colorectal-selfExamination",
+     "topic": "colorectal",
+     "title": "Suolistosyöpä · Omatarkkailu",
+     "status": "awareness_only",
+     "items": [
+      "Huomioi suolen toiminnan muutokset tai näkyvä veri ja kerro niistä terveydenhuollossa. Ulosteen tarkkailu ei sulje pois suolistosyöpää."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Suolistosyöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk01087",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Suomen Syöpärekisteri · Suolistosyöpäseulonta",
+       "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "colorectal-homeKit",
+     "topic": "colorectal",
+     "title": "Suolistosyöpä · Kotinäytteenotto",
+     "status": "programme_information",
+     "items": [
+      "Suomen seulontaohjelmassa kutsutuille lähetetään FIT-testi ulostenäytteen ottamiseen kotona. Noudata pakkauksen ohjeita ja palauta näyte ohjeiden mukaan laboratorioanalyysiin.",
+      "FIT-testi etsii piilevää verta. Seulontayksikkö ilmoittaa tuloksen ja mahdollisista jatkotoimista."
+     ],
+     "sources": [
+      {
+       "title": "Suomen Syöpärekisteri · Suolistosyöpäseulonta",
+       "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "colorectal-riskFactors",
+     "topic": "colorectal",
+     "title": "Suolistosyöpä · Riskitekijät",
+     "items": [
+      "Suvun syöpähistoria ja tietyt perinnölliset sairaudet"
+     ],
+     "sources": [
+      {
+       "title": "NCI · Suolistosyövän ehkäisy",
+       "url": "https://www.cancer.gov/types/colorectal/patient/colorectal-prevention-pdq",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "cervical-awareness",
+     "topic": "cervical",
+     "title": "Kohdunkaulan syöpä · Tietoa ja seulonta",
+     "items": [
+      "Kohdunkaulan seulonnassa etsitään testistä riippuen korkean riskin HPV:tä tai kohdunkaulan solumuutoksia."
+     ],
+     "sources": [
+      {
+       "title": "Suomen Syöpärekisteri · Kohdunkaulan syövän seulonta",
+       "url": "https://cancerregistry.fi/screening/cervical-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Duodecim · Kohdunkaulan syöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk00144",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "cervical-symptoms",
+     "topic": "cervical",
+     "title": "Kohdunkaulan syöpä · Mahdolliset oireet",
+     "items": [
+      "Poikkeava verinen vuoto, esimerkiksi yhdynnän jälkeen tai kuukautisten välissä",
+      "Poikkeava emätinvuoto"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Kohdunkaulan syöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk00144",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "NCI · Kohdunkaulan syövän oireet",
+       "url": "https://www.cancer.gov/types/cervical/symptoms",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "cervical-selfExamination",
+     "topic": "cervical",
+     "title": "Kohdunkaulan syöpä · Omatarkkailu",
+     "status": "unavailable",
+     "items": [
+      "Tässä palvelussa ei ole validoitua kohdunkaulan syövän omatarkastusta. Kerro poikkeavasta vuodosta terveydenhuollossa."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Kohdunkaulan syöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk00144",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "cervical-homeKit",
+     "topic": "cervical",
+     "title": "Kohdunkaulan syöpä · Kotinäytteenotto",
+     "status": "unavailable",
+     "items": [
+      "Kotona otettavan HPV-näytteen saatavuus ja ohjeet riippuvat seulontayksiköstä. Tässä palvelussa ei ole varmennettuja näytteenotto-ohjeita. Kysy kutsussa mainitulta seulontayksiköltä."
+     ],
+     "sources": [
+      {
+       "title": "Suomen Syöpärekisteri · Kohdunkaulan syövän seulonta",
+       "url": "https://cancerregistry.fi/screening/cervical-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "cervical-riskFactors",
+     "topic": "cervical",
+     "title": "Kohdunkaulan syöpä · Riskitekijät",
+     "items": [
+      "Pitkittynyt korkean riskin HPV-infektio"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Kohdunkaulan syöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk00144",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-awareness",
+     "topic": "skin",
+     "title": "Ihosyöpä ja melanooma · Tietoa ja seulonta",
+     "items": [
+      "Melanooma voi kehittyä uuteen ihomuutokseen tai olemassa olevaan luomeen."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Ihosyöpä ja melanooma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-symptoms",
+     "topic": "skin",
+     "title": "Ihosyöpä ja melanooma · Mahdolliset oireet",
+     "items": [
+      "Luomen koon, muodon tai värin muuttuminen"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Ihosyöpä ja melanooma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-selfExamination",
+     "topic": "skin",
+     "title": "Ihosyöpä ja melanooma · Omatarkkailu",
+     "status": "awareness_only",
+     "items": [
+      "Huomioi uudet tai muuttuvat ihomuutokset. Merkitse muistiin sijainti ja havaitsemasi muutos ja kysy huolestuttavasta muutoksesta terveydenhuollossa."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Ihosyöpä ja melanooma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-homeKit",
+     "topic": "skin",
+     "title": "Ihosyöpä ja melanooma · Kotinäytteenotto",
+     "status": "unavailable",
+     "items": [
+      "Tässä palvelussa ei ole varmennettua kotiseulontatestiä tähän aiheeseen."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Ihosyöpä ja melanooma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-riskFactors",
+     "topic": "skin",
+     "title": "Ihosyöpä ja melanooma · Riskitekijät",
+     "items": [
+      "UV-altistus ja suvussa esiintynyt melanooma"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Ihosyöpä ja melanooma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "prostate-awareness",
+     "topic": "prostate",
+     "title": "Eturauhassyöpä · Tietoa ja seulonta",
+     "items": [
+      "Suomessa ei ole kansallista eturauhassyövän seulontaohjelmaa. Keskustele PSA-tutkimuksesta terveydenhuollon ammattilaisen kanssa."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Eturauhassyöpä",
+       "url": "https://www.terveyskirjasto.fi/khp00006",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "prostate-symptoms",
+     "topic": "prostate",
+     "title": "Eturauhassyöpä · Mahdolliset oireet",
+     "items": [
+      "Virtsaamisoireilla voi olla useita syitä. Kerro oireista terveydenhuollossa."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Eturauhassyöpä",
+       "url": "https://www.terveyskirjasto.fi/khp00006",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "prostate-selfExamination",
+     "topic": "prostate",
+     "title": "Eturauhassyöpä · Omatarkkailu",
+     "status": "awareness_only",
+     "items": [
+      "Kirjaa uudet virtsaamisoireet ja kerro niistä terveydenhuollossa. Omatarkkailu ei korvaa ammattilaisen arviota."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Eturauhassyöpä",
+       "url": "https://www.terveyskirjasto.fi/khp00006",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "prostate-homeKit",
+     "topic": "prostate",
+     "title": "Eturauhassyöpä · Kotinäytteenotto",
+     "status": "unavailable",
+     "items": [
+      "Tässä palvelussa ei ole varmennettua kotiseulontatestiä tähän aiheeseen."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Eturauhassyöpä",
+       "url": "https://www.terveyskirjasto.fi/khp00006",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "prostate-riskFactors",
+     "topic": "prostate",
+     "title": "Eturauhassyöpä · Riskitekijät",
+     "items": [
+      "Lähisukulaisella todettu eturauhassyöpä"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Eturauhassyöpä",
+       "url": "https://www.terveyskirjasto.fi/khp00006",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "testicular-awareness",
+     "topic": "testicular",
+     "title": "Kivessyöpä · Tietoa ja seulonta",
+     "items": [
+      "Terveydenhuollon ammattilaisen tulee arvioida kiveksen kyhmy tai muu muutos."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Kivessyöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk00629",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "testicular-symptoms",
+     "topic": "testicular",
+     "title": "Kivessyöpä · Mahdolliset oireet",
+     "items": [
+      "Kyhmy, turvotus tai kiveksen koon muuttuminen"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Kivessyöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk00629",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "testicular-selfExamination",
+     "topic": "testicular",
+     "title": "Kivessyöpä · Omatarkkailu",
+     "status": "awareness_only",
+     "items": [
+      "Tutustu siihen, miltä kiveksesi tavallisesti näyttävät ja tuntuvat, ja kerro uusista muutoksista terveydenhuollon ammattilaiselle."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Kivessyöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk00629",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "testicular-homeKit",
+     "topic": "testicular",
+     "title": "Kivessyöpä · Kotinäytteenotto",
+     "status": "unavailable",
+     "items": [
+      "Tässä palvelussa ei ole varmennettua kotiseulontatestiä tähän aiheeseen."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Kivessyöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk00629",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "testicular-riskFactors",
+     "topic": "testicular",
+     "title": "Kivessyöpä · Riskitekijät",
+     "items": [
+      "Aiemmin todettu laskeutumaton kives"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Kivessyöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk00629",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Suomen Syöpärekisteri · Rintasyöpäseulonta",
+     "url": "https://cancerregistry.fi/screening/breast-cancer-screening/",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Rintasyöpä",
+     "url": "https://www.terveyskirjasto.fi/dlk00618",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Suomen Syöpärekisteri · Suolistosyöpäseulonta",
+     "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Suolistosyöpä",
+     "url": "https://www.terveyskirjasto.fi/dlk01087",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "NCI · Suolistosyövän ehkäisy",
+     "url": "https://www.cancer.gov/types/colorectal/patient/colorectal-prevention-pdq",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Suomen Syöpärekisteri · Kohdunkaulan syövän seulonta",
+     "url": "https://cancerregistry.fi/screening/cervical-cancer-screening/",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Kohdunkaulan syöpä",
+     "url": "https://www.terveyskirjasto.fi/dlk00144",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "NCI · Kohdunkaulan syövän oireet",
+     "url": "https://www.cancer.gov/types/cervical/symptoms",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Ihosyöpä ja melanooma",
+     "url": "https://www.terveyskirjasto.fi/dlk00671",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Eturauhassyöpä",
+     "url": "https://www.terveyskirjasto.fi/khp00006",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Kivessyöpä",
+     "url": "https://www.terveyskirjasto.fi/dlk00629",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ],
+   "providerLinks": [
+    {
+     "topic": "colorectal",
+     "title": "Fimlab · Suolistosyövän seulonta ja näytteenotto-ohjeet",
+     "url": "https://fimlab.fi/suolistosyovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "topic": "cervical",
+     "title": "Fimlab · HPV-omanäytteenottotutkimus 2026",
+     "url": "https://fimlab.fi/kohdunkaulan-syovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ]
+  }
+ },
+ {
+  "request": "/api/library?lang=sv",
+  "status": 200,
+  "cacheControl": "public, max-age=300",
+  "body": {
+   "version": "1.1.0",
+   "language": "en",
+   "requestedLanguage": "sv",
+   "notice": "General education. Symptoms can have several causes. Ask a healthcare professional about new or persistent changes.",
+   "articles": [
+    {
+     "id": "breast-awareness",
+     "topic": "breast",
+     "title": "Breast cancer · Overview and screening",
+     "items": [
+      "Finland’s breast screening programme uses mammography."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Breast cancer screening",
+       "url": "https://cancerregistry.fi/screening/breast-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Duodecim · Breast cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00618",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "breast-symptoms",
+     "topic": "breast",
+     "title": "Breast cancer · Possible symptoms",
+     "items": [
+      "A new lump in the breast or armpit",
+      "New nipple discharge or a change in the nipple or breast skin"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Breast cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00618",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "breast-selfExamination",
+     "topic": "breast",
+     "title": "Breast cancer · Body awareness",
+     "status": "awareness_only",
+     "items": [
+      "Get familiar with how your breasts usually look and feel. Ask a healthcare professional about a new change. Breast awareness does not replace screening."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Breast cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00618",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Finnish Cancer Registry · Breast cancer screening",
+       "url": "https://cancerregistry.fi/screening/breast-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "breast-homeKit",
+     "topic": "breast",
+     "title": "Breast cancer · Home sampling",
+     "status": "unavailable",
+     "items": [
+      "This catalog has no verified home kit for breast screening. The Finnish programme uses mammography."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Breast cancer screening",
+       "url": "https://cancerregistry.fi/screening/breast-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "breast-riskFactors",
+     "topic": "breast",
+     "title": "Breast cancer · Risk factors",
+     "items": [
+      "Older age and inherited susceptibility"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Breast cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00618",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "colorectal-awareness",
+     "topic": "colorectal",
+     "title": "Colorectal cancer · Overview and screening",
+     "items": [
+      "Colorectal cancer affects the colon or rectum. Screening can detect changes before symptoms appear."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Colorectal cancer screening",
+       "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Duodecim · Bowel cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk01087",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "colorectal-symptoms",
+     "topic": "colorectal",
+     "title": "Colorectal cancer · Possible symptoms",
+     "items": [
+      "Blood in the stool or a change in bowel habits",
+      "Unexplained weight loss"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Bowel cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk01087",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "colorectal-selfExamination",
+     "topic": "colorectal",
+     "title": "Colorectal cancer · Body awareness",
+     "status": "awareness_only",
+     "items": [
+      "Notice changes in bowel habits or visible blood and discuss them with healthcare. Looking at stool cannot rule out colorectal cancer."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Bowel cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk01087",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Finnish Cancer Registry · Colorectal cancer screening",
+       "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "colorectal-homeKit",
+     "topic": "colorectal",
+     "title": "Colorectal cancer · Home sampling",
+     "status": "programme_information",
+     "items": [
+      "The Finnish programme sends invited participants a FIT kit for collecting a stool sample at home. Follow the instructions supplied with your kit and return the sample as directed for laboratory analysis.",
+      "FIT checks for hidden blood. The screening service communicates the result and any follow-up."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Colorectal cancer screening",
+       "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "colorectal-riskFactors",
+     "topic": "colorectal",
+     "title": "Colorectal cancer · Risk factors",
+     "items": [
+      "Family history and certain inherited conditions"
+     ],
+     "sources": [
+      {
+       "title": "NCI · Colorectal cancer prevention",
+       "url": "https://www.cancer.gov/types/colorectal/patient/colorectal-prevention-pdq",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "cervical-awareness",
+     "topic": "cervical",
+     "title": "Cervical cancer · Overview and screening",
+     "items": [
+      "Cervical screening looks for high-risk HPV or cervical cell changes, depending on the test."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Cervical cancer screening",
+       "url": "https://cancerregistry.fi/screening/cervical-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Duodecim · Cervical cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00144",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "cervical-symptoms",
+     "topic": "cervical",
+     "title": "Cervical cancer · Possible symptoms",
+     "items": [
+      "Unusual vaginal bleeding, such as after sex or between periods",
+      "Unusual vaginal discharge"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Cervical cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00144",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "NCI · Cervical cancer symptoms",
+       "url": "https://www.cancer.gov/types/cervical/symptoms",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "cervical-selfExamination",
+     "topic": "cervical",
+     "title": "Cervical cancer · Body awareness",
+     "status": "unavailable",
+     "items": [
+      "This catalog has no validated self-examination for cervical cancer. Discuss unusual bleeding or discharge with healthcare."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Cervical cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00144",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "cervical-homeKit",
+     "topic": "cervical",
+     "title": "Cervical cancer · Home sampling",
+     "status": "unavailable",
+     "items": [
+      "Home HPV sampling availability and instructions depend on the screening provider. This catalog has no verified kit instructions. Ask the service listed in your invitation."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Cervical cancer screening",
+       "url": "https://cancerregistry.fi/screening/cervical-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "cervical-riskFactors",
+     "topic": "cervical",
+     "title": "Cervical cancer · Risk factors",
+     "items": [
+      "Persistent infection with a high-risk type of HPV"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Cervical cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00144",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-awareness",
+     "topic": "skin",
+     "title": "Skin cancer and melanoma · Overview and screening",
+     "items": [
+      "Melanoma can develop in a new spot or in an existing mole."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Skin cancer and melanoma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-symptoms",
+     "topic": "skin",
+     "title": "Skin cancer and melanoma · Possible symptoms",
+     "items": [
+      "A mole that changes in size, shape or colour"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Skin cancer and melanoma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-selfExamination",
+     "topic": "skin",
+     "title": "Skin cancer and melanoma · Body awareness",
+     "status": "awareness_only",
+     "items": [
+      "Look for new or changing spots. Note the location and any change you notice, and ask healthcare about a concerning spot."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Skin cancer and melanoma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-homeKit",
+     "topic": "skin",
+     "title": "Skin cancer and melanoma · Home sampling",
+     "status": "unavailable",
+     "items": [
+      "This catalog has no verified home screening kit for this topic."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Skin cancer and melanoma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-riskFactors",
+     "topic": "skin",
+     "title": "Skin cancer and melanoma · Risk factors",
+     "items": [
+      "UV exposure and a family history of melanoma"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Skin cancer and melanoma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "prostate-awareness",
+     "topic": "prostate",
+     "title": "Prostate cancer · Overview and screening",
+     "items": [
+      "Finland has no national prostate cancer screening programme. Discuss PSA testing with a healthcare professional."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Prostate cancer",
+       "url": "https://www.terveyskirjasto.fi/khp00006",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "prostate-symptoms",
+     "topic": "prostate",
+     "title": "Prostate cancer · Possible symptoms",
+     "items": [
+      "Urinary changes can have many causes and should be discussed with healthcare."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Prostate cancer",
+       "url": "https://www.terveyskirjasto.fi/khp00006",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "prostate-selfExamination",
+     "topic": "prostate",
+     "title": "Prostate cancer · Body awareness",
+     "status": "awareness_only",
+     "items": [
+      "Note new urinary changes and discuss them with healthcare. Body awareness does not replace a clinical assessment."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Prostate cancer",
+       "url": "https://www.terveyskirjasto.fi/khp00006",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "prostate-homeKit",
+     "topic": "prostate",
+     "title": "Prostate cancer · Home sampling",
+     "status": "unavailable",
+     "items": [
+      "This catalog has no verified home screening kit for this topic."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Prostate cancer",
+       "url": "https://www.terveyskirjasto.fi/khp00006",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "prostate-riskFactors",
+     "topic": "prostate",
+     "title": "Prostate cancer · Risk factors",
+     "items": [
+      "Prostate cancer in a close relative"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Prostate cancer",
+       "url": "https://www.terveyskirjasto.fi/khp00006",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "testicular-awareness",
+     "topic": "testicular",
+     "title": "Testicular cancer · Overview and screening",
+     "items": [
+      "A testicular lump or change should be assessed by a healthcare professional."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Testicular cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00629",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "testicular-symptoms",
+     "topic": "testicular",
+     "title": "Testicular cancer · Possible symptoms",
+     "items": [
+      "A lump, swelling or change in the size of a testicle"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Testicular cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00629",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "testicular-selfExamination",
+     "topic": "testicular",
+     "title": "Testicular cancer · Body awareness",
+     "status": "awareness_only",
+     "items": [
+      "Get familiar with how your testicles usually look and feel, and tell a healthcare professional about new changes."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Testicular cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00629",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "testicular-homeKit",
+     "topic": "testicular",
+     "title": "Testicular cancer · Home sampling",
+     "status": "unavailable",
+     "items": [
+      "This catalog has no verified home screening kit for this topic."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Testicular cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00629",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "testicular-riskFactors",
+     "topic": "testicular",
+     "title": "Testicular cancer · Risk factors",
+     "items": [
+      "A history of an undescended testicle"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Testicular cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00629",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Finnish Cancer Registry · Breast cancer screening",
+     "url": "https://cancerregistry.fi/screening/breast-cancer-screening/",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Breast cancer",
+     "url": "https://www.terveyskirjasto.fi/dlk00618",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Finnish Cancer Registry · Colorectal cancer screening",
+     "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Bowel cancer",
+     "url": "https://www.terveyskirjasto.fi/dlk01087",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "NCI · Colorectal cancer prevention",
+     "url": "https://www.cancer.gov/types/colorectal/patient/colorectal-prevention-pdq",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Finnish Cancer Registry · Cervical cancer screening",
+     "url": "https://cancerregistry.fi/screening/cervical-cancer-screening/",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Cervical cancer",
+     "url": "https://www.terveyskirjasto.fi/dlk00144",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "NCI · Cervical cancer symptoms",
+     "url": "https://www.cancer.gov/types/cervical/symptoms",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Skin cancer and melanoma",
+     "url": "https://www.terveyskirjasto.fi/dlk00671",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Prostate cancer",
+     "url": "https://www.terveyskirjasto.fi/khp00006",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Testicular cancer",
+     "url": "https://www.terveyskirjasto.fi/dlk00629",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ],
+   "providerLinks": [
+    {
+     "topic": "colorectal",
+     "title": "Fimlab · Bowel screening and kit instructions",
+     "url": "https://fimlab.fi/suolistosyovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "topic": "cervical",
+     "title": "Fimlab · 2026 HPV self-sampling study",
+     "url": "https://fimlab.fi/kohdunkaulan-syovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ]
+  }
+ },
+ {
+  "request": "/api/library?lang=en&topic=breast",
+  "status": 200,
+  "cacheControl": "public, max-age=300",
+  "body": {
+   "version": "1.1.0",
+   "language": "en",
+   "requestedLanguage": "en",
+   "notice": "General education. Symptoms can have several causes. Ask a healthcare professional about new or persistent changes.",
+   "articles": [
+    {
+     "id": "breast-awareness",
+     "topic": "breast",
+     "title": "Breast cancer · Overview and screening",
+     "items": [
+      "Finland’s breast screening programme uses mammography."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Breast cancer screening",
+       "url": "https://cancerregistry.fi/screening/breast-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Duodecim · Breast cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00618",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "breast-symptoms",
+     "topic": "breast",
+     "title": "Breast cancer · Possible symptoms",
+     "items": [
+      "A new lump in the breast or armpit",
+      "New nipple discharge or a change in the nipple or breast skin"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Breast cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00618",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "breast-selfExamination",
+     "topic": "breast",
+     "title": "Breast cancer · Body awareness",
+     "status": "awareness_only",
+     "items": [
+      "Get familiar with how your breasts usually look and feel. Ask a healthcare professional about a new change. Breast awareness does not replace screening."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Breast cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00618",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Finnish Cancer Registry · Breast cancer screening",
+       "url": "https://cancerregistry.fi/screening/breast-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "breast-homeKit",
+     "topic": "breast",
+     "title": "Breast cancer · Home sampling",
+     "status": "unavailable",
+     "items": [
+      "This catalog has no verified home kit for breast screening. The Finnish programme uses mammography."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Breast cancer screening",
+       "url": "https://cancerregistry.fi/screening/breast-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "breast-riskFactors",
+     "topic": "breast",
+     "title": "Breast cancer · Risk factors",
+     "items": [
+      "Older age and inherited susceptibility"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Breast cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00618",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Finnish Cancer Registry · Breast cancer screening",
+     "url": "https://cancerregistry.fi/screening/breast-cancer-screening/",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Breast cancer",
+     "url": "https://www.terveyskirjasto.fi/dlk00618",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ],
+   "providerLinks": []
+  }
+ },
+ {
+  "request": "/api/library?lang=fi&topic=breast",
+  "status": 200,
+  "cacheControl": "public, max-age=300",
+  "body": {
+   "version": "1.1.0",
+   "language": "fi",
+   "requestedLanguage": "fi",
+   "notice": "Yleistä tietoa. Oireilla voi olla useita syitä. Kysy uusista tai jatkuvista muutoksista terveydenhuollon ammattilaiselta.",
+   "articles": [
+    {
+     "id": "breast-awareness",
+     "topic": "breast",
+     "title": "Rintasyöpä · Tietoa ja seulonta",
+     "items": [
+      "Suomessa rintasyöpäseulonnassa käytetään mammografiaa."
+     ],
+     "sources": [
+      {
+       "title": "Suomen Syöpärekisteri · Rintasyöpäseulonta",
+       "url": "https://cancerregistry.fi/screening/breast-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Duodecim · Rintasyöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk00618",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "breast-symptoms",
+     "topic": "breast",
+     "title": "Rintasyöpä · Mahdolliset oireet",
+     "items": [
+      "Uusi kyhmy rinnassa tai kainalossa",
+      "Uusi nännierite tai muutos nännissä tai rinnan ihossa"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Rintasyöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk00618",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "breast-selfExamination",
+     "topic": "breast",
+     "title": "Rintasyöpä · Omatarkkailu",
+     "status": "awareness_only",
+     "items": [
+      "Tutustu siihen, miltä rintasi tavallisesti näyttävät ja tuntuvat. Kysy uudesta muutoksesta terveydenhuollon ammattilaiselta. Rintojen omatarkkailu ei korvaa seulontaa."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Rintasyöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk00618",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Suomen Syöpärekisteri · Rintasyöpäseulonta",
+       "url": "https://cancerregistry.fi/screening/breast-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "breast-homeKit",
+     "topic": "breast",
+     "title": "Rintasyöpä · Kotinäytteenotto",
+     "status": "unavailable",
+     "items": [
+      "Tässä palvelussa ei ole varmennettua rintasyövän kotitestiä. Suomen seulontaohjelmassa käytetään mammografiaa."
+     ],
+     "sources": [
+      {
+       "title": "Suomen Syöpärekisteri · Rintasyöpäseulonta",
+       "url": "https://cancerregistry.fi/screening/breast-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "breast-riskFactors",
+     "topic": "breast",
+     "title": "Rintasyöpä · Riskitekijät",
+     "items": [
+      "Ikääntyminen ja perinnöllinen alttius"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Rintasyöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk00618",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Suomen Syöpärekisteri · Rintasyöpäseulonta",
+     "url": "https://cancerregistry.fi/screening/breast-cancer-screening/",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Rintasyöpä",
+     "url": "https://www.terveyskirjasto.fi/dlk00618",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ],
+   "providerLinks": []
+  }
+ },
+ {
+  "request": "/api/library?lang=en&topic=colorectal",
+  "status": 200,
+  "cacheControl": "public, max-age=300",
+  "body": {
+   "version": "1.1.0",
+   "language": "en",
+   "requestedLanguage": "en",
+   "notice": "General education. Symptoms can have several causes. Ask a healthcare professional about new or persistent changes.",
+   "articles": [
+    {
+     "id": "colorectal-awareness",
+     "topic": "colorectal",
+     "title": "Colorectal cancer · Overview and screening",
+     "items": [
+      "Colorectal cancer affects the colon or rectum. Screening can detect changes before symptoms appear."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Colorectal cancer screening",
+       "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Duodecim · Bowel cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk01087",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "colorectal-symptoms",
+     "topic": "colorectal",
+     "title": "Colorectal cancer · Possible symptoms",
+     "items": [
+      "Blood in the stool or a change in bowel habits",
+      "Unexplained weight loss"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Bowel cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk01087",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "colorectal-selfExamination",
+     "topic": "colorectal",
+     "title": "Colorectal cancer · Body awareness",
+     "status": "awareness_only",
+     "items": [
+      "Notice changes in bowel habits or visible blood and discuss them with healthcare. Looking at stool cannot rule out colorectal cancer."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Bowel cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk01087",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Finnish Cancer Registry · Colorectal cancer screening",
+       "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "colorectal-homeKit",
+     "topic": "colorectal",
+     "title": "Colorectal cancer · Home sampling",
+     "status": "programme_information",
+     "items": [
+      "The Finnish programme sends invited participants a FIT kit for collecting a stool sample at home. Follow the instructions supplied with your kit and return the sample as directed for laboratory analysis.",
+      "FIT checks for hidden blood. The screening service communicates the result and any follow-up."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Colorectal cancer screening",
+       "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "colorectal-riskFactors",
+     "topic": "colorectal",
+     "title": "Colorectal cancer · Risk factors",
+     "items": [
+      "Family history and certain inherited conditions"
+     ],
+     "sources": [
+      {
+       "title": "NCI · Colorectal cancer prevention",
+       "url": "https://www.cancer.gov/types/colorectal/patient/colorectal-prevention-pdq",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Finnish Cancer Registry · Colorectal cancer screening",
+     "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Bowel cancer",
+     "url": "https://www.terveyskirjasto.fi/dlk01087",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "NCI · Colorectal cancer prevention",
+     "url": "https://www.cancer.gov/types/colorectal/patient/colorectal-prevention-pdq",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    }
+   ],
+   "providerLinks": [
+    {
+     "topic": "colorectal",
+     "title": "Fimlab · Bowel screening and kit instructions",
+     "url": "https://fimlab.fi/suolistosyovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ]
+  }
+ },
+ {
+  "request": "/api/library?lang=fi&topic=colorectal",
+  "status": 200,
+  "cacheControl": "public, max-age=300",
+  "body": {
+   "version": "1.1.0",
+   "language": "fi",
+   "requestedLanguage": "fi",
+   "notice": "Yleistä tietoa. Oireilla voi olla useita syitä. Kysy uusista tai jatkuvista muutoksista terveydenhuollon ammattilaiselta.",
+   "articles": [
+    {
+     "id": "colorectal-awareness",
+     "topic": "colorectal",
+     "title": "Suolistosyöpä · Tietoa ja seulonta",
+     "items": [
+      "Suolistosyöpä voi kehittyä paksu- tai peräsuoleen. Seulonta voi havaita muutoksia ennen oireita."
+     ],
+     "sources": [
+      {
+       "title": "Suomen Syöpärekisteri · Suolistosyöpäseulonta",
+       "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Duodecim · Suolistosyöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk01087",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "colorectal-symptoms",
+     "topic": "colorectal",
+     "title": "Suolistosyöpä · Mahdolliset oireet",
+     "items": [
+      "Verta ulosteessa tai muutos suolen toiminnassa",
+      "Selittämätön laihtuminen"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Suolistosyöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk01087",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "colorectal-selfExamination",
+     "topic": "colorectal",
+     "title": "Suolistosyöpä · Omatarkkailu",
+     "status": "awareness_only",
+     "items": [
+      "Huomioi suolen toiminnan muutokset tai näkyvä veri ja kerro niistä terveydenhuollossa. Ulosteen tarkkailu ei sulje pois suolistosyöpää."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Suolistosyöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk01087",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Suomen Syöpärekisteri · Suolistosyöpäseulonta",
+       "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "colorectal-homeKit",
+     "topic": "colorectal",
+     "title": "Suolistosyöpä · Kotinäytteenotto",
+     "status": "programme_information",
+     "items": [
+      "Suomen seulontaohjelmassa kutsutuille lähetetään FIT-testi ulostenäytteen ottamiseen kotona. Noudata pakkauksen ohjeita ja palauta näyte ohjeiden mukaan laboratorioanalyysiin.",
+      "FIT-testi etsii piilevää verta. Seulontayksikkö ilmoittaa tuloksen ja mahdollisista jatkotoimista."
+     ],
+     "sources": [
+      {
+       "title": "Suomen Syöpärekisteri · Suolistosyöpäseulonta",
+       "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "colorectal-riskFactors",
+     "topic": "colorectal",
+     "title": "Suolistosyöpä · Riskitekijät",
+     "items": [
+      "Suvun syöpähistoria ja tietyt perinnölliset sairaudet"
+     ],
+     "sources": [
+      {
+       "title": "NCI · Suolistosyövän ehkäisy",
+       "url": "https://www.cancer.gov/types/colorectal/patient/colorectal-prevention-pdq",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Suomen Syöpärekisteri · Suolistosyöpäseulonta",
+     "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Suolistosyöpä",
+     "url": "https://www.terveyskirjasto.fi/dlk01087",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "NCI · Suolistosyövän ehkäisy",
+     "url": "https://www.cancer.gov/types/colorectal/patient/colorectal-prevention-pdq",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    }
+   ],
+   "providerLinks": [
+    {
+     "topic": "colorectal",
+     "title": "Fimlab · Suolistosyövän seulonta ja näytteenotto-ohjeet",
+     "url": "https://fimlab.fi/suolistosyovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ]
+  }
+ },
+ {
+  "request": "/api/library?lang=en&topic=cervical",
+  "status": 200,
+  "cacheControl": "public, max-age=300",
+  "body": {
+   "version": "1.1.0",
+   "language": "en",
+   "requestedLanguage": "en",
+   "notice": "General education. Symptoms can have several causes. Ask a healthcare professional about new or persistent changes.",
+   "articles": [
+    {
+     "id": "cervical-awareness",
+     "topic": "cervical",
+     "title": "Cervical cancer · Overview and screening",
+     "items": [
+      "Cervical screening looks for high-risk HPV or cervical cell changes, depending on the test."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Cervical cancer screening",
+       "url": "https://cancerregistry.fi/screening/cervical-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Duodecim · Cervical cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00144",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "cervical-symptoms",
+     "topic": "cervical",
+     "title": "Cervical cancer · Possible symptoms",
+     "items": [
+      "Unusual vaginal bleeding, such as after sex or between periods",
+      "Unusual vaginal discharge"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Cervical cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00144",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "NCI · Cervical cancer symptoms",
+       "url": "https://www.cancer.gov/types/cervical/symptoms",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "cervical-selfExamination",
+     "topic": "cervical",
+     "title": "Cervical cancer · Body awareness",
+     "status": "unavailable",
+     "items": [
+      "This catalog has no validated self-examination for cervical cancer. Discuss unusual bleeding or discharge with healthcare."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Cervical cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00144",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "cervical-homeKit",
+     "topic": "cervical",
+     "title": "Cervical cancer · Home sampling",
+     "status": "unavailable",
+     "items": [
+      "Home HPV sampling availability and instructions depend on the screening provider. This catalog has no verified kit instructions. Ask the service listed in your invitation."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Cervical cancer screening",
+       "url": "https://cancerregistry.fi/screening/cervical-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "cervical-riskFactors",
+     "topic": "cervical",
+     "title": "Cervical cancer · Risk factors",
+     "items": [
+      "Persistent infection with a high-risk type of HPV"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Cervical cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00144",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Finnish Cancer Registry · Cervical cancer screening",
+     "url": "https://cancerregistry.fi/screening/cervical-cancer-screening/",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Cervical cancer",
+     "url": "https://www.terveyskirjasto.fi/dlk00144",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "NCI · Cervical cancer symptoms",
+     "url": "https://www.cancer.gov/types/cervical/symptoms",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    }
+   ],
+   "providerLinks": [
+    {
+     "topic": "cervical",
+     "title": "Fimlab · 2026 HPV self-sampling study",
+     "url": "https://fimlab.fi/kohdunkaulan-syovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ]
+  }
+ },
+ {
+  "request": "/api/library?lang=fi&topic=cervical",
+  "status": 200,
+  "cacheControl": "public, max-age=300",
+  "body": {
+   "version": "1.1.0",
+   "language": "fi",
+   "requestedLanguage": "fi",
+   "notice": "Yleistä tietoa. Oireilla voi olla useita syitä. Kysy uusista tai jatkuvista muutoksista terveydenhuollon ammattilaiselta.",
+   "articles": [
+    {
+     "id": "cervical-awareness",
+     "topic": "cervical",
+     "title": "Kohdunkaulan syöpä · Tietoa ja seulonta",
+     "items": [
+      "Kohdunkaulan seulonnassa etsitään testistä riippuen korkean riskin HPV:tä tai kohdunkaulan solumuutoksia."
+     ],
+     "sources": [
+      {
+       "title": "Suomen Syöpärekisteri · Kohdunkaulan syövän seulonta",
+       "url": "https://cancerregistry.fi/screening/cervical-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Duodecim · Kohdunkaulan syöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk00144",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "cervical-symptoms",
+     "topic": "cervical",
+     "title": "Kohdunkaulan syöpä · Mahdolliset oireet",
+     "items": [
+      "Poikkeava verinen vuoto, esimerkiksi yhdynnän jälkeen tai kuukautisten välissä",
+      "Poikkeava emätinvuoto"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Kohdunkaulan syöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk00144",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "NCI · Kohdunkaulan syövän oireet",
+       "url": "https://www.cancer.gov/types/cervical/symptoms",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "cervical-selfExamination",
+     "topic": "cervical",
+     "title": "Kohdunkaulan syöpä · Omatarkkailu",
+     "status": "unavailable",
+     "items": [
+      "Tässä palvelussa ei ole validoitua kohdunkaulan syövän omatarkastusta. Kerro poikkeavasta vuodosta terveydenhuollossa."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Kohdunkaulan syöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk00144",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "cervical-homeKit",
+     "topic": "cervical",
+     "title": "Kohdunkaulan syöpä · Kotinäytteenotto",
+     "status": "unavailable",
+     "items": [
+      "Kotona otettavan HPV-näytteen saatavuus ja ohjeet riippuvat seulontayksiköstä. Tässä palvelussa ei ole varmennettuja näytteenotto-ohjeita. Kysy kutsussa mainitulta seulontayksiköltä."
+     ],
+     "sources": [
+      {
+       "title": "Suomen Syöpärekisteri · Kohdunkaulan syövän seulonta",
+       "url": "https://cancerregistry.fi/screening/cervical-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "cervical-riskFactors",
+     "topic": "cervical",
+     "title": "Kohdunkaulan syöpä · Riskitekijät",
+     "items": [
+      "Pitkittynyt korkean riskin HPV-infektio"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Kohdunkaulan syöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk00144",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Suomen Syöpärekisteri · Kohdunkaulan syövän seulonta",
+     "url": "https://cancerregistry.fi/screening/cervical-cancer-screening/",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Kohdunkaulan syöpä",
+     "url": "https://www.terveyskirjasto.fi/dlk00144",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "NCI · Kohdunkaulan syövän oireet",
+     "url": "https://www.cancer.gov/types/cervical/symptoms",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    }
+   ],
+   "providerLinks": [
+    {
+     "topic": "cervical",
+     "title": "Fimlab · HPV-omanäytteenottotutkimus 2026",
+     "url": "https://fimlab.fi/kohdunkaulan-syovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ]
+  }
+ },
+ {
+  "request": "/api/library?lang=en&topic=skin",
+  "status": 200,
+  "cacheControl": "public, max-age=300",
+  "body": {
+   "version": "1.1.0",
+   "language": "en",
+   "requestedLanguage": "en",
+   "notice": "General education. Symptoms can have several causes. Ask a healthcare professional about new or persistent changes.",
+   "articles": [
+    {
+     "id": "skin-awareness",
+     "topic": "skin",
+     "title": "Skin cancer and melanoma · Overview and screening",
+     "items": [
+      "Melanoma can develop in a new spot or in an existing mole."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Skin cancer and melanoma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-symptoms",
+     "topic": "skin",
+     "title": "Skin cancer and melanoma · Possible symptoms",
+     "items": [
+      "A mole that changes in size, shape or colour"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Skin cancer and melanoma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-selfExamination",
+     "topic": "skin",
+     "title": "Skin cancer and melanoma · Body awareness",
+     "status": "awareness_only",
+     "items": [
+      "Look for new or changing spots. Note the location and any change you notice, and ask healthcare about a concerning spot."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Skin cancer and melanoma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-homeKit",
+     "topic": "skin",
+     "title": "Skin cancer and melanoma · Home sampling",
+     "status": "unavailable",
+     "items": [
+      "This catalog has no verified home screening kit for this topic."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Skin cancer and melanoma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-riskFactors",
+     "topic": "skin",
+     "title": "Skin cancer and melanoma · Risk factors",
+     "items": [
+      "UV exposure and a family history of melanoma"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Skin cancer and melanoma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Duodecim · Skin cancer and melanoma",
+     "url": "https://www.terveyskirjasto.fi/dlk00671",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ],
+   "providerLinks": []
+  }
+ },
+ {
+  "request": "/api/library?lang=fi&topic=skin",
+  "status": 200,
+  "cacheControl": "public, max-age=300",
+  "body": {
+   "version": "1.1.0",
+   "language": "fi",
+   "requestedLanguage": "fi",
+   "notice": "Yleistä tietoa. Oireilla voi olla useita syitä. Kysy uusista tai jatkuvista muutoksista terveydenhuollon ammattilaiselta.",
+   "articles": [
+    {
+     "id": "skin-awareness",
+     "topic": "skin",
+     "title": "Ihosyöpä ja melanooma · Tietoa ja seulonta",
+     "items": [
+      "Melanooma voi kehittyä uuteen ihomuutokseen tai olemassa olevaan luomeen."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Ihosyöpä ja melanooma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-symptoms",
+     "topic": "skin",
+     "title": "Ihosyöpä ja melanooma · Mahdolliset oireet",
+     "items": [
+      "Luomen koon, muodon tai värin muuttuminen"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Ihosyöpä ja melanooma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-selfExamination",
+     "topic": "skin",
+     "title": "Ihosyöpä ja melanooma · Omatarkkailu",
+     "status": "awareness_only",
+     "items": [
+      "Huomioi uudet tai muuttuvat ihomuutokset. Merkitse muistiin sijainti ja havaitsemasi muutos ja kysy huolestuttavasta muutoksesta terveydenhuollossa."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Ihosyöpä ja melanooma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-homeKit",
+     "topic": "skin",
+     "title": "Ihosyöpä ja melanooma · Kotinäytteenotto",
+     "status": "unavailable",
+     "items": [
+      "Tässä palvelussa ei ole varmennettua kotiseulontatestiä tähän aiheeseen."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Ihosyöpä ja melanooma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-riskFactors",
+     "topic": "skin",
+     "title": "Ihosyöpä ja melanooma · Riskitekijät",
+     "items": [
+      "UV-altistus ja suvussa esiintynyt melanooma"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Ihosyöpä ja melanooma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Duodecim · Ihosyöpä ja melanooma",
+     "url": "https://www.terveyskirjasto.fi/dlk00671",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ],
+   "providerLinks": []
+  }
+ },
+ {
+  "request": "/api/library?lang=en&topic=prostate",
+  "status": 200,
+  "cacheControl": "public, max-age=300",
+  "body": {
+   "version": "1.1.0",
+   "language": "en",
+   "requestedLanguage": "en",
+   "notice": "General education. Symptoms can have several causes. Ask a healthcare professional about new or persistent changes.",
+   "articles": [
+    {
+     "id": "prostate-awareness",
+     "topic": "prostate",
+     "title": "Prostate cancer · Overview and screening",
+     "items": [
+      "Finland has no national prostate cancer screening programme. Discuss PSA testing with a healthcare professional."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Prostate cancer",
+       "url": "https://www.terveyskirjasto.fi/khp00006",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "prostate-symptoms",
+     "topic": "prostate",
+     "title": "Prostate cancer · Possible symptoms",
+     "items": [
+      "Urinary changes can have many causes and should be discussed with healthcare."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Prostate cancer",
+       "url": "https://www.terveyskirjasto.fi/khp00006",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "prostate-selfExamination",
+     "topic": "prostate",
+     "title": "Prostate cancer · Body awareness",
+     "status": "awareness_only",
+     "items": [
+      "Note new urinary changes and discuss them with healthcare. Body awareness does not replace a clinical assessment."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Prostate cancer",
+       "url": "https://www.terveyskirjasto.fi/khp00006",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "prostate-homeKit",
+     "topic": "prostate",
+     "title": "Prostate cancer · Home sampling",
+     "status": "unavailable",
+     "items": [
+      "This catalog has no verified home screening kit for this topic."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Prostate cancer",
+       "url": "https://www.terveyskirjasto.fi/khp00006",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "prostate-riskFactors",
+     "topic": "prostate",
+     "title": "Prostate cancer · Risk factors",
+     "items": [
+      "Prostate cancer in a close relative"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Prostate cancer",
+       "url": "https://www.terveyskirjasto.fi/khp00006",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Duodecim · Prostate cancer",
+     "url": "https://www.terveyskirjasto.fi/khp00006",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ],
+   "providerLinks": []
+  }
+ },
+ {
+  "request": "/api/library?lang=fi&topic=prostate",
+  "status": 200,
+  "cacheControl": "public, max-age=300",
+  "body": {
+   "version": "1.1.0",
+   "language": "fi",
+   "requestedLanguage": "fi",
+   "notice": "Yleistä tietoa. Oireilla voi olla useita syitä. Kysy uusista tai jatkuvista muutoksista terveydenhuollon ammattilaiselta.",
+   "articles": [
+    {
+     "id": "prostate-awareness",
+     "topic": "prostate",
+     "title": "Eturauhassyöpä · Tietoa ja seulonta",
+     "items": [
+      "Suomessa ei ole kansallista eturauhassyövän seulontaohjelmaa. Keskustele PSA-tutkimuksesta terveydenhuollon ammattilaisen kanssa."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Eturauhassyöpä",
+       "url": "https://www.terveyskirjasto.fi/khp00006",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "prostate-symptoms",
+     "topic": "prostate",
+     "title": "Eturauhassyöpä · Mahdolliset oireet",
+     "items": [
+      "Virtsaamisoireilla voi olla useita syitä. Kerro oireista terveydenhuollossa."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Eturauhassyöpä",
+       "url": "https://www.terveyskirjasto.fi/khp00006",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "prostate-selfExamination",
+     "topic": "prostate",
+     "title": "Eturauhassyöpä · Omatarkkailu",
+     "status": "awareness_only",
+     "items": [
+      "Kirjaa uudet virtsaamisoireet ja kerro niistä terveydenhuollossa. Omatarkkailu ei korvaa ammattilaisen arviota."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Eturauhassyöpä",
+       "url": "https://www.terveyskirjasto.fi/khp00006",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "prostate-homeKit",
+     "topic": "prostate",
+     "title": "Eturauhassyöpä · Kotinäytteenotto",
+     "status": "unavailable",
+     "items": [
+      "Tässä palvelussa ei ole varmennettua kotiseulontatestiä tähän aiheeseen."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Eturauhassyöpä",
+       "url": "https://www.terveyskirjasto.fi/khp00006",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "prostate-riskFactors",
+     "topic": "prostate",
+     "title": "Eturauhassyöpä · Riskitekijät",
+     "items": [
+      "Lähisukulaisella todettu eturauhassyöpä"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Eturauhassyöpä",
+       "url": "https://www.terveyskirjasto.fi/khp00006",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Duodecim · Eturauhassyöpä",
+     "url": "https://www.terveyskirjasto.fi/khp00006",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ],
+   "providerLinks": []
+  }
+ },
+ {
+  "request": "/api/library?lang=en&topic=testicular",
+  "status": 200,
+  "cacheControl": "public, max-age=300",
+  "body": {
+   "version": "1.1.0",
+   "language": "en",
+   "requestedLanguage": "en",
+   "notice": "General education. Symptoms can have several causes. Ask a healthcare professional about new or persistent changes.",
+   "articles": [
+    {
+     "id": "testicular-awareness",
+     "topic": "testicular",
+     "title": "Testicular cancer · Overview and screening",
+     "items": [
+      "A testicular lump or change should be assessed by a healthcare professional."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Testicular cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00629",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "testicular-symptoms",
+     "topic": "testicular",
+     "title": "Testicular cancer · Possible symptoms",
+     "items": [
+      "A lump, swelling or change in the size of a testicle"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Testicular cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00629",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "testicular-selfExamination",
+     "topic": "testicular",
+     "title": "Testicular cancer · Body awareness",
+     "status": "awareness_only",
+     "items": [
+      "Get familiar with how your testicles usually look and feel, and tell a healthcare professional about new changes."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Testicular cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00629",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "testicular-homeKit",
+     "topic": "testicular",
+     "title": "Testicular cancer · Home sampling",
+     "status": "unavailable",
+     "items": [
+      "This catalog has no verified home screening kit for this topic."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Testicular cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00629",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "testicular-riskFactors",
+     "topic": "testicular",
+     "title": "Testicular cancer · Risk factors",
+     "items": [
+      "A history of an undescended testicle"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Testicular cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00629",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Duodecim · Testicular cancer",
+     "url": "https://www.terveyskirjasto.fi/dlk00629",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ],
+   "providerLinks": []
+  }
+ },
+ {
+  "request": "/api/library?lang=fi&topic=testicular",
+  "status": 200,
+  "cacheControl": "public, max-age=300",
+  "body": {
+   "version": "1.1.0",
+   "language": "fi",
+   "requestedLanguage": "fi",
+   "notice": "Yleistä tietoa. Oireilla voi olla useita syitä. Kysy uusista tai jatkuvista muutoksista terveydenhuollon ammattilaiselta.",
+   "articles": [
+    {
+     "id": "testicular-awareness",
+     "topic": "testicular",
+     "title": "Kivessyöpä · Tietoa ja seulonta",
+     "items": [
+      "Terveydenhuollon ammattilaisen tulee arvioida kiveksen kyhmy tai muu muutos."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Kivessyöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk00629",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "testicular-symptoms",
+     "topic": "testicular",
+     "title": "Kivessyöpä · Mahdolliset oireet",
+     "items": [
+      "Kyhmy, turvotus tai kiveksen koon muuttuminen"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Kivessyöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk00629",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "testicular-selfExamination",
+     "topic": "testicular",
+     "title": "Kivessyöpä · Omatarkkailu",
+     "status": "awareness_only",
+     "items": [
+      "Tutustu siihen, miltä kiveksesi tavallisesti näyttävät ja tuntuvat, ja kerro uusista muutoksista terveydenhuollon ammattilaiselle."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Kivessyöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk00629",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "testicular-homeKit",
+     "topic": "testicular",
+     "title": "Kivessyöpä · Kotinäytteenotto",
+     "status": "unavailable",
+     "items": [
+      "Tässä palvelussa ei ole varmennettua kotiseulontatestiä tähän aiheeseen."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Kivessyöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk00629",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "testicular-riskFactors",
+     "topic": "testicular",
+     "title": "Kivessyöpä · Riskitekijät",
+     "items": [
+      "Aiemmin todettu laskeutumaton kives"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Kivessyöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk00629",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Duodecim · Kivessyöpä",
+     "url": "https://www.terveyskirjasto.fi/dlk00629",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ],
+   "providerLinks": []
+  }
+ },
+ {
+  "request": "/api/library?topic=bowel",
+  "status": 200,
+  "cacheControl": "public, max-age=300",
+  "body": {
+   "version": "1.1.0",
+   "language": "en",
+   "requestedLanguage": "en",
+   "notice": "General education. Symptoms can have several causes. Ask a healthcare professional about new or persistent changes.",
+   "articles": [
+    {
+     "id": "colorectal-awareness",
+     "topic": "colorectal",
+     "title": "Colorectal cancer · Overview and screening",
+     "items": [
+      "Colorectal cancer affects the colon or rectum. Screening can detect changes before symptoms appear."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Colorectal cancer screening",
+       "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Duodecim · Bowel cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk01087",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "colorectal-symptoms",
+     "topic": "colorectal",
+     "title": "Colorectal cancer · Possible symptoms",
+     "items": [
+      "Blood in the stool or a change in bowel habits",
+      "Unexplained weight loss"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Bowel cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk01087",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "colorectal-selfExamination",
+     "topic": "colorectal",
+     "title": "Colorectal cancer · Body awareness",
+     "status": "awareness_only",
+     "items": [
+      "Notice changes in bowel habits or visible blood and discuss them with healthcare. Looking at stool cannot rule out colorectal cancer."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Bowel cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk01087",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Finnish Cancer Registry · Colorectal cancer screening",
+       "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "colorectal-homeKit",
+     "topic": "colorectal",
+     "title": "Colorectal cancer · Home sampling",
+     "status": "programme_information",
+     "items": [
+      "The Finnish programme sends invited participants a FIT kit for collecting a stool sample at home. Follow the instructions supplied with your kit and return the sample as directed for laboratory analysis.",
+      "FIT checks for hidden blood. The screening service communicates the result and any follow-up."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Colorectal cancer screening",
+       "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "colorectal-riskFactors",
+     "topic": "colorectal",
+     "title": "Colorectal cancer · Risk factors",
+     "items": [
+      "Family history and certain inherited conditions"
+     ],
+     "sources": [
+      {
+       "title": "NCI · Colorectal cancer prevention",
+       "url": "https://www.cancer.gov/types/colorectal/patient/colorectal-prevention-pdq",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Finnish Cancer Registry · Colorectal cancer screening",
+     "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Bowel cancer",
+     "url": "https://www.terveyskirjasto.fi/dlk01087",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "NCI · Colorectal cancer prevention",
+     "url": "https://www.cancer.gov/types/colorectal/patient/colorectal-prevention-pdq",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    }
+   ],
+   "providerLinks": [
+    {
+     "topic": "colorectal",
+     "title": "Fimlab · Bowel screening and kit instructions",
+     "url": "https://fimlab.fi/suolistosyovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ]
+  }
+ },
+ {
+  "request": "/api/library?lang=fi&topic=bowel&q=FIT",
+  "status": 200,
+  "cacheControl": "public, max-age=300",
+  "body": {
+   "version": "1.1.0",
+   "language": "fi",
+   "requestedLanguage": "fi",
+   "notice": "Yleistä tietoa. Oireilla voi olla useita syitä. Kysy uusista tai jatkuvista muutoksista terveydenhuollon ammattilaiselta.",
+   "articles": [
+    {
+     "id": "colorectal-homeKit",
+     "topic": "colorectal",
+     "title": "Suolistosyöpä · Kotinäytteenotto",
+     "status": "programme_information",
+     "items": [
+      "Suomen seulontaohjelmassa kutsutuille lähetetään FIT-testi ulostenäytteen ottamiseen kotona. Noudata pakkauksen ohjeita ja palauta näyte ohjeiden mukaan laboratorioanalyysiin.",
+      "FIT-testi etsii piilevää verta. Seulontayksikkö ilmoittaa tuloksen ja mahdollisista jatkotoimista."
+     ],
+     "sources": [
+      {
+       "title": "Suomen Syöpärekisteri · Suolistosyöpäseulonta",
+       "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Suomen Syöpärekisteri · Suolistosyöpäseulonta",
+     "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    }
+   ],
+   "providerLinks": [
+    {
+     "topic": "colorectal",
+     "title": "Fimlab · Suolistosyövän seulonta ja näytteenotto-ohjeet",
+     "url": "https://fimlab.fi/suolistosyovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ]
+  }
+ },
+ {
+  "request": "/api/library?lang=fi&topic=bowel&q=fit",
+  "status": 200,
+  "cacheControl": "public, max-age=300",
+  "body": {
+   "version": "1.1.0",
+   "language": "fi",
+   "requestedLanguage": "fi",
+   "notice": "Yleistä tietoa. Oireilla voi olla useita syitä. Kysy uusista tai jatkuvista muutoksista terveydenhuollon ammattilaiselta.",
+   "articles": [
+    {
+     "id": "colorectal-homeKit",
+     "topic": "colorectal",
+     "title": "Suolistosyöpä · Kotinäytteenotto",
+     "status": "programme_information",
+     "items": [
+      "Suomen seulontaohjelmassa kutsutuille lähetetään FIT-testi ulostenäytteen ottamiseen kotona. Noudata pakkauksen ohjeita ja palauta näyte ohjeiden mukaan laboratorioanalyysiin.",
+      "FIT-testi etsii piilevää verta. Seulontayksikkö ilmoittaa tuloksen ja mahdollisista jatkotoimista."
+     ],
+     "sources": [
+      {
+       "title": "Suomen Syöpärekisteri · Suolistosyöpäseulonta",
+       "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Suomen Syöpärekisteri · Suolistosyöpäseulonta",
+     "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    }
+   ],
+   "providerLinks": [
+    {
+     "topic": "colorectal",
+     "title": "Fimlab · Suolistosyövän seulonta ja näytteenotto-ohjeet",
+     "url": "https://fimlab.fi/suolistosyovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ]
+  }
+ },
+ {
+  "request": "/api/library?q=screening",
+  "status": 200,
+  "cacheControl": "public, max-age=300",
+  "body": {
+   "version": "1.1.0",
+   "language": "en",
+   "requestedLanguage": "en",
+   "notice": "General education. Symptoms can have several causes. Ask a healthcare professional about new or persistent changes.",
+   "articles": [
+    {
+     "id": "breast-awareness",
+     "topic": "breast",
+     "title": "Breast cancer · Overview and screening",
+     "items": [
+      "Finland’s breast screening programme uses mammography."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Breast cancer screening",
+       "url": "https://cancerregistry.fi/screening/breast-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Duodecim · Breast cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00618",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "breast-selfExamination",
+     "topic": "breast",
+     "title": "Breast cancer · Body awareness",
+     "status": "awareness_only",
+     "items": [
+      "Get familiar with how your breasts usually look and feel. Ask a healthcare professional about a new change. Breast awareness does not replace screening."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Breast cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00618",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Finnish Cancer Registry · Breast cancer screening",
+       "url": "https://cancerregistry.fi/screening/breast-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "breast-homeKit",
+     "topic": "breast",
+     "title": "Breast cancer · Home sampling",
+     "status": "unavailable",
+     "items": [
+      "This catalog has no verified home kit for breast screening. The Finnish programme uses mammography."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Breast cancer screening",
+       "url": "https://cancerregistry.fi/screening/breast-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "colorectal-awareness",
+     "topic": "colorectal",
+     "title": "Colorectal cancer · Overview and screening",
+     "items": [
+      "Colorectal cancer affects the colon or rectum. Screening can detect changes before symptoms appear."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Colorectal cancer screening",
+       "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Duodecim · Bowel cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk01087",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "colorectal-homeKit",
+     "topic": "colorectal",
+     "title": "Colorectal cancer · Home sampling",
+     "status": "programme_information",
+     "items": [
+      "The Finnish programme sends invited participants a FIT kit for collecting a stool sample at home. Follow the instructions supplied with your kit and return the sample as directed for laboratory analysis.",
+      "FIT checks for hidden blood. The screening service communicates the result and any follow-up."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Colorectal cancer screening",
+       "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "cervical-awareness",
+     "topic": "cervical",
+     "title": "Cervical cancer · Overview and screening",
+     "items": [
+      "Cervical screening looks for high-risk HPV or cervical cell changes, depending on the test."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Cervical cancer screening",
+       "url": "https://cancerregistry.fi/screening/cervical-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Duodecim · Cervical cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00144",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "cervical-homeKit",
+     "topic": "cervical",
+     "title": "Cervical cancer · Home sampling",
+     "status": "unavailable",
+     "items": [
+      "Home HPV sampling availability and instructions depend on the screening provider. This catalog has no verified kit instructions. Ask the service listed in your invitation."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Cervical cancer screening",
+       "url": "https://cancerregistry.fi/screening/cervical-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-awareness",
+     "topic": "skin",
+     "title": "Skin cancer and melanoma · Overview and screening",
+     "items": [
+      "Melanoma can develop in a new spot or in an existing mole."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Skin cancer and melanoma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-homeKit",
+     "topic": "skin",
+     "title": "Skin cancer and melanoma · Home sampling",
+     "status": "unavailable",
+     "items": [
+      "This catalog has no verified home screening kit for this topic."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Skin cancer and melanoma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "prostate-awareness",
+     "topic": "prostate",
+     "title": "Prostate cancer · Overview and screening",
+     "items": [
+      "Finland has no national prostate cancer screening programme. Discuss PSA testing with a healthcare professional."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Prostate cancer",
+       "url": "https://www.terveyskirjasto.fi/khp00006",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "prostate-homeKit",
+     "topic": "prostate",
+     "title": "Prostate cancer · Home sampling",
+     "status": "unavailable",
+     "items": [
+      "This catalog has no verified home screening kit for this topic."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Prostate cancer",
+       "url": "https://www.terveyskirjasto.fi/khp00006",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "testicular-awareness",
+     "topic": "testicular",
+     "title": "Testicular cancer · Overview and screening",
+     "items": [
+      "A testicular lump or change should be assessed by a healthcare professional."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Testicular cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00629",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "testicular-homeKit",
+     "topic": "testicular",
+     "title": "Testicular cancer · Home sampling",
+     "status": "unavailable",
+     "items": [
+      "This catalog has no verified home screening kit for this topic."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Testicular cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00629",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Finnish Cancer Registry · Breast cancer screening",
+     "url": "https://cancerregistry.fi/screening/breast-cancer-screening/",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Breast cancer",
+     "url": "https://www.terveyskirjasto.fi/dlk00618",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Finnish Cancer Registry · Colorectal cancer screening",
+     "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Bowel cancer",
+     "url": "https://www.terveyskirjasto.fi/dlk01087",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Finnish Cancer Registry · Cervical cancer screening",
+     "url": "https://cancerregistry.fi/screening/cervical-cancer-screening/",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Cervical cancer",
+     "url": "https://www.terveyskirjasto.fi/dlk00144",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Skin cancer and melanoma",
+     "url": "https://www.terveyskirjasto.fi/dlk00671",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Prostate cancer",
+     "url": "https://www.terveyskirjasto.fi/khp00006",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Testicular cancer",
+     "url": "https://www.terveyskirjasto.fi/dlk00629",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ],
+   "providerLinks": [
+    {
+     "topic": "colorectal",
+     "title": "Fimlab · Bowel screening and kit instructions",
+     "url": "https://fimlab.fi/suolistosyovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "topic": "cervical",
+     "title": "Fimlab · 2026 HPV self-sampling study",
+     "url": "https://fimlab.fi/kohdunkaulan-syovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ]
+  }
+ },
+ {
+  "request": "/api/library?q=SCREENING%20breast",
+  "status": 200,
+  "cacheControl": "public, max-age=300",
+  "body": {
+   "version": "1.1.0",
+   "language": "en",
+   "requestedLanguage": "en",
+   "notice": "General education. Symptoms can have several causes. Ask a healthcare professional about new or persistent changes.",
+   "articles": [
+    {
+     "id": "breast-awareness",
+     "topic": "breast",
+     "title": "Breast cancer · Overview and screening",
+     "items": [
+      "Finland’s breast screening programme uses mammography."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Breast cancer screening",
+       "url": "https://cancerregistry.fi/screening/breast-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Duodecim · Breast cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00618",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "breast-selfExamination",
+     "topic": "breast",
+     "title": "Breast cancer · Body awareness",
+     "status": "awareness_only",
+     "items": [
+      "Get familiar with how your breasts usually look and feel. Ask a healthcare professional about a new change. Breast awareness does not replace screening."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Breast cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00618",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Finnish Cancer Registry · Breast cancer screening",
+       "url": "https://cancerregistry.fi/screening/breast-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "breast-homeKit",
+     "topic": "breast",
+     "title": "Breast cancer · Home sampling",
+     "status": "unavailable",
+     "items": [
+      "This catalog has no verified home kit for breast screening. The Finnish programme uses mammography."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Breast cancer screening",
+       "url": "https://cancerregistry.fi/screening/breast-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Finnish Cancer Registry · Breast cancer screening",
+     "url": "https://cancerregistry.fi/screening/breast-cancer-screening/",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Breast cancer",
+     "url": "https://www.terveyskirjasto.fi/dlk00618",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ],
+   "providerLinks": [
+    {
+     "topic": "colorectal",
+     "title": "Fimlab · Bowel screening and kit instructions",
+     "url": "https://fimlab.fi/suolistosyovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "topic": "cervical",
+     "title": "Fimlab · 2026 HPV self-sampling study",
+     "url": "https://fimlab.fi/kohdunkaulan-syovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ]
+  }
+ },
+ {
+  "request": "/api/library?q=lump%20breast",
+  "status": 200,
+  "cacheControl": "public, max-age=300",
+  "body": {
+   "version": "1.1.0",
+   "language": "en",
+   "requestedLanguage": "en",
+   "notice": "General education. Symptoms can have several causes. Ask a healthcare professional about new or persistent changes.",
+   "articles": [
+    {
+     "id": "breast-symptoms",
+     "topic": "breast",
+     "title": "Breast cancer · Possible symptoms",
+     "items": [
+      "A new lump in the breast or armpit",
+      "New nipple discharge or a change in the nipple or breast skin"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Breast cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00618",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Duodecim · Breast cancer",
+     "url": "https://www.terveyskirjasto.fi/dlk00618",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ],
+   "providerLinks": [
+    {
+     "topic": "colorectal",
+     "title": "Fimlab · Bowel screening and kit instructions",
+     "url": "https://fimlab.fi/suolistosyovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "topic": "cervical",
+     "title": "Fimlab · 2026 HPV self-sampling study",
+     "url": "https://fimlab.fi/kohdunkaulan-syovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ]
+  }
+ },
+ {
+  "request": "/api/library?q=%20%20",
+  "status": 200,
+  "cacheControl": "public, max-age=300",
+  "body": {
+   "version": "1.1.0",
+   "language": "en",
+   "requestedLanguage": "en",
+   "notice": "General education. Symptoms can have several causes. Ask a healthcare professional about new or persistent changes.",
+   "articles": [
+    {
+     "id": "breast-awareness",
+     "topic": "breast",
+     "title": "Breast cancer · Overview and screening",
+     "items": [
+      "Finland’s breast screening programme uses mammography."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Breast cancer screening",
+       "url": "https://cancerregistry.fi/screening/breast-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Duodecim · Breast cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00618",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "breast-symptoms",
+     "topic": "breast",
+     "title": "Breast cancer · Possible symptoms",
+     "items": [
+      "A new lump in the breast or armpit",
+      "New nipple discharge or a change in the nipple or breast skin"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Breast cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00618",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "breast-selfExamination",
+     "topic": "breast",
+     "title": "Breast cancer · Body awareness",
+     "status": "awareness_only",
+     "items": [
+      "Get familiar with how your breasts usually look and feel. Ask a healthcare professional about a new change. Breast awareness does not replace screening."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Breast cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00618",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Finnish Cancer Registry · Breast cancer screening",
+       "url": "https://cancerregistry.fi/screening/breast-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "breast-homeKit",
+     "topic": "breast",
+     "title": "Breast cancer · Home sampling",
+     "status": "unavailable",
+     "items": [
+      "This catalog has no verified home kit for breast screening. The Finnish programme uses mammography."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Breast cancer screening",
+       "url": "https://cancerregistry.fi/screening/breast-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "breast-riskFactors",
+     "topic": "breast",
+     "title": "Breast cancer · Risk factors",
+     "items": [
+      "Older age and inherited susceptibility"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Breast cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00618",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "colorectal-awareness",
+     "topic": "colorectal",
+     "title": "Colorectal cancer · Overview and screening",
+     "items": [
+      "Colorectal cancer affects the colon or rectum. Screening can detect changes before symptoms appear."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Colorectal cancer screening",
+       "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Duodecim · Bowel cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk01087",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "colorectal-symptoms",
+     "topic": "colorectal",
+     "title": "Colorectal cancer · Possible symptoms",
+     "items": [
+      "Blood in the stool or a change in bowel habits",
+      "Unexplained weight loss"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Bowel cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk01087",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "colorectal-selfExamination",
+     "topic": "colorectal",
+     "title": "Colorectal cancer · Body awareness",
+     "status": "awareness_only",
+     "items": [
+      "Notice changes in bowel habits or visible blood and discuss them with healthcare. Looking at stool cannot rule out colorectal cancer."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Bowel cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk01087",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Finnish Cancer Registry · Colorectal cancer screening",
+       "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "colorectal-homeKit",
+     "topic": "colorectal",
+     "title": "Colorectal cancer · Home sampling",
+     "status": "programme_information",
+     "items": [
+      "The Finnish programme sends invited participants a FIT kit for collecting a stool sample at home. Follow the instructions supplied with your kit and return the sample as directed for laboratory analysis.",
+      "FIT checks for hidden blood. The screening service communicates the result and any follow-up."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Colorectal cancer screening",
+       "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "colorectal-riskFactors",
+     "topic": "colorectal",
+     "title": "Colorectal cancer · Risk factors",
+     "items": [
+      "Family history and certain inherited conditions"
+     ],
+     "sources": [
+      {
+       "title": "NCI · Colorectal cancer prevention",
+       "url": "https://www.cancer.gov/types/colorectal/patient/colorectal-prevention-pdq",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "cervical-awareness",
+     "topic": "cervical",
+     "title": "Cervical cancer · Overview and screening",
+     "items": [
+      "Cervical screening looks for high-risk HPV or cervical cell changes, depending on the test."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Cervical cancer screening",
+       "url": "https://cancerregistry.fi/screening/cervical-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Duodecim · Cervical cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00144",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "cervical-symptoms",
+     "topic": "cervical",
+     "title": "Cervical cancer · Possible symptoms",
+     "items": [
+      "Unusual vaginal bleeding, such as after sex or between periods",
+      "Unusual vaginal discharge"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Cervical cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00144",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "NCI · Cervical cancer symptoms",
+       "url": "https://www.cancer.gov/types/cervical/symptoms",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "cervical-selfExamination",
+     "topic": "cervical",
+     "title": "Cervical cancer · Body awareness",
+     "status": "unavailable",
+     "items": [
+      "This catalog has no validated self-examination for cervical cancer. Discuss unusual bleeding or discharge with healthcare."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Cervical cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00144",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "cervical-homeKit",
+     "topic": "cervical",
+     "title": "Cervical cancer · Home sampling",
+     "status": "unavailable",
+     "items": [
+      "Home HPV sampling availability and instructions depend on the screening provider. This catalog has no verified kit instructions. Ask the service listed in your invitation."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Cervical cancer screening",
+       "url": "https://cancerregistry.fi/screening/cervical-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "cervical-riskFactors",
+     "topic": "cervical",
+     "title": "Cervical cancer · Risk factors",
+     "items": [
+      "Persistent infection with a high-risk type of HPV"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Cervical cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00144",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-awareness",
+     "topic": "skin",
+     "title": "Skin cancer and melanoma · Overview and screening",
+     "items": [
+      "Melanoma can develop in a new spot or in an existing mole."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Skin cancer and melanoma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-symptoms",
+     "topic": "skin",
+     "title": "Skin cancer and melanoma · Possible symptoms",
+     "items": [
+      "A mole that changes in size, shape or colour"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Skin cancer and melanoma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-selfExamination",
+     "topic": "skin",
+     "title": "Skin cancer and melanoma · Body awareness",
+     "status": "awareness_only",
+     "items": [
+      "Look for new or changing spots. Note the location and any change you notice, and ask healthcare about a concerning spot."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Skin cancer and melanoma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-homeKit",
+     "topic": "skin",
+     "title": "Skin cancer and melanoma · Home sampling",
+     "status": "unavailable",
+     "items": [
+      "This catalog has no verified home screening kit for this topic."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Skin cancer and melanoma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-riskFactors",
+     "topic": "skin",
+     "title": "Skin cancer and melanoma · Risk factors",
+     "items": [
+      "UV exposure and a family history of melanoma"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Skin cancer and melanoma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "prostate-awareness",
+     "topic": "prostate",
+     "title": "Prostate cancer · Overview and screening",
+     "items": [
+      "Finland has no national prostate cancer screening programme. Discuss PSA testing with a healthcare professional."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Prostate cancer",
+       "url": "https://www.terveyskirjasto.fi/khp00006",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "prostate-symptoms",
+     "topic": "prostate",
+     "title": "Prostate cancer · Possible symptoms",
+     "items": [
+      "Urinary changes can have many causes and should be discussed with healthcare."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Prostate cancer",
+       "url": "https://www.terveyskirjasto.fi/khp00006",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "prostate-selfExamination",
+     "topic": "prostate",
+     "title": "Prostate cancer · Body awareness",
+     "status": "awareness_only",
+     "items": [
+      "Note new urinary changes and discuss them with healthcare. Body awareness does not replace a clinical assessment."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Prostate cancer",
+       "url": "https://www.terveyskirjasto.fi/khp00006",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "prostate-homeKit",
+     "topic": "prostate",
+     "title": "Prostate cancer · Home sampling",
+     "status": "unavailable",
+     "items": [
+      "This catalog has no verified home screening kit for this topic."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Prostate cancer",
+       "url": "https://www.terveyskirjasto.fi/khp00006",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "prostate-riskFactors",
+     "topic": "prostate",
+     "title": "Prostate cancer · Risk factors",
+     "items": [
+      "Prostate cancer in a close relative"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Prostate cancer",
+       "url": "https://www.terveyskirjasto.fi/khp00006",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "testicular-awareness",
+     "topic": "testicular",
+     "title": "Testicular cancer · Overview and screening",
+     "items": [
+      "A testicular lump or change should be assessed by a healthcare professional."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Testicular cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00629",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "testicular-symptoms",
+     "topic": "testicular",
+     "title": "Testicular cancer · Possible symptoms",
+     "items": [
+      "A lump, swelling or change in the size of a testicle"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Testicular cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00629",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "testicular-selfExamination",
+     "topic": "testicular",
+     "title": "Testicular cancer · Body awareness",
+     "status": "awareness_only",
+     "items": [
+      "Get familiar with how your testicles usually look and feel, and tell a healthcare professional about new changes."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Testicular cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00629",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "testicular-homeKit",
+     "topic": "testicular",
+     "title": "Testicular cancer · Home sampling",
+     "status": "unavailable",
+     "items": [
+      "This catalog has no verified home screening kit for this topic."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Testicular cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00629",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "testicular-riskFactors",
+     "topic": "testicular",
+     "title": "Testicular cancer · Risk factors",
+     "items": [
+      "A history of an undescended testicle"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Testicular cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00629",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Finnish Cancer Registry · Breast cancer screening",
+     "url": "https://cancerregistry.fi/screening/breast-cancer-screening/",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Breast cancer",
+     "url": "https://www.terveyskirjasto.fi/dlk00618",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Finnish Cancer Registry · Colorectal cancer screening",
+     "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Bowel cancer",
+     "url": "https://www.terveyskirjasto.fi/dlk01087",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "NCI · Colorectal cancer prevention",
+     "url": "https://www.cancer.gov/types/colorectal/patient/colorectal-prevention-pdq",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Finnish Cancer Registry · Cervical cancer screening",
+     "url": "https://cancerregistry.fi/screening/cervical-cancer-screening/",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Cervical cancer",
+     "url": "https://www.terveyskirjasto.fi/dlk00144",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "NCI · Cervical cancer symptoms",
+     "url": "https://www.cancer.gov/types/cervical/symptoms",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Skin cancer and melanoma",
+     "url": "https://www.terveyskirjasto.fi/dlk00671",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Prostate cancer",
+     "url": "https://www.terveyskirjasto.fi/khp00006",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Testicular cancer",
+     "url": "https://www.terveyskirjasto.fi/dlk00629",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ],
+   "providerLinks": [
+    {
+     "topic": "colorectal",
+     "title": "Fimlab · Bowel screening and kit instructions",
+     "url": "https://fimlab.fi/suolistosyovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "topic": "cervical",
+     "title": "Fimlab · 2026 HPV self-sampling study",
+     "url": "https://fimlab.fi/kohdunkaulan-syovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ]
+  }
+ },
+ {
+  "request": "/api/library?lang=fi&topic=skin&q=syopa",
+  "status": 200,
+  "cacheControl": "public, max-age=300",
+  "body": {
+   "version": "1.1.0",
+   "language": "fi",
+   "requestedLanguage": "fi",
+   "notice": "Yleistä tietoa. Oireilla voi olla useita syitä. Kysy uusista tai jatkuvista muutoksista terveydenhuollon ammattilaiselta.",
+   "articles": [
+    {
+     "id": "skin-awareness",
+     "topic": "skin",
+     "title": "Ihosyöpä ja melanooma · Tietoa ja seulonta",
+     "items": [
+      "Melanooma voi kehittyä uuteen ihomuutokseen tai olemassa olevaan luomeen."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Ihosyöpä ja melanooma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-symptoms",
+     "topic": "skin",
+     "title": "Ihosyöpä ja melanooma · Mahdolliset oireet",
+     "items": [
+      "Luomen koon, muodon tai värin muuttuminen"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Ihosyöpä ja melanooma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-selfExamination",
+     "topic": "skin",
+     "title": "Ihosyöpä ja melanooma · Omatarkkailu",
+     "status": "awareness_only",
+     "items": [
+      "Huomioi uudet tai muuttuvat ihomuutokset. Merkitse muistiin sijainti ja havaitsemasi muutos ja kysy huolestuttavasta muutoksesta terveydenhuollossa."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Ihosyöpä ja melanooma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-homeKit",
+     "topic": "skin",
+     "title": "Ihosyöpä ja melanooma · Kotinäytteenotto",
+     "status": "unavailable",
+     "items": [
+      "Tässä palvelussa ei ole varmennettua kotiseulontatestiä tähän aiheeseen."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Ihosyöpä ja melanooma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-riskFactors",
+     "topic": "skin",
+     "title": "Ihosyöpä ja melanooma · Riskitekijät",
+     "items": [
+      "UV-altistus ja suvussa esiintynyt melanooma"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Ihosyöpä ja melanooma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Duodecim · Ihosyöpä ja melanooma",
+     "url": "https://www.terveyskirjasto.fi/dlk00671",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ],
+   "providerLinks": []
+  }
+ },
+ {
+  "request": "/api/library?lang=fi&topic=skin&q=sy%C3%B6p%C3%A4",
+  "status": 200,
+  "cacheControl": "public, max-age=300",
+  "body": {
+   "version": "1.1.0",
+   "language": "fi",
+   "requestedLanguage": "fi",
+   "notice": "Yleistä tietoa. Oireilla voi olla useita syitä. Kysy uusista tai jatkuvista muutoksista terveydenhuollon ammattilaiselta.",
+   "articles": [
+    {
+     "id": "skin-awareness",
+     "topic": "skin",
+     "title": "Ihosyöpä ja melanooma · Tietoa ja seulonta",
+     "items": [
+      "Melanooma voi kehittyä uuteen ihomuutokseen tai olemassa olevaan luomeen."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Ihosyöpä ja melanooma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-symptoms",
+     "topic": "skin",
+     "title": "Ihosyöpä ja melanooma · Mahdolliset oireet",
+     "items": [
+      "Luomen koon, muodon tai värin muuttuminen"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Ihosyöpä ja melanooma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-selfExamination",
+     "topic": "skin",
+     "title": "Ihosyöpä ja melanooma · Omatarkkailu",
+     "status": "awareness_only",
+     "items": [
+      "Huomioi uudet tai muuttuvat ihomuutokset. Merkitse muistiin sijainti ja havaitsemasi muutos ja kysy huolestuttavasta muutoksesta terveydenhuollossa."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Ihosyöpä ja melanooma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-homeKit",
+     "topic": "skin",
+     "title": "Ihosyöpä ja melanooma · Kotinäytteenotto",
+     "status": "unavailable",
+     "items": [
+      "Tässä palvelussa ei ole varmennettua kotiseulontatestiä tähän aiheeseen."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Ihosyöpä ja melanooma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-riskFactors",
+     "topic": "skin",
+     "title": "Ihosyöpä ja melanooma · Riskitekijät",
+     "items": [
+      "UV-altistus ja suvussa esiintynyt melanooma"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Ihosyöpä ja melanooma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Duodecim · Ihosyöpä ja melanooma",
+     "url": "https://www.terveyskirjasto.fi/dlk00671",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ],
+   "providerLinks": []
+  }
+ },
+ {
+  "request": "/api/library?lang=fi&q=oire",
+  "status": 200,
+  "cacheControl": "public, max-age=300",
+  "body": {
+   "version": "1.1.0",
+   "language": "fi",
+   "requestedLanguage": "fi",
+   "notice": "Yleistä tietoa. Oireilla voi olla useita syitä. Kysy uusista tai jatkuvista muutoksista terveydenhuollon ammattilaiselta.",
+   "articles": [
+    {
+     "id": "breast-symptoms",
+     "topic": "breast",
+     "title": "Rintasyöpä · Mahdolliset oireet",
+     "items": [
+      "Uusi kyhmy rinnassa tai kainalossa",
+      "Uusi nännierite tai muutos nännissä tai rinnan ihossa"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Rintasyöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk00618",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "colorectal-awareness",
+     "topic": "colorectal",
+     "title": "Suolistosyöpä · Tietoa ja seulonta",
+     "items": [
+      "Suolistosyöpä voi kehittyä paksu- tai peräsuoleen. Seulonta voi havaita muutoksia ennen oireita."
+     ],
+     "sources": [
+      {
+       "title": "Suomen Syöpärekisteri · Suolistosyöpäseulonta",
+       "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Duodecim · Suolistosyöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk01087",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "colorectal-symptoms",
+     "topic": "colorectal",
+     "title": "Suolistosyöpä · Mahdolliset oireet",
+     "items": [
+      "Verta ulosteessa tai muutos suolen toiminnassa",
+      "Selittämätön laihtuminen"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Suolistosyöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk01087",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "cervical-symptoms",
+     "topic": "cervical",
+     "title": "Kohdunkaulan syöpä · Mahdolliset oireet",
+     "items": [
+      "Poikkeava verinen vuoto, esimerkiksi yhdynnän jälkeen tai kuukautisten välissä",
+      "Poikkeava emätinvuoto"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Kohdunkaulan syöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk00144",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "NCI · Kohdunkaulan syövän oireet",
+       "url": "https://www.cancer.gov/types/cervical/symptoms",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-symptoms",
+     "topic": "skin",
+     "title": "Ihosyöpä ja melanooma · Mahdolliset oireet",
+     "items": [
+      "Luomen koon, muodon tai värin muuttuminen"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Ihosyöpä ja melanooma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "prostate-symptoms",
+     "topic": "prostate",
+     "title": "Eturauhassyöpä · Mahdolliset oireet",
+     "items": [
+      "Virtsaamisoireilla voi olla useita syitä. Kerro oireista terveydenhuollossa."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Eturauhassyöpä",
+       "url": "https://www.terveyskirjasto.fi/khp00006",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "prostate-selfExamination",
+     "topic": "prostate",
+     "title": "Eturauhassyöpä · Omatarkkailu",
+     "status": "awareness_only",
+     "items": [
+      "Kirjaa uudet virtsaamisoireet ja kerro niistä terveydenhuollossa. Omatarkkailu ei korvaa ammattilaisen arviota."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Eturauhassyöpä",
+       "url": "https://www.terveyskirjasto.fi/khp00006",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "testicular-symptoms",
+     "topic": "testicular",
+     "title": "Kivessyöpä · Mahdolliset oireet",
+     "items": [
+      "Kyhmy, turvotus tai kiveksen koon muuttuminen"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Kivessyöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk00629",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Duodecim · Rintasyöpä",
+     "url": "https://www.terveyskirjasto.fi/dlk00618",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Suomen Syöpärekisteri · Suolistosyöpäseulonta",
+     "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Suolistosyöpä",
+     "url": "https://www.terveyskirjasto.fi/dlk01087",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Kohdunkaulan syöpä",
+     "url": "https://www.terveyskirjasto.fi/dlk00144",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "NCI · Kohdunkaulan syövän oireet",
+     "url": "https://www.cancer.gov/types/cervical/symptoms",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Ihosyöpä ja melanooma",
+     "url": "https://www.terveyskirjasto.fi/dlk00671",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Eturauhassyöpä",
+     "url": "https://www.terveyskirjasto.fi/khp00006",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Kivessyöpä",
+     "url": "https://www.terveyskirjasto.fi/dlk00629",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ],
+   "providerLinks": [
+    {
+     "topic": "colorectal",
+     "title": "Fimlab · Suolistosyövän seulonta ja näytteenotto-ohjeet",
+     "url": "https://fimlab.fi/suolistosyovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "topic": "cervical",
+     "title": "Fimlab · HPV-omanäytteenottotutkimus 2026",
+     "url": "https://fimlab.fi/kohdunkaulan-syovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ]
+  }
+ },
+ {
+  "request": "/api/library?q=zzzznomatch",
+  "status": 200,
+  "cacheControl": "public, max-age=300",
+  "body": {
+   "version": "1.1.0",
+   "language": "en",
+   "requestedLanguage": "en",
+   "notice": "General education. Symptoms can have several causes. Ask a healthcare professional about new or persistent changes.",
+   "articles": [],
+   "sources": [],
+   "providerLinks": [
+    {
+     "topic": "colorectal",
+     "title": "Fimlab · Bowel screening and kit instructions",
+     "url": "https://fimlab.fi/suolistosyovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "topic": "cervical",
+     "title": "Fimlab · 2026 HPV self-sampling study",
+     "url": "https://fimlab.fi/kohdunkaulan-syovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ]
+  }
+ },
+ {
+  "request": "/api/library?lang=fi&q=Tutustu%20rintojen",
+  "status": 200,
+  "cacheControl": "public, max-age=300",
+  "body": {
+   "version": "1.1.0",
+   "language": "fi",
+   "requestedLanguage": "fi",
+   "notice": "Yleistä tietoa. Oireilla voi olla useita syitä. Kysy uusista tai jatkuvista muutoksista terveydenhuollon ammattilaiselta.",
+   "articles": [
+    {
+     "id": "breast-selfExamination",
+     "topic": "breast",
+     "title": "Rintasyöpä · Omatarkkailu",
+     "status": "awareness_only",
+     "items": [
+      "Tutustu siihen, miltä rintasi tavallisesti näyttävät ja tuntuvat. Kysy uudesta muutoksesta terveydenhuollon ammattilaiselta. Rintojen omatarkkailu ei korvaa seulontaa."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Rintasyöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk00618",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Suomen Syöpärekisteri · Rintasyöpäseulonta",
+       "url": "https://cancerregistry.fi/screening/breast-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Duodecim · Rintasyöpä",
+     "url": "https://www.terveyskirjasto.fi/dlk00618",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Suomen Syöpärekisteri · Rintasyöpäseulonta",
+     "url": "https://cancerregistry.fi/screening/breast-cancer-screening/",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    }
+   ],
+   "providerLinks": [
+    {
+     "topic": "colorectal",
+     "title": "Fimlab · Suolistosyövän seulonta ja näytteenotto-ohjeet",
+     "url": "https://fimlab.fi/suolistosyovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "topic": "cervical",
+     "title": "Fimlab · HPV-omanäytteenottotutkimus 2026",
+     "url": "https://fimlab.fi/kohdunkaulan-syovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ]
+  }
+ },
+ {
+  "request": "/api/library?article=breast-symptoms",
+  "status": 200,
+  "cacheControl": "public, max-age=300",
+  "body": {
+   "version": "1.1.0",
+   "language": "en",
+   "requestedLanguage": "en",
+   "notice": "General education. Symptoms can have several causes. Ask a healthcare professional about new or persistent changes.",
+   "articles": [
+    {
+     "id": "breast-symptoms",
+     "topic": "breast",
+     "title": "Breast cancer · Possible symptoms",
+     "items": [
+      "A new lump in the breast or armpit",
+      "New nipple discharge or a change in the nipple or breast skin"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Breast cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00618",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Duodecim · Breast cancer",
+     "url": "https://www.terveyskirjasto.fi/dlk00618",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ],
+   "providerLinks": [
+    {
+     "topic": "colorectal",
+     "title": "Fimlab · Bowel screening and kit instructions",
+     "url": "https://fimlab.fi/suolistosyovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "topic": "cervical",
+     "title": "Fimlab · 2026 HPV self-sampling study",
+     "url": "https://fimlab.fi/kohdunkaulan-syovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ]
+  }
+ },
+ {
+  "request": "/api/library?article=breast-symptoms&lang=fi",
+  "status": 200,
+  "cacheControl": "public, max-age=300",
+  "body": {
+   "version": "1.1.0",
+   "language": "fi",
+   "requestedLanguage": "fi",
+   "notice": "Yleistä tietoa. Oireilla voi olla useita syitä. Kysy uusista tai jatkuvista muutoksista terveydenhuollon ammattilaiselta.",
+   "articles": [
+    {
+     "id": "breast-symptoms",
+     "topic": "breast",
+     "title": "Rintasyöpä · Mahdolliset oireet",
+     "items": [
+      "Uusi kyhmy rinnassa tai kainalossa",
+      "Uusi nännierite tai muutos nännissä tai rinnan ihossa"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Rintasyöpä",
+       "url": "https://www.terveyskirjasto.fi/dlk00618",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Duodecim · Rintasyöpä",
+     "url": "https://www.terveyskirjasto.fi/dlk00618",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ],
+   "providerLinks": [
+    {
+     "topic": "colorectal",
+     "title": "Fimlab · Suolistosyövän seulonta ja näytteenotto-ohjeet",
+     "url": "https://fimlab.fi/suolistosyovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "topic": "cervical",
+     "title": "Fimlab · HPV-omanäytteenottotutkimus 2026",
+     "url": "https://fimlab.fi/kohdunkaulan-syovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ]
+  }
+ },
+ {
+  "request": "/api/library?article=colorectal-homeKit&lang=fi",
+  "status": 200,
+  "cacheControl": "public, max-age=300",
+  "body": {
+   "version": "1.1.0",
+   "language": "fi",
+   "requestedLanguage": "fi",
+   "notice": "Yleistä tietoa. Oireilla voi olla useita syitä. Kysy uusista tai jatkuvista muutoksista terveydenhuollon ammattilaiselta.",
+   "articles": [
+    {
+     "id": "colorectal-homeKit",
+     "topic": "colorectal",
+     "title": "Suolistosyöpä · Kotinäytteenotto",
+     "status": "programme_information",
+     "items": [
+      "Suomen seulontaohjelmassa kutsutuille lähetetään FIT-testi ulostenäytteen ottamiseen kotona. Noudata pakkauksen ohjeita ja palauta näyte ohjeiden mukaan laboratorioanalyysiin.",
+      "FIT-testi etsii piilevää verta. Seulontayksikkö ilmoittaa tuloksen ja mahdollisista jatkotoimista."
+     ],
+     "sources": [
+      {
+       "title": "Suomen Syöpärekisteri · Suolistosyöpäseulonta",
+       "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Suomen Syöpärekisteri · Suolistosyöpäseulonta",
+     "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    }
+   ],
+   "providerLinks": [
+    {
+     "topic": "colorectal",
+     "title": "Fimlab · Suolistosyövän seulonta ja näytteenotto-ohjeet",
+     "url": "https://fimlab.fi/suolistosyovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "topic": "cervical",
+     "title": "Fimlab · HPV-omanäytteenottotutkimus 2026",
+     "url": "https://fimlab.fi/kohdunkaulan-syovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ]
+  }
+ },
+ {
+  "request": "/api/library?article=cervical-homeKit&topic=bowel",
+  "status": 404,
+  "cacheControl": null,
+  "body": {
+   "error": "not_found"
+  }
+ },
+ {
+  "request": "/api/library?article=breast-awareness",
+  "status": 200,
+  "cacheControl": "public, max-age=300",
+  "body": {
+   "version": "1.1.0",
+   "language": "en",
+   "requestedLanguage": "en",
+   "notice": "General education. Symptoms can have several causes. Ask a healthcare professional about new or persistent changes.",
+   "articles": [
+    {
+     "id": "breast-awareness",
+     "topic": "breast",
+     "title": "Breast cancer · Overview and screening",
+     "items": [
+      "Finland’s breast screening programme uses mammography."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Breast cancer screening",
+       "url": "https://cancerregistry.fi/screening/breast-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Duodecim · Breast cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00618",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Finnish Cancer Registry · Breast cancer screening",
+     "url": "https://cancerregistry.fi/screening/breast-cancer-screening/",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Breast cancer",
+     "url": "https://www.terveyskirjasto.fi/dlk00618",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ],
+   "providerLinks": [
+    {
+     "topic": "colorectal",
+     "title": "Fimlab · Bowel screening and kit instructions",
+     "url": "https://fimlab.fi/suolistosyovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "topic": "cervical",
+     "title": "Fimlab · 2026 HPV self-sampling study",
+     "url": "https://fimlab.fi/kohdunkaulan-syovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ]
+  }
+ },
+ {
+  "request": "/api/library?article=unknown",
+  "status": 404,
+  "cacheControl": null,
+  "body": {
+   "error": "not_found"
+  }
+ },
+ {
+  "request": "/api/library?topic=unknown",
+  "status": 404,
+  "cacheControl": null,
+  "body": {
+   "error": "not_found"
+  }
+ },
+ {
+  "request": "/api/library?lang=de",
+  "status": 400,
+  "cacheControl": null,
+  "body": {
+   "error": "invalid"
+  }
+ },
+ {
+  "request": "/api/library?q=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+  "status": 400,
+  "cacheControl": null,
+  "body": {
+   "error": "invalid"
+  }
+ },
+ {
+  "request": "/api/library?q=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+  "status": 200,
+  "cacheControl": "public, max-age=300",
+  "body": {
+   "version": "1.1.0",
+   "language": "en",
+   "requestedLanguage": "en",
+   "notice": "General education. Symptoms can have several causes. Ask a healthcare professional about new or persistent changes.",
+   "articles": [],
+   "sources": [],
+   "providerLinks": [
+    {
+     "topic": "colorectal",
+     "title": "Fimlab · Bowel screening and kit instructions",
+     "url": "https://fimlab.fi/suolistosyovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "topic": "cervical",
+     "title": "Fimlab · 2026 HPV self-sampling study",
+     "url": "https://fimlab.fi/kohdunkaulan-syovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ]
+  }
+ },
+ {
+  "request": "/api/library?topic=colorectal&q=kit",
+  "status": 200,
+  "cacheControl": "public, max-age=300",
+  "body": {
+   "version": "1.1.0",
+   "language": "en",
+   "requestedLanguage": "en",
+   "notice": "General education. Symptoms can have several causes. Ask a healthcare professional about new or persistent changes.",
+   "articles": [
+    {
+     "id": "colorectal-homeKit",
+     "topic": "colorectal",
+     "title": "Colorectal cancer · Home sampling",
+     "status": "programme_information",
+     "items": [
+      "The Finnish programme sends invited participants a FIT kit for collecting a stool sample at home. Follow the instructions supplied with your kit and return the sample as directed for laboratory analysis.",
+      "FIT checks for hidden blood. The screening service communicates the result and any follow-up."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Colorectal cancer screening",
+       "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Finnish Cancer Registry · Colorectal cancer screening",
+     "url": "https://cancerregistry.fi/screening/colorectal-cancer-screening/",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    }
+   ],
+   "providerLinks": [
+    {
+     "topic": "colorectal",
+     "title": "Fimlab · Bowel screening and kit instructions",
+     "url": "https://fimlab.fi/suolistosyovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ]
+  }
+ },
+ {
+  "request": "/api/library?topic=cervical&q=hpv",
+  "status": 200,
+  "cacheControl": "public, max-age=300",
+  "body": {
+   "version": "1.1.0",
+   "language": "en",
+   "requestedLanguage": "en",
+   "notice": "General education. Symptoms can have several causes. Ask a healthcare professional about new or persistent changes.",
+   "articles": [
+    {
+     "id": "cervical-awareness",
+     "topic": "cervical",
+     "title": "Cervical cancer · Overview and screening",
+     "items": [
+      "Cervical screening looks for high-risk HPV or cervical cell changes, depending on the test."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Cervical cancer screening",
+       "url": "https://cancerregistry.fi/screening/cervical-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      },
+      {
+       "title": "Duodecim · Cervical cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00144",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "cervical-homeKit",
+     "topic": "cervical",
+     "title": "Cervical cancer · Home sampling",
+     "status": "unavailable",
+     "items": [
+      "Home HPV sampling availability and instructions depend on the screening provider. This catalog has no verified kit instructions. Ask the service listed in your invitation."
+     ],
+     "sources": [
+      {
+       "title": "Finnish Cancer Registry · Cervical cancer screening",
+       "url": "https://cancerregistry.fi/screening/cervical-cancer-screening/",
+       "language": "en",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "cervical-riskFactors",
+     "topic": "cervical",
+     "title": "Cervical cancer · Risk factors",
+     "items": [
+      "Persistent infection with a high-risk type of HPV"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Cervical cancer",
+       "url": "https://www.terveyskirjasto.fi/dlk00144",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Finnish Cancer Registry · Cervical cancer screening",
+     "url": "https://cancerregistry.fi/screening/cervical-cancer-screening/",
+     "language": "en",
+     "retrieved": "2026-11-14"
+    },
+    {
+     "title": "Duodecim · Cervical cancer",
+     "url": "https://www.terveyskirjasto.fi/dlk00144",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ],
+   "providerLinks": [
+    {
+     "topic": "cervical",
+     "title": "Fimlab · 2026 HPV self-sampling study",
+     "url": "https://fimlab.fi/kohdunkaulan-syovan-seulonta/",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ]
+  }
+ },
+ {
+  "request": "/api/library?topic=skin&q=mole&lang=en",
+  "status": 200,
+  "cacheControl": "public, max-age=300",
+  "body": {
+   "version": "1.1.0",
+   "language": "en",
+   "requestedLanguage": "en",
+   "notice": "General education. Symptoms can have several causes. Ask a healthcare professional about new or persistent changes.",
+   "articles": [
+    {
+     "id": "skin-awareness",
+     "topic": "skin",
+     "title": "Skin cancer and melanoma · Overview and screening",
+     "items": [
+      "Melanoma can develop in a new spot or in an existing mole."
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Skin cancer and melanoma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    },
+    {
+     "id": "skin-symptoms",
+     "topic": "skin",
+     "title": "Skin cancer and melanoma · Possible symptoms",
+     "items": [
+      "A mole that changes in size, shape or colour"
+     ],
+     "sources": [
+      {
+       "title": "Duodecim · Skin cancer and melanoma",
+       "url": "https://www.terveyskirjasto.fi/dlk00671",
+       "language": "fi",
+       "retrieved": "2026-11-14"
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Duodecim · Skin cancer and melanoma",
+     "url": "https://www.terveyskirjasto.fi/dlk00671",
+     "language": "fi",
+     "retrieved": "2026-11-14"
+    }
+   ],
+   "providerLinks": []
+  }
+ }
+]

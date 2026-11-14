@@ -1,14 +1,10 @@
-/* care4all entry point. Import order matters: state and content first, then core, art, views, and the shell last. */
+/* care4all entry point. Import order matters: state first, then core, art, views, and the shell last.
+   The educational content is not imported: A.D starts empty and start-up fills it from /api/content (state/content.js). */
 import "./styles/fonts.css";
 import "./styles/app.css";
 import "./styles/account.css";
 import "./styles/content.css";
 import "./styles/chat.css";
-
-import "./content/data.js";
-import "./content/research.js";
-import "./content/merge.js";
-import "./content/facts.js";
 
 import "./state/index.js";
 import "./core.js";
@@ -29,5 +25,6 @@ import "./sessions.js";
 // Modules that replace views defined above. A later assignment to A.views[name] wins.
 import "./views/account.js";
 import "./views/ask.js";
+import "./views/assess.js";
 
 import "./ui.js";

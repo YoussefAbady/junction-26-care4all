@@ -11,7 +11,8 @@ RUN npm run build
 
 FROM builder AS migration
 USER node
-CMD ["npm", "run", "db:migrate"]
+# The release job: apply migrations, then load the content (idempotent, so a restart changes nothing).
+CMD ["npm", "run", "db:release"]
 
 FROM node:24-bookworm-slim AS runtime
 WORKDIR /app

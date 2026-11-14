@@ -293,6 +293,9 @@ svg { display: block; flex: none; }
 .fi { flex: 1; min-width: 0; width: 100%; border: 0; background: transparent; text-align: right; font-size: 1.0625rem; color: var(--ink); outline: none; padding: 8px 0; }
 .fi::placeholder { color: var(--ink3); opacity: 1; }
 select.fi { text-align-last: right; padding-right: 4px; cursor: pointer; }
+/* The list a select opens is painted by the browser from the options' own colours. The select itself is transparent, so
+   without these the list is white under light text in dark mode and most of it cannot be read. */
+select.fi option, select.fi optgroup { background-color: var(--surface); color: var(--ink); }
 .cell.field:focus-within { outline: 3px solid var(--focus); outline-offset: -3px; border-radius: 12px; }
 .cell.field[data-invalid] { background: var(--fail-soft); }
 .cell.field[data-invalid] .fl { color: var(--fail); }

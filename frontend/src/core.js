@@ -36,8 +36,9 @@ import { A as C4A } from "./app.js";
     if (import.meta.env.DEV && !warned[k] && typeof console !== 'undefined') { warned[k] = 1; console.warn('A.save("' + k + '") stores nothing. Change it through A.svc.'); }
   };
   A.t = function (key) {
-    var d = D.I18N[A.S.prefs.lang] || D.I18N.en;
-    return d[key] || D.I18N.en[key] || key;
+    var all = D.I18N;
+    if (!all) return key;   // the content has not loaded: the "No connection" screen still passes through chrome(), which labels the tab bar
+    return (all[A.S.prefs.lang] || all.en)[key] || all.en[key] || key;
   };
   A.LANG_NAMES = { en: 'English', fi: 'Suomi', sv: 'Svenska' };
   /* True when care4all runs as an installed app rather than in a browser tab. */
@@ -251,15 +252,8 @@ import { A as C4A } from "./app.js";
   /* ---------- starter questions ----------
      The answers themselves come from the backend (A.api.chat). These are only the suggestions offered under the box. */
   A.suggestions = function (topic) {
-    var by = {
-      breast: ['When do I get a mammogram letter?', 'What if the images show a change?', 'Which breast changes need checking?'],
-      cervical: ['Can I take the sample at home?', 'What does an unclear result mean?', 'Is screening free?'],
-      bowel: ['What happens after a bowel test?', 'Who is invited in 2026?', 'How do I take the sample?'],
-      skin: ['Which moles should I get checked?', 'Who is at higher risk of melanoma?', 'Is there skin cancer screening?'],
-      testicular: ['How do I check my testicles?', 'What should I look out for?', 'Who gets testicular cancer?'],
-      prostate: ['Is there prostate screening in Finland?', 'Is screening free?', 'Do I have to take part?']
-    };
+    var by = D.SUGGESTIONS.topics;
     if (!by[topic] && D.TOPICS[topic]) { var n = D.TOPICS[topic].name.toLowerCase(); return ['What are the signs of ' + n + ' cancer?', 'What raises the risk of ' + n + ' cancer?', 'How is ' + n + ' cancer diagnosed?']; }
-    return by[topic] || ['How can I lower my cancer risk?', 'Is screening free?', 'What is cancer?', 'When do I get a mammogram letter?'];
+    return by[topic] || D.SUGGESTIONS.general;
   };
 })();

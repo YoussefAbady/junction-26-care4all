@@ -10,7 +10,10 @@
  *   A.actions[name](el)  handles data-action="name" clicks
  *   A.forms[name](form)  handles data-form="name" submits
  *   A.changes / A.inputs handle change and input events inside a data-form
+ *
+ *   A.D                  the public educational content. It starts empty: start-up fills it in place from
+ *                        GET /api/content (src/state/content.js), before the first screen is drawn. A module may keep
+ *                        `var D = A.D`, but must read D.TOPICS and the rest only when it runs, never when it loads.
+ *   A.contentVersion     the version of that content, once it has loaded
  */
-import { D } from "./content/data.js";
-
-export const A = { D };
+export const A = { D: {}, contentVersion: null };

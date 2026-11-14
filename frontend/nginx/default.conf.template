@@ -3,7 +3,9 @@
 
 # Library searches and similar requests carry words people typed about their health. Query strings are
 # therefore left out of the access log on purpose, and request bodies and cookies are never logged.
-log_format care4all '$remote_addr [$time_local] "$request_method $uri" $status $body_bytes_sent';
+# The Origin header is an address, never a person's data, and it is what the backend's same-origin check compares, so it is
+# kept to explain a 403 ("-" when the browser sent none).
+log_format care4all '$remote_addr [$time_local] "$request_method $uri" $status $body_bytes_sent "$http_origin"';
 
 server {
   listen 8080;

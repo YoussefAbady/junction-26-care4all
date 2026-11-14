@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 // These journeys run against the PWA container, which is the address people open (see playwright.config.ts).
 test.use({ serviceWorkers: "allow" });
 
-test("the PWA is installable, registers its worker, opens offline and never caches API responses", async ({ page, context, request }) => {
+test("the PWA is installable, registers its worker, opens offline and caches only the public content from the API", async ({ page, context, request }) => {
   await page.goto("/");
 
   const manifestHref = await page.locator('link[rel="manifest"]').getAttribute("href");
@@ -19,12 +19,9 @@ test("the PWA is installable, registers its worker, opens offline and never cach
   await page.reload();
   await expect.poll(() => page.evaluate(() => Boolean(navigator.serviceWorker.controller))).toBe(true);
 
-  // A public and a private API call go through the worker without being stored.
-  await page.evaluate(async () => {
-    await fetch("/api/cancers?lang=en");
-    await fetch("/api/account?view=identity");
-  });
-  const cached = await page.evaluate(async () => {
+  // The worker keeps exactly one API response: the public content, which the app asked for when it started after the
+  // reload. Every other API call goes through the worker without being stored, including a path that only starts like it.
+  const cachedPaths = () => page.evaluate(async () => {
     const paths: string[] = [];
     for (const key of await caches.keys()) {
       const cache = await caches.open(key);
@@ -32,9 +29,16 @@ test("the PWA is installable, registers its worker, opens offline and never cach
     }
     return paths;
   });
+  await expect.poll(async () => (await cachedPaths()).filter(path => path.startsWith("/api/"))).toEqual(["/api/content"]);
+  await page.evaluate(async () => {
+    await fetch("/api/cancers?lang=en");
+    await fetch("/api/account?view=identity");
+    await fetch("/api/content-reports");
+  });
+  const cached = await cachedPaths();
   expect(cached).toContain("/");
   expect(cached.some(path => path.endsWith(".js"))).toBe(true);
-  expect(cached.filter(path => path.startsWith("/api/"))).toEqual([]);
+  expect(cached.filter(path => path.startsWith("/api/") && path !== "/api/content")).toEqual([]);
 
   // Offline, the cached shell still opens.
   await context.setOffline(true);

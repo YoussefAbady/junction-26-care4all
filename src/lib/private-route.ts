@@ -1,10 +1,10 @@
 import "server-only";
-import { currentAccount, privateJson, sameOrigin } from "./account-session";
+import { currentAccount, privateJson, refuseOrigin, sameOrigin } from "./account-session";
 
 type Owner = NonNullable<Awaited<ReturnType<typeof currentAccount>>>;
 export function privateRoute(handler: (request: Request, owner: Owner, body: unknown) => Promise<Response>, mutation = false) {
   return async (request: Request) => {
-    if (mutation && !sameOrigin(request)) return privateJson({ error: "invalid" }, 403);
+    if (mutation && !sameOrigin(request)) return refuseOrigin(request);
     if (mutation && !request.headers.get("content-type")?.startsWith("application/json")) return privateJson({ error: "invalid" }, 415);
     try {
       const owner = await currentAccount();

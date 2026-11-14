@@ -8,10 +8,12 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "prisma generate && next typegen && tsc --noEmit",
-    "test": "tsx --test tests/domain.test.ts tests/intake.test.ts tests/chat.test.ts",
+    "test": "tsx --test tests/domain.test.ts tests/intake.test.ts tests/chat.test.ts tests/origin.test.ts tests/content.test.ts tests/content-db.test.ts tests/ai.test.ts tests/chat-ai.test.ts tests/assess.test.ts",
     "test:e2e": "playwright test",
     "db:migrate": "prisma migrate deploy",
     "db:seed": "prisma db seed",
+    "db:release": "prisma migrate deploy && prisma db seed",
+    "db:reindex": "tsx prisma/reindex.ts",
     "db:generate": "prisma generate"
   },
   "dependencies": {

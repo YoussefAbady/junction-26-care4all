@@ -15,6 +15,15 @@ const query = params => {
 export const api = {
   health: () => request("health"),
 
+  content: {
+    /**
+     * The public educational content, the same for everyone: topics, articles, sources, statistics and interface text.
+     * Loaded once at start-up by state/content.js. It is the only API response the service worker keeps.
+     * @returns {Promise<{ version: string, retrieved: string, content: object }>}
+     */
+    get: () => request("content"),
+  },
+
   account: {
     /** @returns {Promise<{ account: { username: string, language: string } | null }>} */
     get: () => request("account?view=identity"),
@@ -67,6 +76,12 @@ export const api = {
     saveExport: () => download("my-data", "care4all-my-data.json"),
     /** Deletes the account and everything it owns. Needs the account password. */
     remove: password => request("my-data", { method: "DELETE", body: { confirm: true, password } }),
+  },
+
+  /** An AI review of the saved intake answers. The server removes everything that identifies the person before the model sees them (docs/ai-review.md). */
+  assess: {
+    /** @param {{ language: "en" | "fi", step: "next" | "review", history: { q: string, options: { id: string, label: string }[], a: string }[] }} body The person has already agreed on screen. */
+    send: body => request("assess", { method: "POST", body: { consent: true, ...body } }),
   },
 
   chat: {

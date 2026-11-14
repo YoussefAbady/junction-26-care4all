@@ -35,5 +35,10 @@ export function readProgress(stored: unknown, revision: number): Progress {
   const record = typeof stored === "object" && stored !== null ? stored as Record<string, unknown> : {};
   const language = record.language === "fi" ? "fi" : "en";
   if (record.v !== 2) return { ...freshProgress(language, revision), answers: importLegacyAnswers(record) };
-  return parseProgress({ ...record, revision }) ?? freshProgress(language, revision, true);
+  const current = parseProgress({ ...record, revision });
+  if (current) return current;
+  // A finished interview stops being finished when the questionnaire gains a question. Its answers are still good, so it is
+  // reopened (the new questions are asked, then the person confirms again) instead of being thrown away.
+  const reopened = parseProgress({ ...record, revision, complete: false, confirmed: false });
+  return reopened ? { ...reopened, cursor: "" } : freshProgress(language, revision, true);
 }

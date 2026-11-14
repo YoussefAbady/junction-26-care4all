@@ -1,11 +1,18 @@
-import { eq, femaleBody, has, maleBody, olderThan, oneOf } from "../access";
+import { eq, femaleBody, maleBody, olderThan, oneOf } from "../access";
 import type { Plan } from "../types";
 import { c, o, yesNo } from "./shared";
 
 export const screen: Plan[] = [
   {
+    id: "scr_gate", module: "screen", type: "choice", layout: "yesno", unsure: true,
+    title: c("Do you have a screening letter or test result you would like to understand?", "Onko sinulla seulontakirje tai tutkimustulos, jonka haluaisit ymmärtää?"),
+    label: c("Letter or result to understand", "Ymmärrettävä kirje tai tulos"),
+    why: c("Knowing which test it was and what it said lets a clinician explain it properly.", "Kun tiedetään, mikä tutkimus oli ja mitä se kertoi, lääkäri voi selittää sen oikein."),
+    options: yesNo(),
+  },
+  {
     id: "scr_result", module: "screen", type: "form", unsure: true,
-    show: a => has(a, "reason", "letter"),
+    show: a => eq(a, "scr_gate", "yes"),
     title: c("Tell us about the screening letter or result", "Kerro seulontakirjeestä tai tuloksesta"),
     label: c("Screening letter or result", "Seulontakirje tai tulos"),
     help: c("You mentioned a letter or result you want to understand. Keep the original handy for your appointment.", "Mainitsit kirjeen tai tuloksen, jonka haluat ymmärtää. Pidä alkuperäinen mukana vastaanotolla."),

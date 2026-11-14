@@ -2,9 +2,12 @@ import { defineConfig } from "vite";
 import { createHash } from "node:crypto";
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { renderServiceWorker } from "./scripts/render-sw.js";
 
 const publicDir = "public";
+// The file the database is seeded from. The interface itself bundles no content: it reads /api/content.
+const seedFile = fileURLToPath(new URL("../prisma/seed-data/design-content.json", import.meta.url));
 
 /** Every file in public/, as the URL the browser requests it by. */
 function publicUrls(dir = "", found = []) {
@@ -37,8 +40,37 @@ function serviceWorker() {
   };
 }
 
+/**
+ * Development only. Answers GET /api/content from the seed file, as { version: "dev", retrieved, content }, so the
+ * interface can be worked on before the backend serves the endpoint. It is never part of a build or of `vite preview`.
+ * CONTENT_FROM=backend switches it off, and the /api proxy below then reaches the real endpoint.
+ */
+function devContent() {
+  return {
+    name: "care4all:dev-content",
+    apply: "serve",
+    configureServer(server) {
+      if (process.env.CONTENT_FROM === "backend") return;
+      server.config.logger.info("  /api/content is served from prisma/seed-data/design-content.json. Set CONTENT_FROM=backend to use the backend.");
+      server.middlewares.use((request, response, next) => {
+        if (request.method !== "GET" || new URL(request.url, "http://localhost").pathname !== "/api/content") return next();
+        response.setHeader("Content-Type", "application/json; charset=utf-8");
+        response.setHeader("Cache-Control", "no-store");
+        try {
+          const { source, content } = JSON.parse(readFileSync(seedFile, "utf8"));
+          response.end(JSON.stringify({ version: "dev", retrieved: source && source.retrieved, content }));
+        } catch (error) {
+          server.config.logger.error("care4all: cannot read " + seedFile + ": " + error.message);
+          response.statusCode = 503;
+          response.end('{"error":"unavailable"}');
+        }
+      });
+    },
+  };
+}
+
 export default defineConfig({
-  plugins: [serviceWorker()],
+  plugins: [serviceWorker(), devContent()],
   build: { target: "es2022", sourcemap: false, chunkSizeWarningLimit: 700 },
   server: {
     port: 5173,

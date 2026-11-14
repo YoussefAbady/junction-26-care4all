@@ -29,7 +29,7 @@ import { A as C4A } from "./app.js";
     if (some) {
       h += '<div class="card"><p class="cap">' + esc(A.tr('What to tell them', 'Mitä kertoa')) + '</p><ul class="tick">' +
         recent.map(function (n) { return '<li>' + esc(n.symptoms.join(', ')) + (n.when ? ' <span class="muted">(' + esc(n.when.toLowerCase()) + ')</span>' : '') + '</li>'; }).join('') +
-        found.map(function (r) { return '<li>' + esc((A.CHECK_META[r.check] || {}).name || r.check) + ': ' + esc(r.findings.join(', ') || r.other) + ' <span class="muted">(' + esc(A.fmtDate(r.ts)) + ')</span></li>'; }).join('') + '</ul></div>';
+        found.map(function (r) { return '<li>' + esc((D.CHECK_META[r.check] || {}).name || r.check) + ': ' + esc(r.findings.join(', ') || r.other) + ' <span class="muted">(' + esc(A.fmtDate(r.ts)) + ')</span></li>'; }).join('') + '</ul></div>';
     }
     h += '<p class="small">' + esc(D.COPY.disclaimer) + '</p><div class="stack">' +
       (some ? '<button class="btn primary block" type="button" data-action="gp-copy">' + esc(A.tr('Copy my notes for the appointment', 'Kopioi muistiinpanoni vastaanottoa varten')) + '</button>' : '') +

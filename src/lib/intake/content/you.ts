@@ -2,6 +2,16 @@ import { ageOf, eq, femaleBody, isMarker } from "../access";
 import type { Plan } from "../types";
 import { c, o } from "./shared";
 
+/** The largest cities in Finland, biggest first, as [id, name]. The names are the same in English and Finnish. */
+const cities: [string, string][] = [
+  ["helsinki", "Helsinki"], ["espoo", "Espoo"], ["tampere", "Tampere"], ["vantaa", "Vantaa"], ["oulu", "Oulu"], ["turku", "Turku"],
+  ["jyvaskyla", "Jyväskylä"], ["lahti", "Lahti"], ["kuopio", "Kuopio"], ["pori", "Pori"], ["kouvola", "Kouvola"], ["joensuu", "Joensuu"],
+  ["lappeenranta", "Lappeenranta"], ["hameenlinna", "Hämeenlinna"], ["vaasa", "Vaasa"], ["seinajoki", "Seinäjoki"], ["rovaniemi", "Rovaniemi"],
+  ["mikkeli", "Mikkeli"], ["kotka", "Kotka"], ["salo", "Salo"], ["porvoo", "Porvoo"], ["kokkola", "Kokkola"], ["hyvinkaa", "Hyvinkää"],
+  ["lohja", "Lohja"], ["jarvenpaa", "Järvenpää"], ["rauma", "Rauma"], ["kajaani", "Kajaani"], ["kerava", "Kerava"], ["savonlinna", "Savonlinna"],
+  ["nokia", "Nokia"], ["kemi", "Kemi"], ["riihimaki", "Riihimäki"], ["imatra", "Imatra"], ["raahe", "Raahe"], ["tornio", "Tornio"], ["iisalmi", "Iisalmi"],
+];
+
 export const you: Plan[] = [
   {
     id: "name", module: "you", type: "text", short: true, max: 40, optional: true,
@@ -99,11 +109,15 @@ export const you: Plan[] = [
     id: "residence", module: "you", type: "choice", layout: "list", unsure: false,
     title: c("Where do you live?", "Missä asut?"),
     label: c("Place of residence", "Asuinpaikka"),
+    help: c("Choose your city. If it is not listed, choose “Another place in Finland”.", "Valitse kaupunkisi. Jos sitä ei ole listalla, valitse ”Muu paikkakunta Suomessa”."),
     why: c("Health services and screening programmes differ from place to place.", "Terveyspalvelut ja seulontaohjelmat vaihtelevat paikkakunnittain."),
     options: [
-      o("uusimaa", "Helsinki-Uusimaa", "Helsinki-Uusimaa"),
-      o("finland", "Elsewhere in Finland", "Muualla Suomessa"),
+      ...cities.map(([id, name]) => o(id, name, name)),
+      o("finland", "Another place in Finland", "Muu paikkakunta Suomessa"),
       o("abroad", "Outside Finland", "Suomen ulkopuolella"),
+      // The first version of this question asked for a region. An answer already given stays valid and is shown to the person
+      // who gave it, and nobody else is offered it.
+      o("uusimaa", "Helsinki-Uusimaa (earlier answer)", "Helsinki-Uusimaa (aiempi vastaus)", { when: a => eq(a, "residence", "uusimaa") }),
     ],
   },
 ];

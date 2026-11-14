@@ -267,28 +267,16 @@ const startOptions = [
   o("year_plus", "More than a year ago", "Yli vuosi sitten"),
 ];
 
+// "What brings you here today?" (id "reason") is no longer asked: it was an opener, not a question about the person's health. What
+// it decided is asked directly instead: the areas of concern here, and the screening letter in the last chapter.
 export const now: Plan[] = [
   {
-    id: "reason", module: "now", type: "multi", unsure: false,
-    title: c("What brings you here today?", "Mikä tuo sinut tänne tänään?"),
-    label: c("Reason for visit", "Käynnin syy"),
-    help: c("Pick everything that fits.", "Valitse kaikki sopivat."),
-    why: c("This tells us where to dig deeper, and where we can skip ahead so you are not answering questions that do not matter.", "Tämä kertoo, mihin kannattaa syventyä ja minkä voi ohittaa, ettet vastaa turhiin kysymyksiin."),
-    options: [
-      o("symptom", "A symptom or something that worries me", "Oire tai asia, joka huolestuttaa", { icon: "Stethoscope" }),
-      o("letter", "A screening letter or test result I want to understand", "Seulontakirje tai tutkimustulos, jonka haluan ymmärtää", { icon: "FileText" }),
-      o("checkup", "A routine check-up or prevention", "Tavallinen terveystarkastus tai ennaltaehkäisy", { icon: "ShieldCheck" }),
-      o("known", "A condition I already have and want to keep on record", "Jo todettu sairaus, jonka haluan tallentaa tietoihini", { icon: "ClipboardList" }),
-    ],
-  },
-  {
     id: "areas", module: "now", type: "multi", max: 3, unsure: false,
-    show: a => has(a, "reason", "symptom"),
-    title: c("Where are you noticing it?", "Missä asiassa sen huomaat?"),
+    title: c("Is there anything you have noticed lately, or something that worries you?", "Onko jotain, minkä olet huomannut viime aikoina tai mikä huolestuttaa?"),
     label: c("Areas of concern", "Huolenaiheet"),
-    help: c("Choose up to three, starting with the one that bothers you most.", "Valitse enintään kolme, aloita eniten vaivaavasta."),
+    help: c("Choose up to three, starting with the one that bothers you most. If there is nothing, choose “Nothing in particular”.", "Valitse enintään kolme, aloita eniten vaivaavasta. Jos ei ole mitään, valitse ”Ei mitään erityistä”."),
     why: c("Each area you choose opens a short, tailored set of follow-up questions. Nothing else does.", "Jokainen valitsemasi alue avaa lyhyen, räätälöidyn jatkokysymyssarjan. Muita ei tule."),
-    options: areaOptions,
+    options: [...areaOptions, o("none", "Nothing in particular", "Ei mitään erityistä", { exclusive: true })],
   },
   {
     id: "areas_other", module: "now", type: "text", max: 600,
@@ -299,7 +287,7 @@ export const now: Plan[] = [
     placeholder: c("Describe it as you would to a friend", "Kuvaile se kuin ystävälle"),
   },
   {
-    gen: "sx", source: "areas", skip: ["other"],
+    gen: "sx", source: "areas", skip: ["other", "none"],
     make: (key, label) => {
       const area = areas[key];
       const id = (name: string) => `sx:${key}:${name}`;
@@ -361,7 +349,7 @@ export const now: Plan[] = [
   },
   {
     id: "sx_notes", module: "now", type: "text", optional: true, max: 800,
-    show: a => Array.isArray(a.areas) && (a.areas as string[]).some(area => area !== "other"),
+    show: a => Array.isArray(a.areas) && (a.areas as string[]).some(area => area !== "other" && area !== "none"),
     title: c("Anything else about how you are feeling?", "Onko vielä jotain vointiisi liittyvää?"),
     label: c("Extra notes on symptoms", "Lisätietoja oireista"),
     help: c("Things that seem unrelated are welcome too.", "Myös asiat, jotka tuntuvat täysin liittymättömiltä, ovat tervetulleita."),

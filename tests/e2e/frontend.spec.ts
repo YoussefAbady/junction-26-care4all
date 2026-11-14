@@ -41,7 +41,8 @@ async function expectNothingPrivateStored(page: Page, ...private_: string[]) {
   expect(Object.keys(JSON.parse(stored.local["c4a:display"])).sort()).toEqual(["dismissInstall", "lang", "motion", "plain", "scale", "skin"]);
   expect(stored.session).toEqual([]);
   expect(stored.databases).toBe(0);
-  expect(stored.cached.filter(path => path.startsWith("/api/"))).toEqual([]);
+  // The service worker keeps one API response, the public content, and no other.
+  expect(stored.cached.filter(path => path.startsWith("/api/") && path !== "/api/content")).toEqual([]);
   for (const text of private_) expect(JSON.stringify(stored)).not.toContain(text);
 }
 
@@ -142,19 +143,20 @@ test("a symptom note is saved on the server, appears in My notes after a reload 
     await screen.getByRole("button", { name: "In the past week" }).click();
     await screen.getByRole("button", { name: "Comes and goes" }).click();
     await screen.getByRole("button", { name: "Some effect" }).click();
-    // "Comes and goes" leads to a follow-up question. The last question is optional and can be skipped.
+    // "Comes and goes" rewords the last question, which is optional (otherwise it asks "Anything else you want to share with
+    // your healthcare professional?"). Answering it leads straight to the review.
     await screen.getByLabel("When does it come back, and what else do you notice at the same time?").fill("Only after a walk.");
     await screen.getByRole("button", { name: "Continue" }).click();
-    await expect(screen.getByRole("log").getByText("Anything else you want to share with your healthcare professional?")).toBeVisible();
-    await screen.getByRole("button", { name: "Skip this" }).click();
     await expect(screen.getByText("Review your symptom note")).toBeVisible();
     await screen.getByRole("button", { name: "Confirm and save" }).click();
     await expect(page.getByText("Saved to your symptom notes.")).toBeVisible();
 
+    // Earlier screens stay in the page behind the one on top, so the note is looked for on the My notes screen itself.
     await goto(page, "#notes");
-    await expect(page.getByText(/Fictional skin observation/)).toBeVisible();
+    const notes = page.getByRole("region", { name: "My notes" });
+    await expect(notes.getByText(/Fictional skin observation/)).toBeVisible();
     await page.reload();
-    await expect(page.getByText(/Fictional skin observation/)).toBeVisible();
+    await expect(notes.getByText(/Fictional skin observation/)).toBeVisible();
     await expectNothingPrivateStored(page, "Fictional skin observation", "Only after a walk");
 
     const saved = (await (await page.request.get("/api/observations")).json()).observations;
@@ -164,7 +166,7 @@ test("a symptom note is saved on the server, appears in My notes after a reload 
 
     await page.locator('[data-action="note-menu"]').click();
     await page.getByRole("button", { name: "Delete note" }).click();
-    await expect(page.getByText(/Fictional skin observation/)).toBeHidden();
+    await expect(notes.getByText(/Fictional skin observation/)).toBeHidden();
     expect((await (await page.request.get("/api/observations")).json()).observations).toHaveLength(0);
   } finally {
     await removeAccount(request, baseURL!, credentials);
@@ -178,8 +180,10 @@ test("Ask answers with sources, treats an emergency as one, and Learn searches t
     await page.goto("/#ask");
     await page.getByRole("textbox", { name: "Your question" }).fill("What is FIT?");
     await page.getByRole("button", { name: "Send question" }).click();
-    await expect(page.getByRole("link", { name: /Finnish Cancer Registry/ }).first()).toBeVisible({ timeout: 20000 });
-    await expect(page.getByRole("button", { name: "Copy answer and sources" })).toBeVisible();
+    // The answer is written by a model when one is configured and comes from the reviewed passages otherwise. Either way it
+    // arrives with source links, so this does not depend on which sources a model chose to cite.
+    await expect(page.getByRole("button", { name: "Copy answer and sources" })).toBeVisible({ timeout: 30000 });
+    await expect(page.locator('[role="log"] a[href^="https"]').first()).toBeVisible();
     for (const href of await page.locator('[role="log"] a[href^="http"]').evaluateAll(links => links.map(link => (link as HTMLAnchorElement).href))) expect(href).toMatch(/^https:/);
 
     await page.getByRole("textbox", { name: "Your question" }).fill("I have chest pain and I cannot breathe");
@@ -201,6 +205,57 @@ test("Ask answers with sources, treats an emergency as one, and Learn searches t
   } finally {
     await removeAccount(request, baseURL!, credentials);
   }
+});
+
+test.describe("a model-written answer", () => {
+  // Request interception does not see requests a service worker handles, and this journey fakes the server's reply.
+  test.use({ serviceWorkers: "block" });
+
+  test("an answer an AI model wrote says so, keeps its sources in view, and the question goes out with nothing else", async ({ page, request, baseURL }) => {
+    test.setTimeout(60000);
+    const credentials = await newAccount(page, baseURL!, "gen");
+    const sent: unknown[] = [];
+    try {
+      // The server's reply is faked, so this checks the screen and never calls a model.
+      await page.route("**/api/chat", async route => {
+        if (route.request().method() !== "POST") return route.continue();
+        sent.push(route.request().postDataJSON());
+        await route.fulfill({
+          json: {
+            kind: "education", topic: "colorectal", message: "Colorectal cancer screening",
+            generated: { text: "The FIT test checks a small stool sample for hidden blood.\nPeople are invited by letter.", citations: ["p1"], provider: "gemini", model: "gemini-test" },
+            passages: [{ id: "p1", items: ["The FIT test looks for hidden blood in a small stool sample."], sources: [{ title: "Terveyskylä: Bowel cancer screening", url: "https://www.terveyskyla.fi/", language: "en", retrieved: "2026-11-14T00:00:00.000Z" }] }],
+            suggestedTopics: [{ id: "who", label: "Who is invited?", request: { message: "Who is invited to bowel cancer screening?", language: "en", topic: "colorectal" } }],
+            shareText: "FIT test"
+          }
+        });
+      });
+      await page.goto("/#ask");
+      const log = page.getByRole("log", { name: "Conversation" });
+      // The intro says in plain words where a question goes and what is never sent.
+      await expect(log).toContainText("Google Gemini");
+      await expect(log).toContainText("no account details, saved information or notes");
+
+      await page.getByRole("textbox", { name: "Your question" }).fill("How does the FIT test work?");
+      await page.getByRole("button", { name: "Send question" }).click();
+      await expect(log.getByText("Written by AI", { exact: true })).toBeVisible();
+      await expect(log).toContainText("The FIT test checks a small stool sample for hidden blood.");
+      await expect(log).toContainText("People are invited by letter.");
+      await expect(log).toContainText("Google Gemini");
+      // The source link is in view without opening anything, and the passage it was written from is one tap away.
+      await expect(log.getByRole("link", { name: /Terveyskylä/ })).toHaveAttribute("href", "https://www.terveyskyla.fi/");
+      await expect(page.getByText("The FIT test looks for hidden blood in a small stool sample.")).toBeHidden();
+      await log.getByText("What this answer is based on").click();
+      await expect(page.getByText("The FIT test looks for hidden blood in a small stool sample.")).toBeVisible();
+      await expect(page.getByRole("button", { name: "Who is invited?" })).toBeVisible();
+
+      // The request carries the typed question and the language, and no topic, name, county or saved information.
+      expect(sent).toEqual([{ language: "en", message: "How does the FIT test work?" }]);
+      await expectNothingPrivateStored(page, "How does the FIT test work");
+    } finally {
+      await removeAccount(request, baseURL!, credentials);
+    }
+  });
 });
 
 test("a reminder is saved on the account, can be completed, downloaded as a calendar file and deleted", async ({ page, request, baseURL }) => {

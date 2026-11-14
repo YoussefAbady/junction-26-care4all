@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { beforeEach, test } from "node:test";
+import { payload } from "./content-fixture.js";
 
 // The store reads display preferences when it loads, so the browser globals must exist before it is imported.
 const storage = new Map();
@@ -8,7 +9,10 @@ globalThis.localStorage = {
   setItem: (key, value) => { storage.set(key, String(value)); },
   removeItem: key => { storage.delete(key); },
 };
+const { A } = await import("../../src/app.js");
 const { S, svc, apiTopic, designTopic } = await import("../../src/state/store.js");
+const { errorText } = await import("../../src/state/text.js");
+const { ApiError } = await import("../../src/api/client.js");
 
 const json = (status, body) => new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } });
 
@@ -28,7 +32,10 @@ function backend(routes, calls = []) {
 const profile = { name: "Aino", yob: 1974, sex: "female", county: "pirkanmaa" };
 const prefs = { lang: "en", scale: 0, plain: false, motion: true };
 const nextAction = { nextAction: { id: "complete_intake", title: "Continue getting to know you" }, suggestedTopics: [] };
+// Start-up also loads the public content. Nothing is bundled, so every boot needs this route, with a small fictional fixture.
+const content = { "GET content": payload() };
 const signedIn = {
+  ...content,
   "GET account?view=identity": { account: { username: "aino", language: "en" } },
   "GET profile": { profile, preferences: { ...prefs, lang: "fi", scale: 2 } },
   "GET reminders": { reminders: [] },
@@ -45,6 +52,19 @@ beforeEach(() => {
   storage.clear();
 });
 
+test("a refused address is named, with the address to open instead, in both languages", () => {
+  globalThis.location = { origin: "http://example.invalid:9999" };
+  try {
+    S.prefs.lang = "en";
+    assert.equal(errorText(new ApiError("origin", 403, "http://localhost:8080")),
+      "The server does not accept requests from this address (http://example.invalid:9999). Open care4all at http://localhost:8080 instead.");
+    assert.match(errorText(new ApiError("origin", 403)), /Open care4all at the address it was set up with\./);
+    S.prefs.lang = "fi";
+    assert.match(errorText(new ApiError("origin", 403, "http://localhost:8080")), /Avaa care4all osoitteessa http:\/\/localhost:8080\./);
+    assert.notEqual(errorText(new ApiError("origin", 403)), errorText(new ApiError("invalid", 400)), "it is not the generic 'check the information' message");
+  } finally { delete globalThis.location; }
+});
+
 test("the design's bowel topic is the backend's colorectal and unknown topics have no backend id", () => {
   assert.equal(apiTopic("bowel"), "colorectal");
   assert.equal(apiTopic("breast"), "breast");
@@ -54,11 +74,13 @@ test("the design's bowel topic is the backend's colorectal and unknown topics ha
 });
 
 test("boot without a session leaves the app signed out and ready", async () => {
-  backend({ "GET account?view=identity": { account: null } });
+  backend({ ...content, "GET account?view=identity": { account: null } });
   await svc.boot();
   assert.equal(S.ready, true);
   assert.equal(S.account, null);
   assert.equal(S.profile, null);
+  assert.equal(S.bootError, null);
+  assert.equal(A.D.TOPICS.bowel.name, "Bowel", "the content came from the response and is there when boot is done");
 });
 
 test("boot with a session loads the profile, saved preferences and next action", async () => {
@@ -72,7 +94,7 @@ test("boot with a session loads the profile, saved preferences and next action",
 });
 
 test("an expired session at boot is treated as signed out", async () => {
-  backend({ "GET account?view=identity": { account: { username: "aino", language: "en" } }, "GET profile": [401, { error: "expired" }], "GET reminders": [401, { error: "expired" }], "GET observations": [401, { error: "expired" }], "GET chat/next-action?lang=en": [401, { error: "expired" }] });
+  backend({ ...content, "GET account?view=identity": { account: { username: "aino", language: "en" } }, "GET profile": [401, { error: "expired" }], "GET reminders": [401, { error: "expired" }], "GET observations": [401, { error: "expired" }], "GET chat/next-action?lang=en": [401, { error: "expired" }] });
   await svc.boot();
   assert.equal(S.account, null);
   assert.equal(S.ready, true);
@@ -95,7 +117,7 @@ test("one dropped request at start-up is retried instead of showing 'no connecti
 
 test("a backend that stays down is reported once, after a single retry", async () => {
   let identityCalls = 0;
-  globalThis.fetch = async () => { identityCalls++; return json(503, { error: "unavailable" }); };
+  globalThis.fetch = async url => { if (url.includes("account")) identityCalls++; return json(503, { error: "unavailable" }); };
   await svc.boot();
   assert.equal(identityCalls, 2);
   assert.equal(S.bootError, "unavailable");

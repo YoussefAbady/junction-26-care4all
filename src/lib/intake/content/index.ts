@@ -21,7 +21,7 @@ export const modules: ModuleInfo[] = [
   {
     id: "now", icon: "MessageCircleHeart", minutes: 3,
     title: c("Right now", "Tämän hetken tilanne"),
-    blurb: c("What brings you here, and what you have noticed", "Mikä tuo sinut tänne ja mitä olet huomannut"),
+    blurb: c("What you have noticed lately", "Mitä olet huomannut viime aikoina"),
     intro: c("Thanks, {name}. Now the part clinicians value most: what is on your mind. Take your time, there are no wrong answers.", "Kiitos, {name}. Nyt tärkein osa: mikä sinua mietityttää. Rauhassa, vääriä vastauksia ei ole."),
   },
   {

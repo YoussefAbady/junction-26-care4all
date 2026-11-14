@@ -113,7 +113,21 @@ import { A as C4A } from "./app.js";
   }
   A.resetConversations = resetAll;
   if (A.resetters) A.resetters.push(resetAll);    // the shell calls these when a person signs out or the session ends
-  A.conv = { lang, T, send, sourceChips, reg, run, emergencyHtml, ensureOwner, signInAgain, errText, reset: resetAll };
+  /* Plain text a model wrote: one paragraph per line, and consecutive lines that start with a hyphen as a list. */
+  function textHtml(text) {
+    const out = [];
+    let list = [];
+    const flush = () => { if (list.length) { out.push('<ul class="tick">' + list.map(item => '<li>' + esc(item) + '</li>').join('') + '</ul>'); list = []; } };
+    for (const raw of String(text).split(/\n+/)) {
+      const line = raw.trim();
+      if (!line) continue;
+      if (/^[-•]\s+/.test(line)) list.push(line.replace(/^[-•]\s+/, ''));
+      else { flush(); out.push('<p>' + esc(line) + '</p>'); }
+    }
+    flush();
+    return out.join('');
+  }
+  A.conv = { lang, T, send, sourceChips, textHtml, reg, run, emergencyHtml, ensureOwner, signInAgain, errText, reset: resetAll };
 
   /* ================= words and values ================= */
   const MARK = { unsure: ['Not sure', 'En ole varma'], declined: ['Prefer not to say', 'En halua vastata'], skipped: ['Skipped', 'Ohitettu'] };
@@ -153,6 +167,7 @@ import { A as C4A } from "./app.js";
   }
 
   /* ================= the reply controls ================= */
+  const LONG_LIST = 8;                        // more options than this are offered as a drop-down
   const pillGroup = (options, picked, name, extra) =>
     '<div class="replies multi" role="group"' + (extra || '') + '>' + options.map(o =>
       '<label class="rep"><input type="checkbox" name="' + esc(name) + '" value="' + esc(o.id) + '"' + (o.exclusive || o.id === 'all' ? ' data-ex="1"' : '') + (picked.includes(o.id) ? ' checked' : '') + '><span>' + esc(o.label) + '</span></label>').join('') + '</div>';
@@ -193,6 +208,10 @@ import { A as C4A } from "./app.js";
     const was = prev !== undefined && !isMarker(prev) ? prev : undefined;
     switch (q.input) {
       case 'choice':
+        /* A few options are buttons that answer at a tap. A long list, such as the cities of Finland, is a drop-down with a button. */
+        if (q.options.length > LONG_LIST) {
+          return form('<div class="group">' + fieldRow({ type: 'choice', label: T('Your answer', 'Vastauksesi'), options: q.options }, 'v', was, 'sx-v') + '</div>');
+        }
         return '<div class="replies" role="group" aria-labelledby="sx-q">' + q.options.map(o =>
           '<button class="rep' + (was === o.id ? ' on' : '') + '" type="button" data-action="sx-pick"' + at + ' data-v="' + esc(o.id) + '"' + (was === o.id ? ' aria-pressed="true"' : '') + '>' + esc(o.label) + '</button>').join('') + '</div>';
       case 'multi': case 'body': {
@@ -289,6 +308,10 @@ import { A as C4A } from "./app.js";
   function collect(e, q, form) {
     const canSkip = (q.markers || []).includes('skipped') || (e.id === 'sym' && q.optional);
     switch (q.input) {
+      case 'choice': {                         // only a long list is answered through a form: the short ones answer at a tap
+        const node = form.elements.v;
+        return node && node.value ? { value: node.value } : { error: T('Choose an answer.', 'Valitse vastaus.'), input: node };
+      }
       case 'multi': case 'body': {
         const picked = $$('input[name="v"]:checked', form).map(i => i.value);
         if (!picked.length) return canSkip ? { skip: true } : { error: T('Choose at least one.', 'Valitse vähintään yksi.'), input: $('input[name="v"]', form) };
@@ -641,6 +664,7 @@ import { A as C4A } from "./app.js";
       '<div class="' + (cls ? 'fu-wrap fresh f2' : 'fu-wrap') + '">' + nextCard(e) + '</div>';
   }
   const doneBar = () => '<div class="btn-row"><a class="btn primary sm" href="#next">' + esc(T('See all my next steps', 'Katso kaikki seuraavat askeleeni')) + '</a><a class="btn tint sm" href="#home">' + esc(T('Back to home', 'Takaisin etusivulle')) + '</a></div>' +
+    '<div class="btn-row"><button class="btn tint sm" type="button" data-action="assess-open">' + ic('sparkle', 16) + ' ' + esc(T('Review my answers with AI', 'Tarkista vastaukseni tekoälyllä')) + '</button></div>' +
     '<p class="small reply-n">' + esc(T('You can look at or forget what I know with the eye button at the top.', 'Näet tai unohdat tallentamani tiedot yläreunan silmäpainikkeesta.')) + '</p>';
 
   /* The progress the intake reports, kept for the screens that show it without opening the conversation. */
@@ -759,7 +783,10 @@ import { A as C4A } from "./app.js";
       e.accept(res);
       append(e, e.current(true).chat, { focus: true });
       await Promise.all([A.svc.loadObservations(), A.svc.loadNext()]).catch(() => { /* the note is saved. The lists catch up on the next visit */ });
-      A.refresh(true);
+      /* The screens beneath this one catch up. The top screen is left alone while it is the conversation. A person who has
+         already tapped through to My notes is looking at a list drawn before the note was in it, so that one is redrawn too. */
+      const cur = A.current();
+      A.refresh(!!cur && cur.name === 'symptom');
     });
   }
   async function discardNote(e) {
@@ -1012,7 +1039,7 @@ import { A as C4A } from "./app.js";
       (older ? '<p class="small">' + esc(savedLine(A.survey.complete() ? 'done' : 'more', older)) + '</p>' : '') +
       (!rows && !older ? '<p class="body">' + esc(T('Nothing yet. Answer a question and it shows up here.', 'Ei vielä mitään. Vastaa kysymykseen, niin se näkyy tässä.')) + '</p>' : '') + '</div>' +
       (notes.length ? '<div class="card"><p class="cap">' + esc(T('From your symptom notes', 'Oiremerkinnöistäsi')) + '</p>' + notes.map(n => '<div class="know-row"><span class="cell-b"><span class="cell-t">' + esc(n.symptoms.join(', ')) + '</span><span class="cell-d">' + esc(A.fmtDate(n.ts)) + '</span></span></div>').join('') + '<a class="link" href="#notes" data-action="you-go" data-to="notes">' + esc(T('See all notes', 'Katso kaikki merkinnät')) + '</a></div>' : '') +
-      (S.checklog.length ? '<div class="card"><p class="cap">' + esc(T('From your self-checks', 'Omatarkkailustasi')) + '</p>' + S.checklog.slice(0, 3).map(r => '<div class="know-row"><span class="cell-b"><span class="cell-t">' + esc((A.CHECK_META[r.check] ? A.CHECK_META[r.check].name : r.check) + ': ' + (r.result === 'clear' ? T('nothing new', 'ei mitään uutta') : r.findings.join(', ') || T('found something', 'löysit jotain'))) + '</span><span class="cell-d">' + esc(A.fmtDate(r.ts)) + '</span></span></div>').join('') + '<a class="link" href="#results" data-action="you-go" data-to="results">' + esc(T('See all results', 'Katso kaikki tulokset')) + '</a></div>' : '') +
+      (S.checklog.length ? '<div class="card"><p class="cap">' + esc(T('From your self-checks', 'Omatarkkailustasi')) + '</p>' + S.checklog.slice(0, 3).map(r => '<div class="know-row"><span class="cell-b"><span class="cell-t">' + esc((D.CHECK_META[r.check] ? D.CHECK_META[r.check].name : r.check) + ': ' + (r.result === 'clear' ? T('nothing new', 'ei mitään uutta') : r.findings.join(', ') || T('found something', 'löysit jotain'))) + '</span><span class="cell-d">' + esc(A.fmtDate(r.ts)) + '</span></span></div>').join('') + '<a class="link" href="#results" data-action="you-go" data-to="results">' + esc(T('See all results', 'Katso kaikki tulokset')) + '</a></div>' : '') +
       '<div class="stack"><button class="btn danger block" type="button" data-action="you-forget-all">' + esc(T('Forget all my answers', 'Unohda kaikki vastaukseni')) + '</button><button class="btn ghost block" type="button" data-action="sheet-close">' + esc(T('Close', 'Sulje')) + '</button></div>';
   }
   async function knowSheet() {

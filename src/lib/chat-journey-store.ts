@@ -9,7 +9,9 @@ import { intakeInteraction, nextAction, symptomDraft, symptomInteraction, type J
 import { noteDetails } from "./design-contract";
 import type { Language } from "./survey";
 import { answerChat, chatInput, planChat } from "./chat";
+import { createEvidence } from "./chat-evidence";
 import { directChat } from "./chat-director";
+import { contentStore } from "./content";
 
 type Owner = { username: string; language: string };
 export async function actionFor(owner: Owner, language: Language, progress?: Progress) {
@@ -23,7 +25,7 @@ export async function actionFor(owner: Owner, language: Language, progress?: Pro
   return nextAction(saved, {
     symptom, checkTopic: checks.find(check => check?.selfCheck === "nothing_new")?.topic,
     outsideFinland: saved.answers.residence === "abroad",
-  }, language);
+  }, language, createEvidence(await contentStore().loadEvidence()));
 }
 const invalid = () => privateJson({ error: "invalid" }, 400);
 const conflict = () => privateJson({ error: "conflict" }, 409);
@@ -34,7 +36,7 @@ export async function handleJourney(owner: Owner, input: JourneyInput) {
     const nextAction = await actionFor(owner, language, progress);
     const kind = input.action.endsWith("intake") ? "intake" : "observation";
     // Opening or resuming a saved form should be independent of model latency.
-    return privateJson({ interaction, nextAction, ...await directChat(language, { kind }, nextAction) });
+    return privateJson({ interaction, nextAction, ...await directChat(contentStore(), language, { kind }, nextAction) });
   }
   if (input.action === "start_intake" || input.action === "answer_intake" || input.action === "finish_intake") {
     const progress = await loadSurvey(owner);
@@ -85,7 +87,7 @@ export async function handleJourney(owner: Owner, input: JourneyInput) {
     if (input.value && (input.step === "label" || input.step === "notes")) {
       const message = chatInput.parse({ message: input.value, language });
       const plan = planChat(message);
-      if (plan.kind === "emergency") return privateJson({ ...answerChat(message, plan), interaction, nextAction: await actionFor(owner, language) });
+      if (plan.kind === "emergency") return privateJson({ ...await answerChat(contentStore(), message, plan), interaction, nextAction: await actionFor(owner, language) });
     }
     const next = symptomDraft.safeParse({ ...draft, [input.step]: input.value });
     if (!next.success) return invalid();

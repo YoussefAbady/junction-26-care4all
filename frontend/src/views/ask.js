@@ -8,6 +8,11 @@ import { A as C4A } from "../app.js";
    professional, and where to go next. The transcript lives in memory only. Nothing typed here is stored in the
    browser, and the server does not keep chat messages either.
 
+   For a general question the server can have an AI model write the answer from the passages it found. That answer comes
+   as `generated` and is drawn under a "Written by AI" label, with the source links in view and the passages it was
+   written from one tap away. The model is sent only the typed question and public passages, never saved information
+   (see intro() and the privacy notice, which say so in plain words).
+
    Helpers shared with the other two conversation screens (language, source links, errors, the emergency card) are in
    A.conv, defined in sessions.js. They are looked up when used, so the order of the two files does not matter. */
 (function () {
@@ -44,15 +49,37 @@ import { A as C4A } from "../app.js";
 
   function intro() {
     return '<div class="msg-ai">' + who() + '<p>' + esc(T(
-      'Hi. I answer questions about cancer and cancer screening in Finland, using reviewed sources that I show with each answer. I do not diagnose, and I do not keep what you type here.',
-      'Hei. Vastaan kysymyksiin syövästä ja syöpäseulonnoista Suomessa tarkistettujen lähteiden pohjalta ja näytän lähteet jokaisen vastauksen yhteydessä. En tee diagnooseja enkä tallenna tähän kirjoittamaasi.')) + '</p>' +
+      'Hi. I answer questions about cancer and cancer screening in Finland, using reviewed sources that I show with each answer. I do not diagnose.',
+      'Hei. Vastaan kysymyksiin syövästä ja syöpäseulonnoista Suomessa tarkistettujen lähteiden pohjalta ja näytän lähteet jokaisen vastauksen yhteydessä. En tee diagnooseja.')) + '</p>' +
+      '<p>' + esc(T(
+      'An AI model, Google Gemini, can write the answer from the reviewed source passages that match your question. Then it is sent only your typed question and those public passages: no account details, saved information or notes. Each answer says when an AI wrote it. I do not keep what you type, and Google handles the question under its own terms, so please do not type personal details.',
+      'Tekoälymalli, Google Gemini, voi kirjoittaa vastauksen kysymykseesi sopivien tarkistettujen lähdekatkelmien pohjalta. Silloin sille lähetetään vain kirjoittamasi kysymys ja nämä julkiset katkelmat: ei tilitietoja, tallennettuja tietoja eikä muistiinpanoja. Jokaisessa vastauksessa kerrotaan, kun tekoäly on sen kirjoittanut. En tallenna kirjoittamaasi, ja Google käsittelee kysymyksen omien ehtojensa mukaan, joten älä kirjoita henkilötietoja.')) + '</p>' +
       '<p class="small">' + esc(T('This is a demo. Please use made-up details.', 'Tämä on demo. Käytä kuvitteellisia tietoja.')) + '</p></div>';
   }
 
+  const passageText = p => (p.items || []).map(t => '<p>' + esc(t) + '</p>').join('');
   function passage(p) {
-    const items = (p.items || []).map(t => '<p>' + esc(t) + '</p>').join('');
     const label = STATUS[p.status] ? '<span class="status-pill ans-st">' + esc(T(...STATUS[p.status])) + '</span>' : '';
-    return '<div class="ans-pass">' + label + items + K().sourceChips(p.sources) + '</div>';
+    return '<div class="ans-pass">' + label + passageText(p) + K().sourceChips(p.sources) + '</div>';
+  }
+
+  /* An answer an AI model wrote from the passages the server found. It says so, the source links stay in view, and the
+     passages it was written from are one tap away. The text is plain (the server refuses markdown and links), so each line
+     is a paragraph and nothing more. */
+  const PROVIDER = { gemini: 'Google Gemini', verda: 'Verda' };
+  function generatedHtml(g, passages) {
+    const paragraphs = String(g.text).split(/\n+/).map(s => s.trim()).filter(Boolean);
+    if (!paragraphs.length) return '';
+    const model = PROVIDER[g.provider] ? ' (' + PROVIDER[g.provider] + ')' : '';
+    const sources = [].concat(...passages.map(p => p.sources || []));
+    const basis = passages.length
+      ? '<details class="sx-how ans-ctx"><summary>' + esc(T('What this answer is based on', 'Mihin vastaus perustuu')) + '</summary>' +
+        passages.map(p => '<div class="ans-pass">' + passageText(p) + '</div>').join('') + '</details>'
+      : '';
+    return '<div class="ans-gen"><span class="status-pill ans-st ans-ai">' + ic('sparkle', 14) + esc(T('Written by AI', 'Tekoälyn kirjoittama')) + '</span>' +
+      K().textHtml(g.text) +
+      '<p class="small">' + esc(T('Written from the sources below' + model + '. AI can make mistakes, so please check them.', 'Kirjoitettu alla olevien lähteiden pohjalta' + model + '. Tekoäly voi erehtyä, joten tarkista ne.')) + '</p>' +
+      K().sourceChips(sources) + basis + '</div>';
   }
 
   const SEX = { female: ['Female', 'Nainen'], male: ['Male', 'Mies'], intersex: ['Intersex', 'Intersukupuolinen'], other: ['Other', 'Muu'], declined: ['Prefers not to say', 'Ei halua kertoa'], none: ['Not specified', 'Ei määritelty'] };
@@ -89,9 +116,14 @@ import { A as C4A } from "../app.js";
   function answerHtml(d, i) {
     if (d.kind === 'emergency') return K().emergencyHtml(d, who());
     const parts = [];
-    if (d.message) parts.push(HEADED.has(d.kind) ? '<p class="ans-title">' + esc(d.message) + '</p>' : '<p>' + esc(d.message) + '</p>');
+    const written = d.generated && typeof d.generated.text === 'string' ? generatedHtml(d.generated, d.passages || []) : '';
+    /* When no topic was recognised the server's own sentence says it has no sourced answer. A written answer contradicts
+       that, so it is not shown above one. */
+    const apology = written && (d.kind === 'clarify' || d.kind === 'unsupported');
+    if (d.message && !apology) parts.push(HEADED.has(d.kind) ? '<p class="ans-title">' + esc(d.message) + '</p>' : '<p>' + esc(d.message) + '</p>');
     else if (d.interaction) parts.push('<p>' + esc(T('Happy to. That works best as a short conversation of its own.', 'Mielelläni. Se toimii parhaiten omana lyhyenä keskusteluna.')) + '</p>');
-    for (const p of d.passages || []) parts.push(passage(p));
+    if (written) parts.push(written);
+    else for (const p of d.passages || []) parts.push(passage(p));
     if ((d.nextSteps || []).length) parts.push('<div class="ans-steps"><p class="cap">' + esc(T('Next steps', 'Seuraavat askeleet')) + '</p>' + d.nextSteps.map(passage).join('') + '</div>');
     parts.push(goHtml(d.interaction));
     if (d.safety) parts.push('<div class="ans-safety"><p class="small">' + esc(d.safety.text) + '</p>' + K().sourceChips([d.safety.source]) + '</div>');

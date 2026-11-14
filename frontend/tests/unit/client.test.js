@@ -33,6 +33,14 @@ test("the backend's error string becomes the error code", async () => {
   await assert.rejects(request("account"), error => error instanceof ApiError && error.code === "credentials" && error.status === 401);
 });
 
+test("a write from an address the backend does not accept says which address it does", async () => {
+  globalThis.fetch = async () => reply(403, { error: "origin", expected: "http://localhost:8080" });
+  await assert.rejects(request("account?view=identity", { method: "POST", body: {} }),
+    error => error instanceof ApiError && error.code === "origin" && error.status === 403 && error.expected === "http://localhost:8080");
+  globalThis.fetch = async () => reply(403, { error: "credentials", expected: "http://other.example" });
+  await assert.rejects(request("my-data", { method: "DELETE", body: {} }), error => error.code === "credentials" && error.expected === "", "only an origin refusal carries an address");
+});
+
 test("status codes without a body map to the codes the interface understands", async () => {
   for (const [status, code] of [[401, "expired"], [409, "conflict"], [429, "limited"], [400, "invalid"], [502, "unavailable"]]) {
     globalThis.fetch = async () => new Response("<html></html>", { status });

@@ -3,7 +3,7 @@ import { promisify } from "node:util";
 import { cookies } from "next/headers";
 import { z } from "zod";
 import { database } from "@/lib/database";
-import { cookieName as name, currentAccount, hashToken as hash, privateJson as reply, sameOrigin as trusted, sessionSeconds as seconds } from "@/lib/account-session";
+import { cookieName as name, currentAccount, hashToken as hash, privateJson as reply, refuseOrigin, sameOrigin as trusted, sessionSeconds as seconds } from "@/lib/account-session";
 import { loadSurvey, saveSurvey } from "@/lib/survey-store";
 
 const scrypt = promisify(derive);
@@ -39,7 +39,7 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  if (!trusted(request)) return reply({ error: "invalid" }, 403);
+  if (!trusted(request)) return refuseOrigin(request);
   try {
     if (!request.headers.get("content-type")?.startsWith("application/json")) return reply({ error: "invalid" }, 415);
     const body = await request.text();
@@ -83,7 +83,7 @@ export async function POST(request: Request) {
   }
 }
 export async function DELETE(request: Request) {
-  if (!trusted(request)) return reply({ error: "invalid" }, 403);
+  if (!trusted(request)) return refuseOrigin(request);
   try {
     const jar = await cookies();
     const token = jar.get(name)?.value;

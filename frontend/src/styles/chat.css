@@ -6,6 +6,11 @@
 .ans-pass, .ans-steps, .ans-safety, .ans-q, .ans-go { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
 .ans-pass + .ans-pass, .ans-steps, .ans-q, .ans-safety { padding-top: 10px; border-top: .5px solid var(--line); align-self: stretch; }
 .ans-steps > .ans-pass + .ans-pass { border-top: 0; padding-top: 0; }
+/* An answer an AI model wrote from the passages. The label comes first, the sources it used stay in view. */
+.ans-gen { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+.ans-gen > p { margin: 0; }
+.ans-ai { display: inline-flex; align-items: center; gap: 6px; }
+.ans-gen .ans-ctx .ans-pass + .ans-pass { margin-top: 8px; }
 .ans-q .tick { align-self: stretch; }
 .ans-q .tick li { padding: 8px 0; font-size: 1rem; }
 

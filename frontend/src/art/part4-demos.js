@@ -195,43 +195,7 @@ import { A as C4A } from "../app.js";
   };
 
   /* ====================================================== HINTS ======================================================
-     What to do with your body and your hands, shown under every picture. */
+     What to do with your body and your hands, shown under every picture, is content (D.STEP_HINTS). The guide in ui.js
+     reads it when it draws a step. */
   art.figure = figure;
-  A.STEP_HINTS = {
-    breast: [
-      { pose: 'Anywhere private: in bed, in the shower, or at a mirror.', move: 'Nothing to do yet. Pick a time when your breasts are soft, just after a period.' },
-      { pose: 'Standing at a mirror, arms relaxed by your sides.', move: 'Look at both breasts. Slowly turn to each side and look again.' },
-      { pose: 'Standing at the mirror.', move: 'Raise both arms above your head, hold, then lower them. Look from the front and from each side.' },
-      { pose: 'Standing at the mirror with your hands on your hips.', move: 'Press your hands firmly into your hips so your chest muscles tighten. Keep your shoulders straight.' },
-      { pose: 'Standing at the mirror.', move: 'Look closely at each nipple for fluid, crusting, or a change in shape.' },
-      { pose: 'Lying on your back, the arm on the side you are checking behind your head. A pillow under that shoulder helps.', move: 'Rest your other hand flat on the breast you are checking.' },
-      { pose: 'Lying on your back, arm behind your head.', move: 'Press with three flat finger pads and move in small circles, about the size of a coin.' },
-      { pose: 'Lying on your back.', move: 'At each spot press three times: lightly, then with medium pressure, then firmly until you feel the ribs.' },
-      { pose: 'Lying on your back.', move: 'Move up and down in rows, like mowing a lawn, from your collarbone to your bra line and from your armpit to your breastbone.' },
-      { pose: 'Standing in the shower, the arm on the side you are checking raised.', move: 'Glide soapy fingers over the breast in small circles. Repeat with your arm by your side, then stretched out.' },
-      { pose: 'Standing or lying, the arm on the side you are checking raised.', move: 'Feel all around the nipple, then sweep flat fingers up and down your armpit.' },
-      { pose: 'At home, when you are ready.', move: 'Book an appointment at your health centre.' }
-    ],
-    testicular: [
-      { pose: 'Standing or sitting in a warm bath or shower.', move: 'Let the warm water relax the skin for a few minutes.' },
-      { pose: 'Standing, with your scrotum resting in the palm of one hand.', move: 'Gently lift and hold it. Compare the size and weight of the two sides.' },
-      { pose: 'Standing, one testicle held between your thumb and two fingers.', move: 'Roll it slowly between your thumb and fingers, like a small egg.' },
-      { pose: 'Still holding one testicle.', move: 'Slide your fingertips over the whole surface, front and back, and feel for lumps or bumps.' },
-      { pose: 'Same hand position.', move: 'Slide a finger up and down behind the testicle, over the soft tube. Then do the other side.' },
-      { pose: 'At home, when you are ready.', move: 'Book an appointment at your health centre.' }
-    ],
-    skin: [
-      { pose: 'Standing in a bright room with a full-length mirror and a hand mirror.', move: 'Look at your skin from head to toe, front and back.' },
-      { pose: 'Standing at the mirror.', move: 'Part your hair with a comb to see your scalp. Check your ears, face and lips.' },
-      { pose: 'Standing or sitting, hands in front of you.', move: 'Turn your hands over, spread your fingers, and look at every nail.' },
-      { pose: 'Standing at the mirror, one arm raised.', move: 'Look at your neck and chest. Lift your breasts to see the skin underneath.' },
-      { pose: 'Standing at the mirror.', move: 'Bend an elbow to see the upper arm, and raise your arm to see the armpit.' },
-      { pose: 'Standing with your back to the big mirror.', move: 'Hold the hand mirror so you can see your neck and back in the big mirror. Turn slowly.' },
-      { pose: 'Sitting on a chair or the edge of the bed.', move: 'Check your bottom and the backs of your legs. Lift each foot to see the sole and the gaps between toes.' },
-      { pose: 'At the mirror, or with a photo.', move: 'Compare each mole against the five ABCDE signs.' },
-      { pose: 'Looking at all your moles together.', move: 'Find the one mole that looks different from the rest.' },
-      { pose: 'Standing, with a ruler or tape beside the spot.', move: 'Take a photo of anything unusual, with the ruler next to it.' },
-      { pose: 'At home, when you are ready.', move: 'Book an appointment at your health centre.' }
-    ]
-  };
 })();

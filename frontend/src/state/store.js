@@ -7,9 +7,9 @@
  *
  * Views read S and call svc.* to change it. Every svc function updates S and rejects with an ApiError.
  */
-import { A } from "../app.js";
 import { api } from "../api/index.js";
 import { ApiError } from "../api/client.js";
+import { loadContent } from "./content.js";
 
 /* ---------- topics ---------- */
 // The backend knows six cancer topics and spells bowel as "colorectal". The design has sixteen topics.
@@ -93,7 +93,7 @@ async function loadObservations() {
   for (const item of all) {   // newest first
     const details = item.details || {};
     const ts = Date.parse(item.observedAt || item.createdAt);
-    const topic = designTopic(details.topic);
+    const topic = designTopic(details.topic);   // the id the backend sent. The content may still be arriving, so it is not consulted here
     if (details.scanId) {
       if (!scans[details.scanId]) scans[details.scanId] = { ts, id: item.id };
     } else if (details.selfCheck && topic) {
@@ -105,7 +105,7 @@ async function loadObservations() {
       if (!checks[topic]) checks[topic] = { ...result, logId: item.id };
     } else {
       notes.push({
-        id: item.id, ts, kind: item.kind, topic: topic && A.D.TOPICS[topic] ? topic : "general",
+        id: item.id, ts, kind: item.kind, topic: topic || "general",
         symptoms: details.symptoms && details.symptoms.length ? details.symptoms : [item.label],
         when: ONSET[details.onset] || "", still: COURSE[details.course] || "", note: item.notes,
       });
@@ -139,34 +139,51 @@ function reset() {
   notified.clear();
 }
 
+/** Finds out whether there is a signed-in account and loads its records. */
+async function loadAccount() {
+  const { account } = await api.account.get();
+  S.account = account;
+  if (account) await hydrate();
+}
+
+/**
+ * Runs one of the two start-up requests. A dropped connection or a restarting backend is retried once before the app
+ * says it has no connection. Never rejects: it resolves to the error that stopped the request, or null.
+ */
+async function startup(request) {
+  for (let attempt = 0; ; attempt++) {
+    try {
+      await request();
+      return null;
+    } catch (error) {
+      const code = error instanceof ApiError ? error.code : "unavailable";
+      if (attempt === 0 && (code === "unavailable" || code === "offline")) {
+        await new Promise(resolve => setTimeout(resolve, BOOT_RETRY_MS));
+        continue;
+      }
+      return error;
+    }
+  }
+}
+
 /* ---------- services ---------- */
 export const svc = {
   /**
-   * Finds out whether there is a signed-in account and loads its records. Never rejects.
-   * A dropped connection or a restarting backend is retried once before the app says it has no connection.
+   * Loads the public content and finds out whether there is a signed-in account, loading its records, at the same time.
+   * It finishes when both are done, so the first screen is never drawn without content. Never rejects: a failure is
+   * left in S.bootError, and "try again" calls this again, which loads both again. Each request has its own single retry.
    */
   async boot() {
     S.bootError = null;
-    for (let attempt = 0; ; attempt++) {
-      try {
-        const { account } = await api.account.get();
-        S.account = account;
-        if (account) await hydrate();
-        break;
-      } catch (error) {
-        const code = error instanceof ApiError ? error.code : "unavailable";
-        if (attempt === 0 && (code === "unavailable" || code === "offline")) {
-          await new Promise(resolve => setTimeout(resolve, BOOT_RETRY_MS));
-          continue;
-        }
-        if (!(error instanceof ApiError) || code === "expired") reset();
-        S.bootError = code;
-        break;
-      }
-    }
+    const [accountError, contentError] = await Promise.all([startup(loadAccount), startup(loadContent)]);
+    if (accountError && (!(accountError instanceof ApiError) || accountError.code === "expired")) reset();
+    // Nothing can be drawn without the content, so that failure is the one reported. An ended session is not a failure.
+    const error = contentError || accountError;
+    if (error) S.bootError = error instanceof ApiError ? error.code : "unavailable";
     S.ready = true;
   },
   hydrate,
+  loadContent,
 
   async register(username, password) {
     const { account } = await api.account.register(username, password, accountLanguage());

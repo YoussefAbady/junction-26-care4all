@@ -8,60 +8,12 @@ import { A as C4A } from "../app.js";
   var cell = H.cell, group = H.group, lead = H.lead, chips = H.chips, footer = H.footer, secH = H.secH;
   var DAY = 864e5;
 
-  /* ---------- self-check facts ---------- */
-  var CHECK_META = {
-    breast: { name: 'Breast check', min: 5, every: 30, when: '4w', short: 'regularly',
-      freq: 'Regularly, no fixed schedule', rec: 'Regularly, whatever your age. There is no fixed schedule: what matters is knowing what is normal for you.',
-      recSrc: ['ilmansyopaa-breast', 'syopa-blog-breast'], drawSrc: ['ilmansyopaa-breast', 'nhs-breast-check', 'bco-bse', 'bcn-tlc'],
-      note: 'Know what is normal for you.' },
-    testicular: { name: 'Testicle check', min: 3, every: 30, when: '4w', short: 'regularly',
-      freq: 'Regularly', rec: 'Feel both testicles regularly. The Cancer Society of Finland gives no fixed interval.',
-      recSrc: ['ilmansyopaa-testicles', 'terveyskirjasto-testis'], drawSrc: ['ilmansyopaa-testicles', 'nhs-testicle-check', 'orchid-check', 'tcs-ballchecker'],
-      note: 'Know what is normal for you.' },
-    skin: { name: 'Skin and mole check', min: 10, every: 180, when: '6m', short: 'a couple of times a year',
-      freq: 'A couple of times a year', rec: 'Check your skin at home a couple of times a year, and get to know your moles.',
-      recSrc: ['terveyskirjasto-bcc', 'ilmansyopaa-moles'], drawSrc: ['euromelanoma-how', 'aad-skin-exam', 'ilmansyopaa-moles'],
-      note: 'Know your skin.' }
-  };
-  A.CHECK_META = CHECK_META;
-
-  /* ---------- scans and tests ---------- */
-  var SCANS = [
-    { id: 'mammogram', name: 'Mammogram', topic: 'breast', kind: 'invited', type: 'Radiology (X-ray of the breasts)', who: 'Women aged 50 to 69', every: 2,
-      freq: 'About every 2 years', time: 'About 5 minutes', where: 'A health centre or medical centre, named in your invitation letter',
-      what: 'An X-ray of each breast, taken by a radiographer. Each breast is pressed flat for about 10 seconds. Two radiologists read the pictures.',
-      note: 'A national group proposed in March 2025 to widen the ages to 46–74. Check the current ages.',
-      ans: 'scr_breast', ansMap: { recent: 'In the last 2 years', long: 'More than 2 years ago', never: 'Not yet' }, journey: 'breast', src: ['registry-breast', 'tunne-rintasi-mammo', 'cs-breast-screening-news'] },
-    { id: 'cervical', name: 'Cervical screening sample', topic: 'cervical', kind: 'invited', type: 'Clinical examination (sample taken by a nurse)', who: 'Women aged 30 to 65, in some counties from 25', every: 5,
-      freq: 'Every 5 years', time: 'About 10 minutes at the clinic', where: 'A health centre or screening clinic named in your invitation. Home sampling is being studied in some counties in 2026',
-      what: 'A nurse trained in screening takes a small sample of cells from the cervix with a soft brush. It is tested for high-risk HPV.',
-      note: '',
-      ans: 'scr_cervical', ansMap: { recent: 'In the last 5 years', long: 'More than 5 years ago', never: 'Not yet' }, journey: 'cervical', src: ['registry-cervical', 'hus-cervical', 'fimlab-cervical', 'fimlab-hpv-study'] },
-    { id: 'fit', name: 'Bowel screening test (FIT)', topic: 'bowel', kind: 'invited', type: 'Home kit and lab test', who: 'Ages 56 to 74, phased in by 2031. In 2026: ages 60, 62, 64, 66, 68, 70 and 72', every: 2,
-      freq: 'Every 2 years', time: 'At home, when you choose. Post it within 24 hours', where: 'At home. The kit comes with your invitation letter and you post the sample to the lab',
-      what: 'A stool sample that you take at home. The lab looks for blood you cannot see. More than 9 in 10 results are normal.',
-      note: 'Bowel screening is rolling out by age and county.',
-      ans: 'scr_bowel', ansMap: { done: 'Yes, I did the test', kit: 'I have a kit', none: 'Not received one' }, journey: 'bowel', src: ['fimlab-crc', 'fimlab-crc-instructions', 'registry-crc-faq'] },
-    { id: 'colonoscopy', name: 'Colonoscopy', topic: 'bowel', kind: 'doctor', type: 'Examination with a camera, at a hospital or clinic', who: 'Only if a doctor refers you, for example after a bowel screening test finds blood', every: 0,
-      freq: 'No routine schedule. Your doctor decides', time: '20 minutes to 1 hour, plus preparing the day before', where: 'A hospital or clinic. Your local screening nurse or doctor arranges it',
-      what: 'A thin, bendable tube with a camera goes in through the bottom, with sedation, so the doctor can see the bowel. Samples can be taken and small growths removed.',
-      note: 'You empty your bowel beforehand as instructed so the doctor can see clearly.', journey: 'bowel', src: ['ovph-colonoscopy', 'cs-colorectal', 'nhs-bowel-tests'] },
-    { id: 'lungct', name: 'Low-dose CT lung scan', topic: 'lung', kind: 'notnational', type: 'Radiology (CT scan)', who: 'Not offered as screening in Finland. Some countries scan older people who have smoked', every: 0,
-      freq: 'Not a routine test in Finland', time: 'Ask your doctor', where: 'Ask your health centre',
-      what: 'The Finnish Cancer Registry says CT scans of smokers cut lung cancer deaths by one-fifth, but it did not recommend screening because of many unnecessary follow-up tests.',
-      note: 'Finland’s national lung cancer programme (2026 to 2035) will look at screening people at higher risk. In England, lung health checks are offered in some areas to people aged 55 to 74 who have ever smoked.', src: ['fcr-other-screening-lung', 'filha-lung-programme', 'nhs-lung-screening'] },
-    { id: 'psa', name: 'PSA blood test', topic: 'prostate', kind: 'notnational', sex: 'male', type: 'Blood test', who: 'Men with symptoms or a good reason such as family history. Not for routine testing of men without symptoms', every: 0,
-      freq: 'Not a routine test. Talk to your doctor', time: 'Ask your doctor', where: 'Ask your health centre',
-      what: 'The Cancer Society of Finland says the harms of PSA-only screening, such as false alarms and treating cancers that would never cause harm, outweigh the benefits.',
-      note: 'The Council of the EU asked countries in 2022 to evaluate organised screening with PSA plus MRI. Finland is running a large trial called ProScreen.', src: ['cs-prostate', 'cs-screen-prostate', 'eu-prostate-screening', 'cruk-prostate-screening'] },
-    { id: 'skinexam', name: 'Skin check by a specialist', topic: 'skin', kind: 'notnational', type: 'Examination by a doctor', who: 'People at higher risk of skin cancer. There is no national melanoma screening', every: 0,
-      freq: 'Your doctor decides', time: 'Ask your doctor', where: 'Ask your health centre',
-      what: 'A doctor looks at your skin and moles. The best way to find melanoma early is to know the signs and see a doctor if you notice any.',
-      note: '', src: ['cruk-melanoma-screening', 'euromelanoma-look'] }
-  ];
-  var BY = {}; SCANS.forEach(function (s) { BY[s.id] = s; });
-  D.SCANS = SCANS; A.scanById = BY;
-  A.scansFor = function (topic) { return SCANS.filter(function (s) { return s.topic === topic && s.kind !== 'notnational'; }); };
+  /* ---------- self-check facts and scans ----------
+     The facts about each self-check (D.CHECK_META), the scans and tests (D.SCANS) and the national programmes (D.NAT) are
+     content. It is filled in before the first screen is drawn, so these are read when a screen needs them, never when this
+     module loads. */
+  function scanById(id) { return D.SCANS.filter(function (s) { return s.id === id; })[0]; }
+  A.scansFor = function (topic) { return D.SCANS.filter(function (s) { return s.topic === topic && s.kind !== 'notnational'; }); };
 
   function ago(ts) {
     var d = Math.round((Date.now() - ts) / DAY);
@@ -76,7 +28,7 @@ import { A as C4A } from "../app.js";
   /* What a scan or test is, and when the person last had it (the date they logged). Whether and when someone is
      invited is never worked out here: the invitation letter is the source of truth. */
   A.scanInfo = function (id) {
-    var sc = BY[id], out = { sc: sc, fit: 'ask', label: '', why: '', last: null, lastText: 'Not logged', next: null, nextText: '', due: false };
+    var sc = scanById(id), out = { sc: sc, fit: 'ask', label: '', why: '', last: null, lastText: 'Not logged', next: null, nextText: '', due: false };
     if (sc.kind === 'invited') {
       out.label = 'By invitation';
       out.why = sc.who + '. Your invitation letter tells you whether and when you are invited.';
@@ -95,7 +47,7 @@ import { A as C4A } from "../app.js";
   }
   function pill(text, cls) { return '<span class="status-pill ' + (cls || '') + '">' + esc(text) + '</span>'; }
   function checkStatus(id) {
-    var ch = S.checks[id], m = CHECK_META[id];
+    var ch = S.checks[id], m = D.CHECK_META[id];
     if (!ch) return { key: 'new', label: 'New', last: 'Not done yet' };
     var days = (Date.now() - ch.ts) / DAY;
     if (ch.result === 'change') return { key: 'change', label: 'Found something', last: 'Last: ' + ago(ch.ts) + ', you found something' };
@@ -146,7 +98,7 @@ import { A as C4A } from "../app.js";
   A.CHECK_HERO = HERO_STEP;
 
   /* Self-check results come from the account's observations (S.checklog, newest first). */
-  function allResults() { return S.checklog.filter(function (r) { return CHECK_META[r.check]; }); }
+  function allResults() { return S.checklog.filter(function (r) { return D.CHECK_META[r.check]; }); }
   function resultsFor(id) { return allResults().filter(function (r) { return !id || r.check === id; }); }
   A.checkResults = resultsFor;
   /* The account's note has no field for a side, so "Side: left" is kept with the findings and read back from them. */
@@ -167,14 +119,14 @@ import { A as C4A } from "../app.js";
   }
   function recText(r) {
     r = norm(r);
-    return [CHECK_META[r.check].name + ', ' + A.fmtDate(r.ts), r.result === 'clear' ? 'Found: nothing new' : 'Found: ' + (r.findings.join('; ') || 'see my words below')]
+    return [D.CHECK_META[r.check].name + ', ' + A.fmtDate(r.ts), r.result === 'clear' ? 'Found: nothing new' : 'Found: ' + (r.findings.join('; ') || 'see my words below')]
       .concat(r.side && r.side !== 'unsure' ? ['Side: ' + r.side] : []).concat(r.other ? ['In my words: ' + r.other] : []).join('\n');
   }
   A.checkText = recText;
 
   /* The last step of a guided check: a checklist, plus a place to write anything else. */
   A.findingsHtml = function (id) {
-    var F = FINDINGS[id], M = CHECK_META[id];
+    var F = FINDINGS[id], M = D.CHECK_META[id];
     return '<form class="form" data-form="checkfind" data-topic="' + id + '" novalidate>' +
       '<p class="small" style="font-weight:700;color:var(--ink)">Last step</p>' +
       '<h3 class="h3" id="gstep" tabindex="-1">What did you find in your ' + esc(M.name.toLowerCase()) + '?</h3>' +
@@ -195,7 +147,7 @@ import { A as C4A } from "../app.js";
   };
   /* A suggestion to set the next self-check reminder, unless one is already set for this check. */
   function nextCheckHtml(id) {
-    var M = CHECK_META[id], wl = { '4w': '4 weeks', '6m': '6 months' }[M.when] || M.when;
+    var M = D.CHECK_META[id], wl = { '4w': '4 weeks', '6m': '6 months' }[M.when] || M.when;
     if (S.reminders.some(function (x) { return x.status === 'active' && x.kind === 'selfcheck' && x.topic === id; })) return '';
     return '<p class="cap" style="margin-top:6px">Suggested next step</p><div class="fu-list"><article class="fu lvl-info" data-t="' + id + '"><p class="fu-tag"><span class="fu-dot" aria-hidden="true"></span>Good to know</p>' +
       '<h3 class="h3">Schedule your next ' + esc(D.TOPICS[id].name.toLowerCase()) + ' check</h3><p class="body">You did this one today. A reminder in ' + wl + ' keeps it easy.</p>' +
@@ -203,7 +155,7 @@ import { A as C4A } from "../app.js";
   }
   function resultHtml(r) {
     r = norm(r);
-    var M = CHECK_META[r.check], date = A.fmtDate(r.ts), found = r.result === 'change';
+    var M = D.CHECK_META[r.check], date = A.fmtDate(r.ts), found = r.result === 'change';
     var list = '<ul class="tick sx-sum"><li><span><b>Check:</b> ' + esc(M.name) + ' · ' + esc(date) + '</span></li><li><span><b>Result:</b> ' + (found ? 'You found something' : 'Nothing new') + '</span></li>' +
       (found ? resultSummary(r).map(function (x) { return '<li><span>' + esc(x) + '</span></li>'; }).join('') : '') + (r.other ? '<li><span><b>In your words:</b> “' + esc(r.other) + '”</span></li>' : '') + '</ul>';
     var foot = '<p class="small">Saved in Profile, under Self-check results.</p>';
@@ -220,7 +172,7 @@ import { A as C4A } from "../app.js";
   }
   /* Saves what was found as an observation in the account, then shows the result in the sheet. */
   A.forms.checkfind = async function (form) {
-    var id = form.getAttribute('data-topic'), F = FINDINGS[id], M = CHECK_META[id], err = A.$('#e-cf', form), btn = A.$('button[type="submit"]', form);
+    var id = form.getAttribute('data-topic'), F = FINDINGS[id], M = D.CHECK_META[id], err = A.$('#e-cf', form), btn = A.$('button[type="submit"]', form);
     var keys = A.$$('input[name="f"]:checked', form).map(function (i) { return i.value; }), none = keys.indexOf('none') > -1;
     keys = keys.filter(function (k) { return k !== 'none'; });
     var other = form.elements.other.value.trim(), sideEl = A.$('input[name="side"]:checked', form), side = sideEl ? sideEl.value : '';
@@ -246,13 +198,13 @@ import { A as C4A } from "../app.js";
     var r = allResults().filter(function (x) { return x.id === el.getAttribute('data-id'); })[0];
     if (!r) return;
     r = norm(r);
-    A.symStart(r.check, 'In my ' + CHECK_META[r.check].name.toLowerCase() + ' I found: ' + (r.findings.join(', ') || r.other) + (r.side && r.side !== 'unsure' ? ' (' + r.side + ')' : '') + '.');
+    A.symStart(r.check, 'In my ' + D.CHECK_META[r.check].name.toLowerCase() + ' I found: ' + (r.findings.join(', ') || r.other) + (r.side && r.side !== 'unsure' ? ' (' + r.side + ')' : '') + '.');
   };
 
   /* ---------- Self-check list: small rows, each opens the full details ---------- */
   function checkTone(st) { return st.key === 'ok' ? 'on' : (st.key === 'change' || st.key === 'due') ? 'warn' : ''; }
   function checkRow(x) {
-    var id = x.id, M = CHECK_META[id], st = checkStatus(id);
+    var id = x.id, M = D.CHECK_META[id], st = checkStatus(id);
     return '<a class="chk-row" href="#chk-' + id + '" data-t="' + id + '" data-check="' + id + '">' + H.tIc(id, 26) +
       '<span class="chk-b"><span class="chk-h"><span class="chk-name">' + esc(M.name) + '</span>' + pill(st.label, checkTone(st)) + '</span>' +
       '<span class="chk-m"><span><span class="m-l">Last:</span> ' + esc(st.last.replace(/^Last: /, '').replace(/, you found something$/, '')) + '</span><span><span class="m-l">How often:</span> ' + esc(M.short) + '</span><span><span class="m-l">Takes:</span> about ' + M.min + ' min</span></span></span>' +
@@ -306,7 +258,7 @@ import { A as C4A } from "../app.js";
       (found ? '<p class="res-t">' + esc(resultSummary(r).join(' · ') || 'Something you noticed') + '</p>' : '') + (r.other ? '<p class="res-o">“' + esc(r.other) + '”</p>' : '') + '</div>';
   }
   V.check = function (id) {
-    var T = D.TOPICS[id], M = CHECK_META[id];
+    var T = D.TOPICS[id], M = D.CHECK_META[id];
     if (!T || !T.check || !M) return V.notfound();
     var c = T.check, st = checkStatus(id), sum = CHECK_SUMMARY[id] || [], setup = CHECK_SETUP[id] || [], past = resultsFor(id), h = '';
     h += '<header class="t-hero" data-t="' + id + '"><span class="glyph-bg" aria-hidden="true">' + A.organ(id, 230) + '</span><p class="cap">Self-check</p><h1 class="large" id="h">' + esc(M.name) + '</h1><p class="lede">' + esc(c.title) + '</p></header>';
@@ -338,7 +290,7 @@ import { A as C4A } from "../app.js";
     } else {
       h += '<div class="stack" style="gap:12px">' + list.map(function (r) {
         var found = r.result === 'change', id = esc(r.id);
-        return '<article class="card res" data-t="' + esc(r.check) + '" data-res="' + id + '"><div class="scn-h"><div><p class="cap">' + esc(A.fmtDate(r.ts)) + '</p><h2 class="h3">' + esc(CHECK_META[r.check].name) + '</h2></div>' + pill(found ? 'Found something' : 'Nothing new', found ? 'warn' : 'on') + '</div>' +
+        return '<article class="card res" data-t="' + esc(r.check) + '" data-res="' + id + '"><div class="scn-h"><div><p class="cap">' + esc(A.fmtDate(r.ts)) + '</p><h2 class="h3">' + esc(D.CHECK_META[r.check].name) + '</h2></div>' + pill(found ? 'Found something' : 'Nothing new', found ? 'warn' : 'on') + '</div>' +
           (found ? '<ul class="tick">' + resultSummary(r).map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' : '') + (r.other ? '<p class="body">“' + esc(r.other) + '”</p>' : '') +
           (found ? '<div class="btn-row"><button class="btn sm tint" type="button" data-action="chk-talk" data-id="' + id + '">' + ic('chat', 16) + ' Talk about it</button></div>' : '') +
           '<div class="btn-row"><button class="btn sm ghost" type="button" data-action="chk-del" data-id="' + id + '">' + ic('trash', 16) + ' Delete</button></div></article>';
@@ -372,7 +324,7 @@ import { A as C4A } from "../app.js";
   }
   A.scanCard = scanCard;
   V.scans = function () {
-    var inv = SCANS.filter(function (s) { return s.kind === 'invited'; }), oth = SCANS.filter(function (s) { return s.kind === 'doctor'; });
+    var inv = D.SCANS.filter(function (s) { return s.kind === 'invited'; }), oth = D.SCANS.filter(function (s) { return s.kind === 'doctor'; });
     var h = '<p class="lede" style="margin-top:-18px">Regular tests and scans that medical providers suggest, how long they take, and when you last had them.</p>';
     h += '<section class="sec" aria-labelledby="inv-h">' + secH('By invitation', '', 'inv-h') + '<p class="small">National screening. Free, voluntary, and sent to you by letter. Take part when you are invited.</p><div class="scn-list">' + inv.map(function (s) { return scanCard(s.id); }).join('') + '</div></section>';
     h += '<section class="sec" aria-labelledby="doc-h">' + secH('If a doctor refers you', '', 'doc-h') + '<p class="small">Arranged by a doctor, for example after a screening test finds something.</p><div class="scn-list">' + oth.map(function (s) { return scanCard(s.id); }).join('') + '</div></section>';
@@ -396,7 +348,7 @@ import { A as C4A } from "../app.js";
   A.actions['scan-open'] = function (el) { scanSheet(el.getAttribute('data-id')); };
   A.actions['scan-talk'] = function () { A.sheet.close(true); H.askOpen(tr('What should I ask at my appointment?', 'Mitä kysyä vastaanotolla?')); };
   A.actions['scan-log'] = function (el) {
-    var id = el.getAttribute('data-id'), sc = BY[id], cur = S.scans[id], today = new Date().toISOString().slice(0, 10);
+    var id = el.getAttribute('data-id'), sc = scanById(id), cur = S.scans[id], today = new Date().toISOString().slice(0, 10);
     var val = cur && cur.ts ? new Date(cur.ts).toISOString().slice(0, 10) : '';
     A.sheet.open({ kicker: sc.name, title: 'When did you last have it?',
       html: '<form class="form" data-form="scanlog" data-id="' + id + '" novalidate><div class="fgroup"><div class="group"><label class="cell field" for="sl-d"><span class="fl">Date</span><input class="fi" id="sl-d" name="date" type="date" max="' + today + '" value="' + val + '" aria-describedby="e-sl"></label></div>' +
@@ -405,7 +357,7 @@ import { A as C4A } from "../app.js";
   };
   /* The date is saved as an observation in the account. A new date replaces the one logged before for the same scan. */
   A.forms.scanlog = async function (form) {
-    var id = form.getAttribute('data-id'), sc = BY[id], v = form.elements.date.value, err = A.$('#e-sl', form), btn = A.$('button[type="submit"]', form);
+    var id = form.getAttribute('data-id'), sc = scanById(id), v = form.elements.date.value, err = A.$('#e-sl', form), btn = A.$('button[type="submit"]', form);
     var ts = /^\d{4}-\d{2}-\d{2}$/.test(v) ? Date.parse(v + 'T12:00:00Z') : NaN;
     if (!sc || isNaN(ts) || ts > Date.now() + DAY) { err.hidden = false; err.textContent = 'Pick a date that is today or earlier.'; form.elements.date.focus(); return; }
     var before = S.scans[id], topic = A.apiTopic(sc.topic), details = { scanId: id };
@@ -429,12 +381,6 @@ import { A as C4A } from "../app.js";
   };
 
   /* ---------- National screening programme ---------- */
-  var NAT = {
-    breast: { kind: 'Radiology', test: 'Mammogram, an X-ray of the breasts', ages: 'Women aged 50 to 69', freq: 'About every 2 years', scan: 'mammogram', pick: 'The place is in your letter' },
-    cervical: { kind: 'Clinical examination', test: 'A sample taken by a screening nurse (HPV test)', ages: 'Women aged 30 to 65, in some counties from 25', freq: 'Every 5 years', scan: 'cervical', pick: 'Home sampling is being studied in some counties in 2026' },
-    bowel: { kind: 'Home kit and lab', test: 'A stool test (FIT) you do at home and post to a lab', ages: 'Ages 56 to 74, phased in by 2031', freq: 'Every 2 years', scan: 'fit', pick: 'The kit comes with your letter' }
-  };
-  A.NAT = NAT;
   /* Programme information only. Whether and when someone is invited is in their invitation letter. */
   V.national = function () {
     var ids = ['breast', 'cervical', 'bowel'], h = '';
@@ -442,7 +388,7 @@ import { A as C4A } from "../app.js";
     h += '<section class="hero-card nat-push" aria-labelledby="np-h"><p class="cap">When you are invited</p><h2 class="h2" id="np-h">Please take part</h2><p class="body" style="color:var(--panel-ink2);padding-bottom:6px">Screening looks for a problem before you feel anything. It is free and takes only a few minutes. If you are not sure, “Step by step” shows what happens, and you can always say no.</p></section>';
     h += '<div class="note">Your invitation letter is the source of truth. It tells you whether and when you are invited, and where to go. This page describes the programmes, not your own invitation.</div>';
     ids.forEach(function (id) {
-      var T = D.TOPICS[id], n = NAT[id], inf = A.scanInfo(n.scan);
+      var T = D.TOPICS[id], n = D.NAT[id], inf = A.scanInfo(n.scan);
       h += '<article class="card nat-card" data-t="' + id + '" aria-labelledby="nat-' + id + '"><div class="nat-h"><span class="ic" data-t="' + id + '" aria-hidden="true">' + A.organ(id, 26) + '</span><div class="cell-b"><h2 class="h3" id="nat-' + id + '">' + esc(A.sname(id)) + '</h2>' +
         '<span class="s-lab-d">' + esc(n.kind) + '</span></div></div><div>' + pill('By invitation letter') + '</div>' +
         '<p class="body">' + esc(H.firstSentences(T.screeningText, 2)) + '</p>' +

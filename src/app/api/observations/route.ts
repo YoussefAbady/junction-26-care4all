@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { z } from "zod";
-import { currentAccount, privateJson, sameOrigin } from "@/lib/account-session";
+import { currentAccount, privateJson, refuseOrigin, sameOrigin } from "@/lib/account-session";
 import { database } from "@/lib/database";
 import { noteDetails } from "@/lib/design-contract";
 
@@ -37,7 +37,7 @@ export async function GET(request: Request) {
 }
 
 async function mutate(request: Request, action: "save" | "delete") {
-  if (!sameOrigin(request)) return privateJson({ error: "invalid" }, 403);
+  if (!sameOrigin(request)) return refuseOrigin(request);
   if (!request.headers.get("content-type")?.startsWith("application/json")) return privateJson({ error: "invalid" }, 415);
   try {
     const account = await currentAccount();

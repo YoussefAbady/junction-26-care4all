@@ -59,9 +59,10 @@ test("every question and option has English and Finnish text and unique ids", ()
   }
 });
 
-test("the interview adapts to sex, age, reason and chosen concerns", () => {
-  assert.deepEqual(ids({}).slice(0, 8), ["name", "dob", "sex", "gender", "body", "weight_change", "residence", "reason"]);
-  assert.ok(!ids({}).includes("areas") && !ids({}).includes("scr_cervix") && !ids({}).includes("scr_psa"));
+test("the interview adapts to sex, age and chosen concerns", () => {
+  assert.deepEqual(ids({}).slice(0, 8), ["name", "dob", "sex", "gender", "body", "weight_change", "residence", "areas"]);
+  assert.ok(!ids({}).includes("reason"), "'What brings you here today?' is no longer asked");
+  assert.ok(!ids({}).includes("scr_cervix") && !ids({}).includes("scr_psa") && !ids({}).includes("scr_result"));
   assert.ok(ids(base).includes("pregnancy"));
   assert.ok(!ids({ ...base, dob: "1960-01-01" }).includes("pregnancy"));
   assert.ok(ids(base).includes("scr_cervix") && ids(base).includes("scr_mammo") && !ids(base).includes("scr_psa"));
@@ -75,15 +76,18 @@ test("the interview adapts to sex, age, reason and chosen concerns", () => {
 });
 
 test("concerns open tailored follow-ups in option order, and only those", () => {
-  const picked = { ...base, reason: ["symptom"], areas: ["skin", "bowel"] };
+  const picked = { ...base, areas: ["skin", "bowel"] };
   const list = ids(picked);
   assert.ok(list.indexOf("sx:bowel:what") < list.indexOf("sx:skin:what"));
   assert.ok(list.includes("sx:skin:where") && list.includes("sx:bowel:freq") && !list.some(id => id.startsWith("sx:breast")));
-  assert.ok(!ids({ ...base, reason: ["checkup"] }).includes("areas"));
+  const nothing = ids({ ...base, areas: ["none"] });
+  assert.ok(nothing.includes("areas") && !nothing.some(id => id.startsWith("sx:")) && !nothing.includes("sx_notes") && !nothing.includes("areas_other"), "'Nothing in particular' opens no follow-ups");
+  assert.equal(check(registry.get("areas")!, ["none", "skin"]), "invalid", "'Nothing in particular' stands alone");
+  assert.equal(check(registry.get("areas")!, ["none"]), null);
   assert.ok(ids({ ...picked, sx_unused: "" } as Answers).includes("sx_notes"));
-  const weight = ids({ ...base, reason: ["symptom"], areas: ["general"], "sx:general:what": ["weight_loss"] });
+  const weight = ids({ ...base, areas: ["general"], "sx:general:what": ["weight_loss"] });
   assert.ok(weight.includes("sx:general:loss"));
-  assert.ok(!ids({ ...base, reason: ["symptom"], areas: ["general"], "sx:general:what": ["tired"] }).includes("sx:general:loss"));
+  assert.ok(!ids({ ...base, areas: ["general"], "sx:general:what": ["tired"] }).includes("sx:general:loss"));
   assert.ok(ids({ ...base, conditions: ["diabetes", "ibd"] }).includes("cond:diabetes") && ids({ ...base, conditions: ["diabetes", "ibd"] }).includes("cond:ibd"));
   assert.ok(ids({ ...base, cancer_personal: "yes" }).includes("cancer_list"));
   assert.ok(ids({ ...base, smoke: "former" }).includes("smoke_quit") && !ids({ ...base, smoke: "current" }).includes("smoke_quit"));
@@ -104,7 +108,8 @@ test("a complete interview can always be reached, with and without concerns", ()
   const plain = finish({});
   assert.ok(isComplete(plain) && Object.keys(plain).length > 25);
   assert.equal(firstOpen(plain), null);
-  const everything = finish({ dob: "1975-01-01", sex: "male", reason: ["symptom", "letter"], areas: ["bowel", "urinary", "andro"] });
+  const everything = finish({ dob: "1975-01-01", sex: "male", scr_gate: "yes", areas: ["bowel", "urinary", "andro"] });
+  assert.ok(ids(everything).includes("scr_result"), "a screening letter to understand opens its details");
   assert.ok(isComplete(everything) && ids(everything).filter(id => id.startsWith("sx:")).length > 18);
   for (const sex of ["female", "male", "intersex"]) assert.ok(isComplete(finish({ dob: "1990-01-01", sex })));
   assert.deepEqual(Object.keys(prune(everything)).sort(), Object.keys(everything).sort());
@@ -154,7 +159,7 @@ test("answers are validated by type, range and permission to say 'not sure'", ()
   assert.equal(check(q("fh_list"), [{ relative: "mother", type: "breast", age: 200 }]), "range");
   assert.equal(check(q("cond:diabetes"), { year: 2010, status: "controlled" }), null);
   assert.equal(check(q("cond:diabetes"), { status: "mystery" }), "invalid");
-  assert.equal(check(q("reason"), []), "required");
+  assert.equal(check(q("areas"), []), "required");
 });
 
 test("the server gate rejects unknown questions, wrong shapes and prototype tricks", () => {
@@ -188,25 +193,26 @@ test("derived measures are plain arithmetic on the answers", () => {
 
 test("safety alerts are raised by flagged answers, ranked, stable and never about diagnosis", () => {
   assert.deepEqual(alerts(base), []);
-  const emergency = alerts({ ...base, reason: ["symptom"], areas: ["breath"], "sx:breath:what": ["chest_now", "cough3"] });
+  const emergency = alerts({ ...base, areas: ["breath"], "sx:breath:what": ["chest_now", "cough3"] });
   assert.deepEqual(emergency.map(alert => alert.level), ["emergency", "soon"]);
   assert.equal(emergency[0].items.length, 1);
   assert.ok(emergency[0].items[0][0].includes("Chest pain"));
-  assert.deepEqual(alerts({ ...base, reason: ["symptom"], areas: ["breath"], "sx:breath:what": ["chest_now", "cough3"] }).map(alert => alert.key), emergency.map(alert => alert.key));
+  assert.deepEqual(alerts({ ...base, areas: ["breath"], "sx:breath:what": ["chest_now", "cough3"] }).map(alert => alert.key), emergency.map(alert => alert.key));
   assert.equal(alerts({ ...base, weight_change: "loss_big" })[0].level, "soon");
-  const severe = alerts({ ...base, reason: ["symptom"], areas: ["pain"], "sx:pain:severity": 9 });
+  const severe = alerts({ ...base, areas: ["pain"], "sx:pain:severity": 9 });
   assert.equal(severe[0].level, "urgent");
-  assert.equal(alerts({ ...base, reason: ["symptom"], areas: ["pain"], "sx:pain:severity": 8 }).length, 0);
+  assert.equal(alerts({ ...base, areas: ["pain"], "sx:pain:severity": 8 }).length, 0);
   assert.equal(alerts({ ...base, phq1: "half", phq2: "half" })[0].kind, "mood");
   assert.equal(alerts({ ...base, phq1: "some", phq2: "some" }).length, 0);
-  assert.equal(alerts({ ...base, reason: ["checkup"], areas: ["breath"], "sx:breath:what": ["chest_now"] }).length, 0, "hidden answers raise nothing");
-  assert.equal(alerts({ ...base, reason: ["symptom"], areas: ["head"], "sx:head:sudden": "yes" })[0].level, "urgent");
+  assert.equal(alerts({ ...base, areas: ["none"], "sx:breath:what": ["chest_now"] }).length, 0, "hidden answers raise nothing");
+  assert.equal(alerts({ ...base, areas: ["pain"], "sx:breath:what": ["chest_now"] }).length, 0, "an area that was not chosen raises nothing");
+  assert.equal(alerts({ ...base, areas: ["head"], "sx:head:sudden": "yes" })[0].level, "urgent");
 });
 
 test("the summary uses the chosen language, skips hidden answers and shows 'not sure' honestly", () => {
   const answers: Answers = {
     ...base, name: "Aino", sex: "female", body: { height: 170, weight: 70 }, smoke: "never", alc_freq: { $: "unsure" },
-    reason: ["symptom"], areas: ["skin"], "sx:skin:what": ["changed"], "sx:skin:where": ["arm_l", "back_upper"], scr_psa: "y2",
+    areas: ["skin"], "sx:skin:what": ["changed"], "sx:skin:where": ["arm_l", "back_upper"], scr_psa: "y2",
     fh_gate: "yes", fh_list: [{ relative: "mother", type: "breast", age: 52 }],
   };
   const english = summarise(answers, "en");
@@ -244,17 +250,59 @@ test("earlier surveys import compatible answers without inferring missing clinic
   });
 });
 
+test("where do you live offers the larger cities, 'Another place in Finland' and 'Outside Finland', and keeps the earlier region answer valid", () => {
+  const residence = registry.get("residence")!;
+  assert.equal(residence.type, "choice");
+  const question = residence as Extract<Question, { type: "choice" }>;
+  const offered = optionsOf(question, {}).map(option => option.id);
+  assert.deepEqual(offered.slice(0, 6), ["helsinki", "espoo", "tampere", "vantaa", "oulu", "turku"]);
+  assert.ok(offered.length >= 30, "a real list of cities, not regions");
+  assert.deepEqual(offered.slice(-2), ["finland", "abroad"], "the cities come first, then the catch-all, then abroad");
+  assert.ok(!offered.includes("uusimaa"), "the old region is offered to nobody new");
+  assert.ok(optionsOf(question, { residence: "uusimaa" }).some(option => option.id === "uusimaa"), "a person who gave it still sees it");
+  assert.equal(check(question, "tampere"), null);
+  assert.equal(check(question, "uusimaa"), null, "an answer saved before the change is still valid");
+  assert.equal(check(question, "atlantis"), "invalid");
+  for (const option of question.options) assert.ok(option.label[0].trim() && option.label[1].trim(), option.id);
+});
+
+test("a question that was retired is dropped from saved answers instead of failing them", () => {
+  assert.deepEqual(sanitize({ name: "Aino", reason: ["checkup"] }), { name: "Aino" });
+  assert.equal(registry.has("reason"), false);
+  assert.equal(sanitize({ name: "Aino", not_a_question: "x" }), null, "anything else unknown is still refused");
+});
+
+test("a finished interview that has gained a question is reopened with its answers, not thrown away", async () => {
+  const { readProgress } = await import("../src/lib/intake/progress");
+  const answers = finish({ dob: "1975-01-01", sex: "male", cancer_personal: "no" });
+  const saved = { v: 2, answers, cursor: "review", complete: true, confirmed: true, acks: [], language: "en", revision: 3 };
+  assert.equal(readProgress(saved, 3).complete, true, "a finished interview that is still finished stays finished");
+  // The same interview as it was saved before the questions about concerns and screening letters were asked this way.
+  const older = Object.fromEntries(Object.entries(answers).filter(([id]) => id !== "areas" && id !== "scr_gate"));
+  const reopened = readProgress({ ...saved, answers: { ...older, reason: ["checkup"] } }, 3);
+  assert.equal(reopened.complete, false);
+  assert.equal(reopened.confirmed, false);
+  assert.equal(reopened.upgraded, undefined, "it is not a fresh start");
+  assert.equal(reopened.answers.dob, "1975-01-01");
+  assert.ok(!("reason" in reopened.answers), "the retired answer is gone");
+  assert.equal(firstOpen(reopened.answers), "areas", "only what is new is asked");
+  assert.equal(readProgress({ ...saved, answers: { sex: "robot" } }, 3).upgraded, true, "an answer that is simply wrong still starts over");
+});
+
 test("chat next action keeps incomplete intake first and switches after confirmation", async () => {
   const { freshProgress } = await import("../src/lib/intake/progress");
   const { intakeInteraction, nextAction, symptomInteraction } = await import("../src/lib/chat-journey");
+  const { createEvidence } = await import("../src/lib/chat-evidence");
+  const { store } = await import("./content-store");
+  const evidence = createEvidence(await store.loadEvidence());
   const progress = { ...freshProgress("en"), answers: finish({ ...base, cancer_personal: "no", scr_pending: "no" }) };
   const facts = { symptom: true, outsideFinland: false };
   assert.equal(intakeInteraction(progress, "en").type, "review_intake");
-  assert.equal(nextAction(progress, facts, "en").id, "complete_intake");
+  assert.equal(nextAction(progress, facts, "en", evidence).id, "complete_intake");
   const confirmed = { ...progress, complete: true, confirmed: true };
-  assert.equal(nextAction(confirmed, facts, "en").id, "contact_professional");
-  assert.equal(nextAction(confirmed, { ...facts, symptom: false, checkTopic: "skin" }, "fi").id, "review_body_awareness");
-  assert.equal(nextAction(confirmed, { ...facts, symptom: false }, "en").id, "review_screening");
+  assert.equal(nextAction(confirmed, facts, "en", evidence).id, "contact_professional");
+  assert.equal(nextAction(confirmed, { ...facts, symptom: false, checkTopic: "skin" }, "fi", evidence).id, "review_body_awareness");
+  assert.equal(nextAction(confirmed, { ...facts, symptom: false }, "en", evidence).id, "review_screening");
   const resolved = symptomInteraction("draft", { label: "Fictional symptom", onset: "today", course: "gone" }, "en");
   assert.equal(resolved.type === "symptom_question" && resolved.step, "notes");
 });

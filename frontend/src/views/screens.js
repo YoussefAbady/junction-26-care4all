@@ -534,7 +534,7 @@ import { A as C4A } from "../app.js";
       '<h1 class="large" id="h">' + esc(T.name + ' cancer') + '</h1><p class="lede">' + esc(T.lede) + '</p>' + chips(T.leadSrc) + '</header>';
     h += statCard(id);
     if (T.national) {
-      var N = A.NAT[id], inf = A.scanInfo(N.scan);
+      var N = D.NAT[id], inf = A.scanInfo(N.scan);
       h += '<section class="card up nat-link" data-t="' + id + '" aria-labelledby="nl-h"><p class="cap">National screening programme</p><h2 class="h3" id="nl-h">' + esc(A.sname(id)) + '</h2>' +
         '<p class="body">Your invitation letter tells you whether and when you are invited. It is free and your choice. The test: ' + esc(N.test.charAt(0).toLowerCase() + N.test.slice(1)) + ' (' + esc(N.kind.toLowerCase()) + ').</p>' +
         '<div class="metas">' + '<div class="meta"><span class="m-i" aria-hidden="true">' + ic('user', 16) + '</span><span class="m-t"><span class="m-l">Who:</span> ' + esc(N.ages) + '</span></div>' +

@@ -200,6 +200,12 @@ export function check(question: Question, answer: unknown, now = clock.now()): P
   }
 }
 
+/**
+ * Questions that used to be asked and no longer are. An answer saved to one is dropped, so that retiring a question never
+ * makes a person's whole saved interview unreadable. "reason" was "What brings you here today?".
+ */
+const retired: ReadonlySet<string> = new Set(["reason"]);
+
 /** Server-side gate: every key must be a known question and every value valid for it. */
 export function sanitize(raw: unknown, now = clock.now()): Answers | null {
   if (typeof raw !== "object" || raw === null || Array.isArray(raw)) return null;
@@ -207,6 +213,7 @@ export function sanitize(raw: unknown, now = clock.now()): Answers | null {
   if (entries.length > 400) return null;
   const out: Answers = {};
   for (const [id, answer] of entries) {
+    if (retired.has(id)) continue;
     const question = registry.get(id);
     if (!question || check(question, answer, now)) return null;
     out[id] = answer as Answer;

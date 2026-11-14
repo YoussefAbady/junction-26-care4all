@@ -1,5 +1,6 @@
 import { geminiOrder } from "./gemini";
-import { cancerCards } from "./cancer-catalog";
+import { cancerCards } from "./content/catalog";
+import type { ContentStore } from "./content/types";
 import { tr, type Copy, type Language } from "./survey";
 
 type NextAction = { id: string; title: string; topic?: string };
@@ -12,14 +13,14 @@ type Suggestion = {
     { open: "library" | "professional_options"; topic?: string };
 };
 
-export async function directChat(language: Language, plan: Plan, next: NextAction, config?: { apiKey?: string; model?: string }, request: typeof fetch = fetch) {
+export async function directChat(store: ContentStore, language: Language, plan: Plan, next: NextAction, config?: { apiKey?: string; model?: string }, request: typeof fetch = fetch) {
   const label = (copy: Copy) => tr(language, copy);
   const choices: Suggestion[] = [
     { id: "log_symptom", label: label(["Log a symptom or observation", "Kirjaa oire tai havainto"]), request: { action: "start_symptom", language } },
     { id: "prepare_visit", label: label(["Prepare questions for a professional", "Valmistele kysymyksiä ammattilaiselle"]), request: { message: label(["What should I ask at my appointment?", "Mitä kysyä vastaanotolla?"]), language } },
     { id: "find_support", label: label(["Find cancer support", "Etsi tukea syöpään liittyvissä asioissa"]), request: { message: label(["Where can I find cancer counselling?", "Mistä saan syöpäneuvontaa?"]), language } },
   ];
-  const card = plan.topic ? cancerCards(language, plan.topic)[0] : undefined;
+  const card = plan.topic ? cancerCards(await store.loadCatalog(), language, plan.topic)[0] : undefined;
   choices.unshift(card
     ? { id: "learn_topic", label: label(["Explore", "Tutustu aiheeseen"]) + " · " + card.name, request: { open: "library", topic: card.slug } }
     : { id: "learn_topic", label: label(["Explore cancer topics", "Tutustu syöpäaiheisiin"]), request: { open: "library" } });

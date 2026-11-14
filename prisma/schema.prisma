@@ -78,6 +78,7 @@ model CareReminder {
   @@index([username, dueAt, id])
 }
 
+/// A problem a person reported with the content. Account data, not content: the content seed never touches it.
 model ContentReport {
   id String @id
   username String
@@ -94,4 +95,387 @@ model ChatSymptomDraft {
   data Json
   revision Int @default(0)
   account ScreeningAccount @relation(fields: [username], references: [username], onDelete: Cascade)
+}
+
+// ---------------------------------------------------------------------------------------------------------------
+// Public educational content. It holds no personal data and is the same for everyone. docs/content-database.md
+// explains how it is seeded, served and edited. The Content* tables below are replaced as a whole by the seed when the
+// seed input changes (ContentReport above is not one of them).
+//
+// Conventions: `position` keeps the order the interface shows. Lists of text and lists of source ids are text[]
+// columns. Small ordered lists of objects that are always read whole are jsonb. A *SourceIds column holds ContentSource
+// ids, in the order the interface shows them. The seed checks every one of those ids.
+// ---------------------------------------------------------------------------------------------------------------
+
+/// Single values: contentVersion, contentRevision, retrieved, designSource, year, example, statsNote, statsSourceIds,
+/// triageIntro, triageSourceIds and catalogVersion.
+model ContentMeta {
+  key   String @id
+  value Json
+}
+
+/// An official page the content cites. `listed` marks the sources the PWA shows in its own source list. The others are
+/// cited only by the backend's catalog and chat answers.
+model ContentSource {
+  id           String  @id
+  listed       Boolean
+  position     Int
+  organisation String
+  name         String
+  /// Finnish title, when the source has one (the backend catalog does). Otherwise `name` is used in every language.
+  nameFi       String?
+  url          String
+  /// The publisher's own date label, such as "Last reviewed 14 Oct 2026". Empty when the page shows none.
+  published    String
+  /// ISO date the page was read, for example 2026-11-14.
+  retrieved    String
+  /// What this source is cited for.
+  use          String
+  /// Language of the page itself, such as en or fi.
+  language     String
+  @@index([listed, position])
+}
+
+/// Interface text. scope is copy (the English D.COPY lines), i18n (D.I18N, one row per language) or catalog (the notice
+/// the catalog API shows).
+model ContentString {
+  scope    String
+  key      String
+  language String
+  position Int
+  text     String
+  @@id([scope, key, language])
+  @@index([scope, position])
+}
+
+model ContentCounty {
+  id       String @id
+  position Int
+  name     String
+}
+
+model ContentArticle {
+  id       String  @id
+  position Int
+  /// A topic id, or general for articles that belong to no topic.
+  topic    String
+  minutes  Int
+  title    String
+  inShort  String
+  /// True for the article that introduces a topic.
+  about    Boolean @default(false)
+  /// Article ids to read next.
+  related  String[]
+  sections ContentArticleSection[]
+}
+
+model ContentArticleSection {
+  articleId  String
+  position   Int
+  /// The section's id inside its article, such as does.
+  key        String
+  heading    String
+  lead       String?
+  paragraphs String[]
+  /// The plain-language version of the paragraphs. Empty when the section has none.
+  plain      String[]
+  /// Bullet points, in order. Empty when the section has none.
+  list       String[]
+  steps      String[]
+  /// [{ n, prefix, suffix, text, label }]: figures shown big, each with a label.
+  stats      Json?
+  /// [{ label, text }]: side-by-side columns.
+  cols       Json?
+  /// { topic, anchor, label }: a button into the topic page.
+  link       Json?
+  sourceIds  String[]
+  article    ContentArticle @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  @@id([articleId, position])
+  @@unique([articleId, key])
+}
+
+model ContentTopic {
+  id                   String   @id
+  /// Order of the topic list (D.TOPIC_ORDER).
+  position             Int
+  name                 String
+  kicker               String
+  /// Part of Finland's national screening programme. D.NATIONAL lists these topics, in topic order.
+  national             Boolean
+  pref                 String?
+  blurb                String
+  lede                 String
+  leadSourceIds        String[]
+  programme            String
+  /// Article ids, in reading order.
+  articleIds           String[]
+  organ                String
+  aboutId              String
+  screeningText        String
+  screeningSourceIds   String[]
+  screenName           String?
+  symptomsTitle        String
+  symptomsSee          String
+  symptomsSeeSourceIds String[]
+  symptomsNote         String
+  symptomsContact      String
+  symptomsSourceIds    String[]
+  symptoms             ContentSymptom[]
+  guide                ContentGuide?
+  kit                  ContentKit?
+}
+
+model ContentSymptom {
+  topicId  String
+  position Int
+  title    String
+  what     String
+  /// Name of the illustration.
+  art      String
+  sourceId String
+  topic    ContentTopic @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  @@id([topicId, position])
+}
+
+/// The self-check guide of a topic (TOPICS.<id>.check).
+model ContentGuide {
+  topicId         String   @id
+  title           String
+  text            String[]
+  normal          String[]
+  normalSourceIds String[]
+  found           String
+  /// [{ url, org, title, lang, length }]
+  videos          Json
+  differ          String
+  differSourceIds String[]
+  /// [{ letter, word, t, src }] for the skin guide, null for the others.
+  abcde           Json?
+  sourceIds       String[]
+  topic           ContentTopic @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  steps           ContentGuideStep[]
+}
+
+model ContentGuideStep {
+  topicId  String
+  position Int
+  heading  String
+  text     String
+  /// Name of the illustration.
+  art      String
+  sourceId String
+  /// What to look for in this step.
+  look     String?
+  /// STEP_HINTS: how to stand or sit, and what to do with your hands.
+  pose     String
+  move     String
+  guide    ContentGuide @relation(fields: [topicId], references: [topicId], onDelete: Cascade)
+  @@id([topicId, position])
+}
+
+/// The home test kit of a topic (TOPICS.<id>.kit).
+model ContentKit {
+  topicId   String   @id
+  title     String
+  text      String
+  sourceIds String[]
+  kind      String
+  /// { url, org, title, lang, length }
+  video     Json?
+  topic     ContentTopic @relation(fields: [topicId], references: [id], onDelete: Cascade)
+}
+
+/// How a national screening works, step by step (D.JOURNEYS). The id is a topic id.
+model ContentJourney {
+  id        String   @id
+  position  Int
+  intro     String
+  benefits  String[]
+  downsides String[]
+  unsure    String
+  sourceIds String[]
+  steps     ContentJourneyStep[]
+}
+
+model ContentJourneyStep {
+  journeyId String
+  position  Int
+  heading   String
+  text      String
+  /// Name of the illustration.
+  art       String
+  sourceId  String
+  tip       String?
+  journey   ContentJourney @relation(fields: [journeyId], references: [id], onDelete: Cascade)
+  @@id([journeyId, position])
+}
+
+/// How often to do a self-check, and how long it takes (D.CHECK_META). The id is a topic id.
+model ContentCheck {
+  id                      String   @id
+  position                Int
+  name                    String
+  minutes                 Int
+  everyDays               Int
+  /// Reminder offset the interface offers, such as 4w or 6m.
+  remindIn                String
+  short                   String
+  frequency               String
+  recommendation          String
+  recommendationSourceIds String[]
+  drawingSourceIds        String[]
+  note                    String
+}
+
+/// A regular scan or test (D.SCANS).
+model ContentScan {
+  id            String   @id
+  position      Int
+  name          String
+  topic         String
+  /// invited, doctor or notnational.
+  kind          String
+  sex           String?
+  type          String
+  who           String
+  /// Years between tests. 0 when there is no routine schedule.
+  everyYears    Int
+  frequency     String
+  duration      String
+  place         String
+  what          String
+  note          String
+  /// The intake question that records when the person last had this test.
+  intakeQuestion String?
+  /// How the answers to that question read: { recent, long, never } or { done, kit, none }.
+  intakeAnswers Json?
+  journeyId     String?
+  sourceIds     String[]
+}
+
+/// A national screening programme in one line each (D.NAT). The id is a topic id.
+model ContentProgramme {
+  id        String @id
+  position  Int
+  kind      String
+  test      String
+  ages      String
+  frequency String
+  scanId    String
+  pick      String
+}
+
+/// Cancer figures for Finland (D.STATS). The id is a topic id.
+model ContentStat {
+  id          String   @id
+  position    Int
+  site        String
+  /// Chance of being diagnosed before age 75, in percent.
+  riskPercent Float
+  sex         String?
+  casesBoth   Int
+  casesMen    Int?
+  casesWomen  Int?
+  /// Share of all cancers in men or in women, in percent.
+  shareMen    Float?
+  shareWomen  Float?
+  /// Sources of this figure when they differ from the list in ContentMeta (statsSourceIds).
+  sourceIds   String[]
+}
+
+model ContentVaccine {
+  id        String   @id
+  position  Int
+  name      String
+  protects  String
+  finland   String?
+  sourceIds String[]
+}
+
+model ContentTriageRule {
+  position  Int      @id
+  heading   String
+  text      String
+  sourceIds String[]
+}
+
+model ContentFaq {
+  position     Int      @id
+  topic        String?
+  /// Pattern that recognises the question, with its flags. The keywords below are the fallback.
+  pattern      String?
+  patternFlags String?
+  keywords     String[]
+  question     String
+  answer       String
+  sourceIds    String[]
+}
+
+/// Starter questions. topic is a topic id, or general. position runs over all rows, so it keeps the group order too.
+model ContentSuggestion {
+  position Int    @id
+  topic    String
+  question String
+}
+
+/// One cancer topic of the backend catalog behind /api/cancers and /api/library, in English and Finnish.
+model ContentCatalogCard {
+  slug      String   @id
+  position  Int
+  nameEn    String
+  nameFi    String
+  summaryEn String
+  summaryFi String
+  /// ContentSource ids of official provider pages the library shows beside the card.
+  linkIds   String[]
+  sections  ContentCatalogSection[]
+}
+
+model ContentCatalogSection {
+  cardSlug  String
+  /// awareness, symptoms, selfExamination, homeKit or riskFactors.
+  key       String
+  position  Int
+  titleEn   String
+  titleFi   String
+  /// awareness_only, unavailable or programme_information. Null for plain information.
+  status    String?
+  /// itemsEn and itemsFi are the same list in two languages.
+  itemsEn   String[]
+  itemsFi   String[]
+  sourceIds String[]
+  card      ContentCatalogCard @relation(fields: [cardSlug], references: [slug], onDelete: Cascade)
+  @@id([cardSlug, key])
+}
+
+/// The passages chat answers quote. id is the passage id the API returns. A passage can have a text per language and,
+/// where the answer depends on it, per residence. Several candidates for one passage are ranked by source tier.
+model ContentEvidence {
+  id        String
+  language  String
+  /// any, finland or abroad.
+  residence String
+  position  Int
+  /// A topic id, or general.
+  topic     String
+  heading   String?
+  text      String
+  sourceIds String[]
+  @@id([id, language, residence, position])
+}
+
+/// Every quotable passage of the content above, in plain text, for retrieval. Rebuilt from the tables whenever the
+/// content is replaced or reindexed. `search` is a generated tsvector with a GIN index, both created in the migration.
+model ContentPassage {
+  id        String   @id
+  kind      String
+  /// A topic id, or general.
+  topic     String
+  language  String
+  heading   String
+  text      String
+  sourceIds String[]
+  search    Unsupported("tsvector")?
+  @@index([language, topic])
+  @@index([search], type: Gin)
 }
