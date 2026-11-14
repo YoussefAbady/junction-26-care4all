@@ -1,4 +1,4 @@
-const CACHE = "care4all-public-v1";
+const CACHE = "care4all-public-v2";
 const OFFLINE = "/offline.html";
 const PUBLIC = new Set([OFFLINE, "/care-192.png", "/care-512.png", "/care-maskable.png", "/care-apple.png", "/care-hero.webp"]);
 self.addEventListener("install", event => {

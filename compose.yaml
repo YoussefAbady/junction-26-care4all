@@ -1,6 +1,12 @@
+# Care4All local stack: PWA (nginx) -> backend (Next.js API) -> PostgreSQL.
+# Browsers only talk to the PWA origin. nginx serves the app shell and proxies /api/ to the backend,
+# so the HTTP-only session cookie and the backend's same-origin check work without CORS.
+name: care4all
+
 services:
   db:
     image: postgres:17-bookworm
+    restart: unless-stopped
     environment:
       POSTGRES_USER: care4all
       POSTGRES_DB: care4all
@@ -14,6 +20,7 @@ services:
       interval: 3s
       timeout: 3s
       retries: 20
+
   migrate:
     build:
       context: .
@@ -24,22 +31,53 @@ services:
       db:
         condition: service_healthy
     restart: "no"
-  app:
+
+  backend:
     build:
       context: .
       target: runtime
+    restart: unless-stopped
     environment:
       DATABASE_URL: ${DOCKER_DATABASE_URL:?Set DOCKER_DATABASE_URL in .env.docker}
-      APP_ORIGIN: ${APP_ORIGIN:-http://localhost:3000}
+      # The exact origin people load the PWA from. The backend rejects writes from any other origin.
+      APP_ORIGIN: ${APP_ORIGIN:-http://localhost:8080}
       COOKIE_SECURE: ${COOKIE_SECURE:-false}
       AI_PROVIDER: ${AI_PROVIDER:-mock}
       VERDA_BASE_URL: ${VERDA_BASE_URL:-}
       VERDA_API_KEY: ${VERDA_API_KEY:-}
       VERDA_MODEL: ${VERDA_MODEL:-}
+      CHAT_PROVIDER: ${CHAT_PROVIDER:-catalog}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODEL: ${GEMINI_MODEL:-}
     ports:
+      # Published for direct API checks such as /api/health. The PWA reaches it over the Compose network.
       - "127.0.0.1:${APP_PORT:-3000}:3000"
     depends_on:
       migrate:
         condition: service_completed_successfully
+
+  frontend:
+    build:
+      context: ./frontend
+    restart: unless-stopped
+    environment:
+      BACKEND_URL: http://backend:3000
+    ports:
+      - "127.0.0.1:${FRONTEND_PORT:-8080}:8080"
+    # Stateless: nothing is written to the image. nginx needs scratch space for its pid file, caches and the
+    # configuration it renders from the template at start-up.
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /var/cache/nginx:uid=101,gid=101
+      - /etc/nginx/conf.d:uid=101,gid=101
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    depends_on:
+      backend:
+        condition: service_healthy
+
 volumes:
   care4all-postgres:

@@ -1,118 +1,129 @@
 import { expect, test, type Page } from "@playwright/test";
+import { randomBytes } from "node:crypto";
 
-async function start(page: Page, name: string) {
+// This journey drives the backend's own Next.js interface at "/", which the PWA replaced as the entry point.
+// Run it against a backend whose APP_ORIGIN is its own address:  $env:LEGACY_UI_URL='http://localhost:3000'
+test.skip(!process.env.LEGACY_UI_URL, "Targets the backend's built-in interface. Set LEGACY_UI_URL to run it.");
+test.use({ baseURL: process.env.LEGACY_UI_URL });
+
+/** Fills in whatever the current question asks for, with the simplest valid answer. */
+async function answerCurrent(page: Page) {
+  const form = page.locator("form.qcard");
+  for (const box of await form.locator("input.input:not(.input--number):not([type=checkbox]), textarea.input").all()) {
+    if (!(await box.inputValue())) await box.fill("x");
+  }
+  for (const select of await form.locator("select.input").all()) if (!(await select.inputValue())) await select.selectOption({ index: 1 });
+  for (const box of await form.locator(".numberbox").all()) {
+    const field = box.locator("input");
+    if (await field.inputValue()) continue;
+    const increase = box.getByRole("button", { name: /Increase|Lisää/ });
+    if (await increase.count()) await increase.click();
+    else await field.fill("2020");
+  }
+  for (const group of await form.getByRole("radiogroup").all()) {
+    if ((await group.getByRole("radio", { checked: true }).count()) === 0) await group.getByRole("radio").first().check();
+  }
+  for (const group of await form.locator("[role=group]:has(input[type=checkbox]):not(.bodymap)").all()) {
+    if ((await group.getByRole("checkbox", { checked: true }).count()) === 0) await group.getByRole("checkbox").first().check();
+  }
+  if (await form.locator(".bodymap__spot").count()) await form.locator(".bodymap__spot").first().click();
+}
+
+test("signs up, meets a safety alert, saves and resumes in Finnish, then finishes with a summary", async ({ page }) => {
+  test.setTimeout(120000);
+  const username = "survey_" + randomBytes(5).toString("hex");
+  const password = randomBytes(16).toString("hex");
   await page.goto("/");
-  await page.getByRole("button", { name: "Start demo journey" }).click();
-  await page.getByRole("button", { name: new RegExp(name) }).click();
-}
-async function nav(page: Page, desktop: string, mobile = desktop) {
-  const bottom = page.getByRole("navigation", { name: "Mobile care workspace" });
-  if (await bottom.isVisible()) await bottom.getByRole("button", { name: mobile, exact: true }).click();
-  else await page.getByRole("navigation", { name: "Care workspace", exact: true }).getByRole("button", { name: desktop, exact: true }).click();
-}
-async function pick(page: Page, answer: string) {
-  await page.getByRole("radio", { name: answer, exact: true }).check();
-  await page.getByRole("button", { name: "Continue", exact: true }).click();
-}
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("care team");
+  await page.locator('input[name="username"]').fill(username);
+  await page.locator('input[name="password"]').fill(password);
+  await page.getByRole("button", { name: "Create profile and begin" }).click();
 
-test("adaptive profile saves, resumes, and reviews answers", async ({ page }) => {
-  await start(page, "Aino");
-  await pick(page, "Symptoms");
-  await expect(page.getByText("Question 2 of 6")).toBeVisible();
-  await page.getByRole("radio", { name: "I don’t know" }).check();
+  await page.getByRole("button", { name: "Let's begin" }).click();
+  await page.getByRole("textbox", { name: /what should we call you/i }).fill("Aino");
+  await page.getByRole("button", { name: "Continue" }).click();
+
+  await expect(page.getByRole("heading", { name: "About you", exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Continue" }).click();
+
+  // An adult-only questionnaire, and real dates only.
+  await page.getByLabel("Day").fill("15");
+  await page.getByLabel("Month").selectOption("6");
+  await page.getByLabel("Year").fill("2015");
+  await page.getByRole("button", { name: "Continue" }).click();
+  await expect(page.getByRole("main").getByRole("alert")).toContainText("adults");
+  await page.getByLabel("Year").fill("1992");
+  await page.getByRole("button", { name: "Continue" }).click();
+
+  await page.getByRole("button", { name: "Continue" }).click();
+  await expect(page.getByRole("main").getByRole("alert")).toContainText("answer");
+  await page.getByRole("radio", { name: "Female" }).check();
+  await page.getByRole("button", { name: "Continue" }).click();
+  await page.getByRole("button", { name: "Prefer not to say" }).click(); // gender
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("pregnant");
+  await page.getByRole("radio", { name: "No", exact: true }).check();
+  await page.getByRole("button", { name: "Continue" }).click();
+  await page.getByLabel("Height", { exact: true }).fill("168");
+  await page.getByLabel("Weight", { exact: true }).fill("64");
+  await page.getByRole("button", { name: "Continue" }).click();
+  await page.getByRole("radio", { name: /steady/ }).check();
+  await page.getByRole("button", { name: "Continue" }).click();
+  await page.getByRole("radio", { name: "Elsewhere in Finland" }).check();
+  await page.getByRole("button", { name: "Continue" }).click();
+
+  await expect(page.getByRole("heading", { name: "Right now" })).toBeVisible();
+  await page.getByRole("button", { name: "Continue" }).click();
+  await page.getByRole("checkbox", { name: /A symptom or something that worries me/ }).check();
+  await page.getByRole("button", { name: "Continue" }).click();
+  await page.getByRole("checkbox", { name: "Breathing or chest pain" }).check();
+  await page.getByRole("button", { name: "Continue" }).click();
+  await page.getByRole("checkbox", { name: "Chest pain or pressure right now" }).check();
+  await page.getByRole("button", { name: "Continue" }).click();
+
+  await expect(page.getByRole("heading", { name: "Please get help right now" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Call 112" })).toHaveAttribute("href", "tel:112");
+  await page.getByRole("button", { name: "I am safe, continue" }).click();
+  await expect(page.getByRole("heading", { name: "Is it worse when you lie flat?" })).toBeVisible();
+
   await page.getByRole("button", { name: "Save and exit" }).click();
+  await expect(page.getByRole("heading", { name: "Create your free profile" })).toBeVisible();
+  await page.getByRole("button", { name: "Suomi" }).click();
+  await page.getByRole("button", { name: "Onko sinulla jo profiili? Kirjaudu sisään" }).click();
+  await page.locator('input[name="username"]').fill(username);
+  await page.locator('input[name="password"]').fill(password);
+  await page.getByRole("button", { name: "Kirjaudu sisään", exact: true }).click();
+  await expect(page.locator("html")).toHaveAttribute("lang", "fi");
+  await expect(page.getByRole("heading", { name: "Pahenevatko oireet makuuasennossa?" })).toBeVisible();
+
+  for (let guard = 0; guard < 120; guard++) {
+    if (await page.getByRole("heading", { name: "Tarkistetaan vastauksesi" }).isVisible()) break;
+    if (await page.locator("section.chapter").isVisible()) { await page.getByRole("button", { name: "Jatka" }).click(); continue; }
+    if (await page.getByRole("alertdialog").isVisible()) { await page.getByRole("alertdialog").getByRole("button").last().click(); continue; }
+    await answerCurrent(page);
+    await page.getByRole("button", { name: "Jatka" }).click();
+    await page.waitForTimeout(40);
+  }
+  await expect(page.getByRole("heading", { name: "Tarkistetaan vastauksesi" })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Valmis, näytä yhteenveto/ })).toBeDisabled();
+  await page.getByRole("checkbox", { name: /^Olen tarkistanut vastaukseni/ }).check();
+  await page.getByRole("button", { name: /Valmis, näytä yhteenveto/ }).click();
+  await expect(page.getByRole("heading", { name: "Valmista, Aino!" })).toBeVisible();
+
   await page.reload();
-  await page.getByRole("button", { name: "Set up care profile" }).click();
-  await expect(page.getByRole("radio", { name: "I don’t know" })).toBeChecked();
-  for (const answer of ["I don’t know", "No", "Symptoms present", "Elsewhere in Finland", "English"]) await pick(page, answer);
-  await expect(page.getByText("Review your answers")).toBeVisible();
-  await page.getByRole("button", { name: "Finish profile" }).click();
-  await expect(page.getByRole("heading", { name: "Prepare for a GP conversation" })).toBeVisible();
-});
-
-test("symptoms, session ownership, GP brief and demo reset", async ({ page, browser, baseURL }) => {
-  await start(page, "Mika");
-  await nav(page, "Symptoms");
-  await page.getByRole("button", { name: "Log a symptom" }).click();
-  await page.getByLabel("Symptom", { exact: true }).fill("Fictional discomfort");
-  await page.getByLabel("Onset date").fill("2026-10-03");
-  await page.getByLabel("Duration").fill("Two days");
-  await page.getByRole("button", { name: "Save symptom" }).click();
-  await page.getByRole("button", { name: "Edit Fictional discomfort" }).click();
-  await page.getByLabel("Notes").fill("After lunch");
-  await page.getByRole("button", { name: "Save symptom" }).click();
-  await expect(page.getByText("After lunch")).toBeVisible();
-
-  const owner = (await (await page.request.get("/api/demo")).json()).state;
-  const isolated = await browser.newContext({ baseURL });
-  try {
-    expect((await (await isolated.request.get("/api/demo")).json()).state).toBeNull();
-    const headers = { Origin: baseURL! };
-    const response = await isolated.request.post("/api/demo", { headers, data: { profile: "aino" } });
-    expect(response.status()).toBe(201);
-    const edit = await isolated.request.post("/api/demo", { headers, data: { revision: 0, change: { kind: "symptom", id: owner.symptoms[0].id, value: owner.symptoms[0] } } });
-    expect(edit.status()).toBe(422);
-  } finally { await isolated.close(); }
-
-  await nav(page, "GP brief");
-  await page.getByLabel("Sample record").selectOption("letter");
-  await page.getByRole("button", { name: "Add reviewed extract" }).click();
-  await expect(page.getByText("Fictional screening service: FIT sample received on 6 October 2026.").last()).toBeVisible();
-  await expect(page.getByText(/Fictional discomfort · Present · Onset 2026-10-03 · Duration Two days/)).toBeVisible();
-  await page.getByRole("button", { name: "Generate AI summary" }).click();
-  await expect(page.getByText(/Demo AI · Patient-reported/)).toBeVisible();
-  await page.getByLabel("Questions", { exact: true }).fill("Who should I call about the letter?");
-  await page.getByRole("checkbox").check();
-  await page.getByRole("button", { name: "Save review" }).click();
-  await expect(page.getByRole("button", { name: "Print / Save PDF" })).toBeEnabled();
-  await page.getByRole("banner").getByRole("button", { name: "Care profile", exact: true }).click();
-  await page.getByRole("button", { name: "Reset demo data" }).click();
-  await page.getByRole("button", { name: "Delete demo data" }).click();
-  await expect(page.getByRole("heading", { name: "Welcome to Care4All." })).toBeVisible();
-  expect((await (await page.request.get("/api/demo")).json()).state).toBeNull();
-});
-
-test("offline save retains input and only public assets are cached", async ({ page, context }) => {
-  await start(page, "Mika");
-  await page.evaluate(async () => { await navigator.serviceWorker.ready; });
-  await page.reload();
-  await expect(page.getByRole("heading", { name: "Welcome, Mika." })).toBeVisible();
-  const cached = await page.evaluate(async () => {
-    const cache = await caches.open("care4all-public-v1");
-    return (await cache.keys()).map(request => new URL(request.url).pathname);
-  });
-  expect(cached.sort()).toEqual(["/care-192.png", "/care-512.png", "/care-apple.png", "/care-hero.webp", "/care-maskable.png", "/offline.html"]);
-  await nav(page, "Symptoms");
-  await page.getByRole("button", { name: "Log a symptom" }).click();
-  await page.getByLabel("Symptom", { exact: true }).fill("Offline draft");
-  await context.setOffline(true);
-  await page.getByRole("button", { name: "Save symptom" }).click();
-  await expect(page.getByRole("main").getByRole("alert")).toContainText("weren’t saved");
-  await expect(page.getByLabel("Symptom", { exact: true })).toHaveValue("Offline draft");
-  await context.setOffline(false);
-  await page.getByRole("button", { name: "Save symptom" }).click();
-  await expect(page.getByText("Offline draft", { exact: true })).toBeVisible();
-  await context.setOffline(true);
-  await page.reload();
-  await expect(page.getByRole("heading", { name: "Care4All is offline" })).toBeVisible();
-});
-
-test("layout stays within the viewport and kit and follow-up flows save", async ({ page }, testInfo) => {
-  await start(page, "Leena");
-  await expect(page.getByRole("heading", { name: "Welcome, Leena." })).toBeVisible();
-  await page.screenshot({ path: testInfo.outputPath("dashboard.png"), fullPage: true });
+  await expect(page.getByRole("heading", { name: "Valmista, Aino!" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Kannattaa ottaa puheeksi hoitajan tai lääkärin kanssa" })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-  await nav(page, "Home sampling", "Sampling");
-  await page.getByLabel("Kit stage").selectOption("Invalid sample");
-  await page.getByRole("button", { name: "Save kit progress" }).click();
-  await expect(page.getByText("Saved stage · Invalid sample")).toBeVisible();
-  await nav(page, "GP brief");
-  await page.getByLabel("Sample record").selectOption("care");
-  await page.getByRole("button", { name: "Add reviewed extract" }).click();
-  await expect(page.getByText("Saved to your demo session.")).toBeVisible();
-  await nav(page, "Follow-up");
-  await expect(page.getByText("Unlocked by the reviewed fictional clinician note.")).toBeVisible();
-  await page.getByLabel("Follow-up stage").selectOption("Could not get an appointment");
-  await page.getByRole("button", { name: "Save follow-up" }).click();
-  await expect(page.getByText("Saved stage · Could not get an appointment")).toBeVisible();
+  const response = await page.request.get("/api/account");
+  expect(response.headers()["cache-control"]).toContain("no-store");
+  expect(await page.evaluate(() => JSON.stringify(localStorage))).not.toMatch(/Aino|1992|chest/i);
+});
+
+test("the landing page is readable and navigable at every text size", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  await page.getByRole("button", { name: "Extra large text size" }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-text", "xl");
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.getByRole("link", { name: "How your data is handled" }).first().click();
+  await expect(page.getByRole("heading", { name: "How your data is handled" })).toBeVisible();
 });

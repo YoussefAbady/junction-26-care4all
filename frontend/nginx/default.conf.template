@@ -1,0 +1,91 @@
+# care4all PWA. Serves the static app shell and forwards /api/ to the backend container.
+# The nginx image substitutes ${BACKEND_URL} from the container environment at start-up.
+
+# Library searches and similar requests carry words people typed about their health. Query strings are
+# therefore left out of the access log on purpose, and request bodies and cookies are never logged.
+log_format care4all '$remote_addr [$time_local] "$request_method $uri" $status $body_bytes_sent';
+
+server {
+  listen 8080;
+  server_name _;
+  server_tokens off;
+
+  # Inside server{} so this replaces the image's default access log (which records query strings) instead of adding to it.
+  access_log /dev/stdout care4all;
+  error_log /dev/stderr warn;
+
+  root /usr/share/nginx/html;
+  index index.html;
+
+  gzip on;
+  gzip_comp_level 5;
+  gzip_min_length 512;
+  gzip_vary on;
+  gzip_types text/css application/javascript text/javascript application/json application/manifest+json image/svg+xml text/plain;
+
+  client_max_body_size 256k;
+
+  include /etc/nginx/snippets/care4all-headers.conf;
+
+  location = /healthz {
+    access_log off;
+    default_type text/plain;
+    include /etc/nginx/snippets/care4all-headers.conf;
+    return 200 "ok\n";
+  }
+
+  # The backend. Mutating requests keep the browser's Origin header, which the backend compares with APP_ORIGIN.
+  location /api/ {
+    proxy_pass ${BACKEND_URL};
+    proxy_http_version 1.1;
+    proxy_set_header Host $http_host;
+    proxy_set_header Connection "";
+    proxy_set_header X-Forwarded-For $remote_addr;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Forwarded-Host $http_host;
+    proxy_connect_timeout 3s;
+    proxy_read_timeout 30s;
+    proxy_redirect off;
+    error_page 502 503 504 = @backend_unavailable;
+    include /etc/nginx/snippets/care4all-headers.conf;
+  }
+
+  location @backend_unavailable {
+    default_type application/json;
+    add_header Cache-Control "no-store" always;
+    include /etc/nginx/snippets/care4all-headers.conf;
+    return 503 '{"error":"unavailable"}';
+  }
+
+  # Hashed build output never changes under the same name.
+  location /assets/ {
+    try_files $uri =404;
+    add_header Cache-Control "public, max-age=31536000, immutable" always;
+    include /etc/nginx/snippets/care4all-headers.conf;
+  }
+
+  location /icons/ {
+    try_files $uri =404;
+    add_header Cache-Control "public, max-age=86400" always;
+    include /etc/nginx/snippets/care4all-headers.conf;
+  }
+
+  # The worker and the manifest are revalidated on every load so an update is noticed straight away.
+  location = /sw.js {
+    add_header Cache-Control "no-cache" always;
+    include /etc/nginx/snippets/care4all-headers.conf;
+  }
+
+  location = /manifest.webmanifest {
+    default_type application/manifest+json;
+    add_header Cache-Control "no-cache" always;
+    include /etc/nginx/snippets/care4all-headers.conf;
+  }
+
+  # The app shell. Routes live in the URL fragment, so every path serves index.html.
+  location / {
+    try_files $uri /index.html;
+    add_header Cache-Control "no-cache" always;
+    include /etc/nginx/snippets/care4all-headers.conf;
+  }
+}

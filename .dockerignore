@@ -1,10 +1,12 @@
-node_modules
+**/node_modules
 .next
 .git
+.claude
 .env*
 .care4all-data
 .care4all-test-data
 test-results
 playwright-report
 src/generated
+frontend
 *.log

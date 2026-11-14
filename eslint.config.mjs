@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts", "src/generated/**",
+    // The PWA is a separate project with its own ESLint config and dependencies.
+    "frontend/**", ".claude/**",
   ]),
 ]);
 

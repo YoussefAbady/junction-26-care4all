@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>care4all</title>
+<meta name="description" content="Plain-language information on cancer screening in Finland, with a source for every claim.">
+<meta name="theme-color" content="#F2F1F1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0E1217" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="care4all">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+</head>
+<body>
+<div class="stage">
+  <div class="device" id="app" data-tabs="off">
+    <div class="stack" id="stack"></div>
+    <nav class="tabbar" id="tabbar" aria-label="Main">
+      <a class="tab" href="#home" data-nav="home"><span class="pill" data-icon="home"></span><span data-i18n="home">Home</span></a>
+      <button class="tab fight" type="button" data-action="fight" aria-haspopup="dialog"><span class="fight-btn" data-icon="bolt"></span><span data-i18n="fight">Fight</span></button>
+      <a class="tab" href="#me" data-nav="me"><span class="pill" data-icon="user"></span><span data-i18n="profile">Profile</span></a>
+    </nav>
+    <div id="sheet-root"></div>
+    <div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+    <div class="sr" id="live" role="status" aria-live="polite"></div>
+  </div>
+</div>
+<noscript><p style="padding:24px;font:16px/1.5 system-ui,sans-serif">care4all needs JavaScript to run.</p></noscript>
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>

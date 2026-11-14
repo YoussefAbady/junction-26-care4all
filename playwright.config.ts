@@ -1,17 +1,12 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const baseURL = "http://localhost:3199";
+// The default target is the PWA container, the address people open. nginx forwards /api/ to the backend, and the
+// backend's APP_ORIGIN is that same address, so the API specs and the browser journeys all run against it.
 export default defineConfig({
   testDir: "./tests/e2e", workers: 1, timeout: 45000,
-  use: { baseURL },
+  use: { baseURL: process.env.CARE_TEST_URL || process.env.FRONTEND_TEST_URL || "http://localhost:8080" },
   projects: [
     { name: "desktop", use: { ...devices["Desktop Chrome"] } },
     { name: "mobile", use: { ...devices["Pixel 7"] } },
   ],
-  webServer: {
-    command: "node node_modules/next/dist/bin/next start --hostname localhost --port 3199",
-    url: baseURL + "/api/health",
-    env: { DEMO_STORE: "file", DEMO_DATA_DIR: ".care4all-test-data", COOKIE_SECURE: "false", APP_ORIGIN: baseURL, AI_PROVIDER: "mock" },
-    reuseExistingServer: false,
-  },
 });

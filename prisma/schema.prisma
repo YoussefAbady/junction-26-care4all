@@ -16,3 +16,82 @@ model DemoFixture {
   id      String @id
   payload Json
 }
+
+model ScreeningAccount {
+  username String @id
+  password String
+  language String @default("en")
+  logins ScreeningLogin[]
+  survey ScreeningSurvey?
+  observations HealthObservation[]
+  chatSymptomDraft ChatSymptomDraft?
+  profile CareProfile?
+  reminders CareReminder[]
+  reports ContentReport[]
+}
+model ScreeningLogin {
+  id String @id
+  username String
+  expiresAt DateTime
+  account ScreeningAccount @relation(fields: [username], references: [username], onDelete: Cascade)
+  @@index([username])
+  @@index([expiresAt])
+}
+
+model ScreeningSurvey {
+  username String @id
+  progress Json
+  revision Int @default(0)
+  legacyProgress Json?
+  account ScreeningAccount @relation(fields: [username], references: [username], onDelete: Cascade)
+}
+
+model HealthObservation {
+  id String @id
+  username String
+  kind String
+  label String
+  notes String
+  details Json?
+  observedAt DateTime?
+  createdAt DateTime @default(now())
+  account ScreeningAccount @relation(fields: [username], references: [username], onDelete: Cascade)
+  @@index([username, createdAt, id])
+}
+
+model CareProfile {
+  username String @id
+  profile Json
+  preferences Json
+  account ScreeningAccount @relation(fields: [username], references: [username], onDelete: Cascade)
+}
+
+model CareReminder {
+  id String @id
+  username String
+  kind String
+  topic String?
+  dueAt DateTime
+  done Boolean @default(false)
+  createdAt DateTime @default(now())
+  account ScreeningAccount @relation(fields: [username], references: [username], onDelete: Cascade)
+  @@index([username, dueAt, id])
+}
+
+model ContentReport {
+  id String @id
+  username String
+  topic String?
+  message String
+  createdAt DateTime @default(now())
+  account ScreeningAccount @relation(fields: [username], references: [username], onDelete: Cascade)
+  @@index([username, createdAt])
+}
+
+model ChatSymptomDraft {
+  id String @id
+  username String @unique
+  data Json
+  revision Int @default(0)
+  account ScreeningAccount @relation(fields: [username], references: [username], onDelete: Cascade)
+}

@@ -1,0 +1,6 @@
+CREATE TABLE "ChatSymptomDraft" (
+  "id" TEXT PRIMARY KEY,
+  "username" TEXT NOT NULL UNIQUE REFERENCES "ScreeningAccount"("username") ON DELETE CASCADE ON UPDATE CASCADE,
+  "data" JSONB NOT NULL,
+  "revision" INTEGER NOT NULL DEFAULT 0
+);

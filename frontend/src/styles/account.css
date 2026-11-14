@@ -1,0 +1,24 @@
+/* Styles for the account, profile, reminder and notes screens. Reuse the design's classes first: these are only the
+   few additions the account flow needs. */
+
+/* Shown while the app asks the server who is signed in. */
+.boot { position: absolute; inset: 0; display: grid; place-items: center; background: var(--bg); }
+.boot .spin { width: 28px; height: 28px; }
+
+/* The design's .err prefix is written in English. The page language is set on <html>, so the prefix can follow it. */
+:lang(fi) .err::before { content: "Virhe:"; }
+:lang(sv) .err::before { content: "Fel:"; }
+
+/* The design has no disabled state. A button waiting for the server keeps its shape and stops responding. */
+.btn:disabled, .btn[aria-disabled="true"] { opacity: .55; cursor: default; pointer-events: none; }
+.btn:disabled:active { transform: none; }
+
+/* While an example account is being made, none of the three choices on the welcome screen should be tappable. */
+.actionbar[data-pending] a { opacity: .55; pointer-events: none; }
+
+/* Profile: the username under the name, and the example-account note above the account cells. */
+.me-head .small b { color: var(--ink); overflow-wrap: anywhere; }
+.sec > .note { margin-bottom: -2px; }
+
+/* Radio and checkbox rows keep the field cell's focus ring when they sit alone in a group. */
+.group > .opt:only-child { border-radius: 20px; }

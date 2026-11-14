@@ -1,2 +1,3 @@
-import { CareApp } from "./care-app";
-export default function Page() { return <CareApp />; }
+import { Home } from "@/components/home";
+
+export default function Page() { return <Home />; }

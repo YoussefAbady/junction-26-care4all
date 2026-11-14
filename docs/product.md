@@ -1,13 +1,9 @@
 # Product scope
 
-Care4All helps people practise navigating a cancer-care journey with fictional information. Aino starts with a reason for visiting and receives relevant questions, with unknown answers, saved progress, back navigation and review. Mika starts with a fictional screening profile. Leena starts with a fictional existing-diagnosis profile.
+Care4ll by AstraZeneca is a prototype health questionnaire that gathers detailed, accurate personal history so a clinician can work from better information. Users create an account with a fictional username and a unique password. The English and Finnish interface runs as a guided conversation, one question at a time.
 
-The overview presents the next example action, why it appears, uncertainty, tasks, recent symptoms and current stage. The English interface records the patient’s preferred care language. The symptom timeline distinguishes present, absent and not reported, and lets the patient edit entries. Submissions have no clinical monitoring.
+The intake is adaptive. Six chapters (About you, Right now, Your health, Your family, Daily life, Check-ups) open or skip questions based on earlier answers: sex and age, the reason for the visit, the concerns picked (up to three, each with its own follow-ups and a body map for location), conditions, cancer history, family history, smoking, alcohol and more. Answers are typed (choice, multi-choice, numbers, dates, a 0 to 10 scale, body map, free text, repeatable lists for medicines, allergies, operations and relatives). "I'm not sure", "Prefer not to say" and "Skip" are recorded explicitly so a clinician can tell them from a blank.
 
-The home-sampling experience illustrates stages of colorectal FIT as placeholders. For a real test use the instructions and contact information in the kit. Recorded result text is the fictional patient’s transcription. There is no test interpretation, photo analysis or marketplace.
+Standard instruments are used where they exist: AUDIT-C (alcohol), PHQ-2 and GAD-2 (mood). The summary shows simple arithmetic on the answers (age, BMI, pack-years, instrument scores) and is printable. Answers flagged as possible emergencies, urgent or worth checking soon raise a safety message that points to care (112, 116 117, health centre). The questionnaire never diagnoses, scores risk or decides eligibility.
 
-The GP brief presents patient reports, reviewed synthetic document extracts and an optional AI-organised summary in separate sections. Patients add questions, review the brief and use the browser print dialog to print or save a PDF. The patient is responsible for sharing the brief.
-
-Follow-up tracks contact, appointments, results and clinician-advised follow-up with in-app reminders. The reviewed synthetic clinician note unlocks the example care plan. The app gives no treatment recommendations.
-
-The FIT background supports the prevention, screening-result and sampling content. It was retrieved 14 November 2026 and is recorded in the source catalog. [Finnish Cancer Registry colorectal screening](https://cancerregistry.fi/screening/colorectal-cancer-screening/)
+Before any real use it needs clinical review of every question and of the safety rules, a privacy review, and a check of whether it counts as a medical device. Finnish text needs review by a native-speaking clinician. The Finnish Cancer Registry describes the national screening programmes. [Official screening information](https://cancerregistry.fi/screening/)

@@ -1,0 +1,63 @@
+/* Styles for the conversation screens: ask, get to know you, symptoms. Reuse the design's classes first.
+   Everything here is an addition: the bubbles, chips, reply bar and scale come from app.css. */
+
+/* ---------- Ask: one answer from the sources ---------- */
+.msg-ai .ans-title { font-size: 1.1875rem; font-weight: 800; letter-spacing: -.01em; line-height: 1.25; }
+.ans-pass, .ans-steps, .ans-safety, .ans-q, .ans-go { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+.ans-pass + .ans-pass, .ans-steps, .ans-q, .ans-safety { padding-top: 10px; border-top: .5px solid var(--line); align-self: stretch; }
+.ans-steps > .ans-pass + .ans-pass { border-top: 0; padding-top: 0; }
+.ans-q .tick { align-self: stretch; }
+.ans-q .tick li { padding: 8px 0; font-size: 1rem; }
+
+/* Source links wrap on narrow screens and keep a 44px target. The second line is the retrieval date. */
+.chip.src { height: auto; min-height: 44px; padding: 6px 14px; border-radius: 22px; text-align: left; }
+.chip.src .src-b { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.chip.src .src-t { line-height: 1.25; }
+.chip.src .src-d { font-size: .75rem; font-weight: 500; color: var(--ink3); }
+
+/* An emergency answer comes before anything else and does not look like the other bubbles. */
+.msg-ai.is-alert { background: var(--fail-soft); box-shadow: inset 7px 0 0 var(--fail); padding-left: 22px; }
+.msg-ai.is-alert .ans-title { color: var(--fail); }
+.msg-ai.is-alert .btn.primary { background: var(--fail); color: var(--surface); }
+
+/* What the answer took into account: the person's own saved information, kept apart from the answer. */
+.ans-ctx { align-self: stretch; background: var(--bg); }
+.ans-dl { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px; margin: 0 0 6px; }
+.ans-dl dt { margin-top: 8px; font-size: .75rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--ink3); }
+.ans-dl dd { margin: 0; font-size: 1rem; line-height: 1.4; overflow-wrap: anywhere; }
+
+/* Suggested next questions. The first one is the assistant's own suggestion. */
+.composer-bar .sugg .chip { min-height: 44px; }
+.chip.focus { background: var(--accent-soft); color: var(--accent-text); }
+.composer .send { width: 44px; height: 44px; }
+.composer .send:disabled { opacity: .5; cursor: default; }
+
+/* ---------- Get to know you and Talk about symptoms ---------- */
+.you .msg-ai .btn-row { margin-top: 2px; }
+.you .msg-user:not(.editable) { text-align: right; white-space: pre-line; }
+.msg-user.editable > span:first-child { white-space: pre-line; text-align: right; }
+.composer-bar.reply.is-busy { opacity: .6; pointer-events: none; }
+.composer-bar.reply.tall { max-height: 62vh; }
+.composer-bar.reply .fnote { padding: 0; }
+.composer-bar.reply .btn-row .btn { flex: 1 1 auto; }
+
+/* The footer links keep a 44px target and wrap instead of overflowing on a narrow phone. */
+.reply-foot { flex-wrap: wrap; row-gap: 0; }
+.reply-foot .rf { display: flex; flex-wrap: wrap; column-gap: 14px; }
+.reply-foot .link { min-height: 44px; }
+
+/* Form answers: a field per row, a group of tick pills for a multiple-choice field. */
+.sx-multi { margin: 0; padding: 12px 14px 14px; border: 0; border-radius: 20px; background: var(--surface); display: flex; flex-direction: column; gap: 8px; width: 100%; min-width: 0; }
+.sx-multi legend { padding: 0; float: left; width: 100%; margin-bottom: 8px; }
+.sx-multi .replies { clear: both; }
+.sx-row { margin: 0; padding: 12px 0 0; border: 0; border-top: .5px solid var(--line2); display: flex; flex-direction: column; gap: 10px; width: 100%; min-width: 0; align-items: flex-start; }
+.sx-row:first-of-type { border-top: 0; padding-top: 0; }
+.sx-row legend { float: left; width: 100%; padding: 0; margin-bottom: 8px; }
+.sx-row > .group, .sx-row > .sx-multi { clear: both; }
+.cell.field .fi { min-height: 44px; }
+
+/* Review and finish: the saved answers, one per row. */
+.sx-sum.tick li { padding: 8px 0; }
+.sx-review .know-row { padding: 8px 0; }
+.sx-review .know-row .cell-d { overflow-wrap: anywhere; white-space: pre-line; }
+.sx-review .btn.sm { min-height: 44px; }

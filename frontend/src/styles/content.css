@@ -1,0 +1,20 @@
+/* Styles for the learning screens: topics, articles, self-checks, scans, results. Reuse the design's classes first. */
+
+/* Suggested next steps from the backend: the same chips, with a 44px touch target. */
+.chips.lg .chip { min-height: 44px; padding: 0 16px; font-size: .9375rem; }
+
+/* Official source library (Learn) and official information (topic pages): sourced passages with their links. */
+.lib-form { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.lib-form .searchbar { flex: 1 1 200px; min-width: 0; }
+.lib-out { display: flex; flex-direction: column; gap: 12px; }
+/* The design draws its own clear button, so the browser's built-in one would show a second cross. */
+.searchbar input[type="search"]::-webkit-search-cancel-button { display: none; -webkit-appearance: none; }
+.lib-list { display: flex; flex-direction: column; gap: 12px; }
+.lib-t { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.lib-t .h3 { margin: 0; min-width: 0; }
+.lib-art .scn-h, .off-sec .scn-h { align-items: center; flex-wrap: wrap; row-gap: 6px; }
+.lib-src { display: flex; flex-direction: column; margin-top: 2px; }
+.lib-src .cap { margin-bottom: 2px; }
+.lib-load { display: flex; align-items: center; gap: 10px; padding: 12px 4px; color: var(--ink2); }
+.off-sec { display: flex; flex-direction: column; gap: 10px; }
+.off-sec + .off-sec { padding-top: 14px; border-top: .5px solid var(--line); }
