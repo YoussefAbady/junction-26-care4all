@@ -7,6 +7,7 @@ import "./styles/content.css";
 import "./styles/chat.css";
 import "./styles/risk.css";
 import "./styles/monitor.css";
+import "./styles/selfcheck.css";
 
 import "./state/index.js";
 import "./core.js";
@@ -17,6 +18,14 @@ import "./art/part3.js";
 import "./art/part4-journeys.js";
 import "./art/part4-demos.js";
 import "./art/part5-guides.js";
+
+// The self-check illustrations: the stage (timeline and controls), the kit of figures and props, then the scenes. They replace the older pictures
+// of the same ids. A.art.render hands any id the stage knows to the stage, so the guide, the posters and the intro screens upgrade by themselves.
+import "./art/stage.js";
+import "./art/kit.js";
+import "./art/scenes-breast.js";
+import "./art/scenes-skin.js";
+import "./art/scenes-testicular.js";
 
 import "./coach.js";
 import "./views/screens.js";

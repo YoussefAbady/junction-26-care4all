@@ -1,0 +1,105 @@
+/* The self-check illustrations: tokens, the figure frame, captions, progress and the shared overlay classes.
+   Skin tones come from --sk, --sk-d and --sk-a in app.css (html[data-skin]). The light comes from the upper left in every scene. */
+
+:root {
+  /* room and cloth */
+  --st-wall: #E7E2DC; --st-wall2: #D5CDC3; --st-floor: #CFC5BA;
+  --st-sheet: #F6F7F9; --st-sheet-d: #BCC6D2; --st-sheet-tint: #DCE6F0;
+  --st-pillow: #FBFBFD; --st-pillow-d: #C4CDD9;
+  --st-bed: #8A6B52; --st-bed-d: #5B4433;
+  --st-towel: #7FB3C4; --st-towel-d: #4E8294;
+  --st-tile: #E6EFF1; --st-tile-d: #CBDADF; --st-grout: #A9BCC2;
+  --st-glass: #EAF4F8; --st-mirror: #DCE7EE; --st-mirror-d: #A9BAC8; --st-frame: #3D3A3A; --st-metal: #B9C0C8; --st-metal-d: #77808B;
+  --st-water: #9CD3EA;
+  /* ink and light */
+  --st-ink: #2F2630; --st-contour: rgba(70, 40, 30, .34); --st-shadow: 38, 22, 18; --st-hair: #4A3224; --st-hair-l: #7A5638;
+  --st-pill: rgba(255, 255, 255, .94); --st-pill-ink: #242C38; --st-halo: rgba(255, 255, 255, .9);
+  --st-guide: #D9345F; --st-guide-d: #A81F45; --st-ok: #1F8A5B; --st-warn: #B8610A;
+  --st-lens-bg: #F7F2EC; --st-paper: #FBF8F3; --st-paper-d: #E4DDD1;
+  --st-lip: #C0645F; --st-nail: #F4E2DC;
+  /* the skin tone of the active theme: the kit builds its gradients from these */
+  --st-sk: var(--sk); --st-sk-d: var(--sk-d); --st-sk-a: var(--sk-a); --st-rd: var(--rd);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --st-wall: #2C323C; --st-wall2: #1F242C; --st-floor: #22262D;
+    --st-sheet: #A9B6C6; --st-sheet-d: #596778; --st-sheet-tint: #6F849B;
+    --st-pillow: #B8C3D1; --st-pillow-d: #5D6B7C;
+    --st-bed: #5A4636; --st-bed-d: #33271E;
+    --st-towel: #4F8294; --st-towel-d: #2D5262;
+    --st-tile: #34424A; --st-tile-d: #2A353C; --st-grout: #1D262B;
+    --st-glass: #596D7B; --st-mirror: #50606E; --st-mirror-d: #35424E; --st-frame: #14161A; --st-metal: #8C95A0; --st-metal-d: #4C545D;
+    --st-water: #5DA6C4;
+    --st-ink: #F2EDF0; --st-contour: rgba(10, 4, 4, .5); --st-shadow: 0, 0, 0; --st-hair: #30211A; --st-hair-l: #5B4130;
+    --st-pill: rgba(26, 33, 43, .92); --st-pill-ink: #F2F1F1; --st-halo: rgba(14, 18, 23, .85);
+    --st-guide: #FF7DA3; --st-guide-d: #FF9DBA; --st-ok: #6FD2A1; --st-warn: #F2A55B;
+    --st-lens-bg: #2A2F37; --st-paper: #D9D4CB; --st-paper-d: #A9A396;
+    --st-lip: #A85A58; --st-nail: #D8C3BD;
+    --st-sk: color-mix(in srgb, var(--sk) 86%, #0d0908); --st-sk-d: color-mix(in srgb, var(--sk-d) 84%, #0d0908); --st-sk-a: color-mix(in srgb, var(--sk-a) 86%, #0d0908); --st-rd: var(--rd);
+  }
+}
+:root[data-theme="dark"] {
+  --st-wall: #2C323C; --st-wall2: #1F242C; --st-floor: #22262D;
+  --st-sheet: #A9B6C6; --st-sheet-d: #596778; --st-sheet-tint: #6F849B;
+  --st-pillow: #B8C3D1; --st-pillow-d: #5D6B7C;
+  --st-bed: #5A4636; --st-bed-d: #33271E;
+  --st-towel: #4F8294; --st-towel-d: #2D5262;
+  --st-tile: #34424A; --st-tile-d: #2A353C; --st-grout: #1D262B;
+  --st-glass: #596D7B; --st-mirror: #50606E; --st-mirror-d: #35424E; --st-frame: #14161A; --st-metal: #8C95A0; --st-metal-d: #4C545D;
+  --st-water: #5DA6C4;
+  --st-ink: #F2EDF0; --st-contour: rgba(10, 4, 4, .5); --st-shadow: 0, 0, 0; --st-hair: #30211A; --st-hair-l: #5B4130;
+  --st-pill: rgba(26, 33, 43, .92); --st-pill-ink: #F2F1F1; --st-halo: rgba(14, 18, 23, .85);
+  --st-guide: #FF7DA3; --st-guide-d: #FF9DBA; --st-ok: #6FD2A1; --st-warn: #F2A55B;
+  --st-lens-bg: #2A2F37; --st-paper: #D9D4CB; --st-paper-d: #A9A396;
+  --st-lip: #A85A58; --st-nail: #D8C3BD;
+  --st-sk: color-mix(in srgb, var(--sk) 86%, #0d0908); --st-sk-d: color-mix(in srgb, var(--sk-d) 84%, #0d0908); --st-sk-a: color-mix(in srgb, var(--sk-a) 86%, #0d0908); --st-rd: var(--rd);
+}
+
+/* ---------- the figure: picture, captions, progress, controls ---------- */
+.st-fig { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.st-svg { display: block; width: 100%; height: auto; border-radius: 14px; background: var(--st-wall); overflow: hidden; }
+.st-svg .st-bg { fill: var(--st-wall); }
+.st-fig.thumb .st-call { display: none; }
+.st-a { will-change: auto; }
+
+.st-caps { display: grid; padding: 0 4px; }
+.st-cap { grid-area: 1 / 1; display: flex; align-items: flex-start; gap: 10px; margin: 0; opacity: 0; font-size: .9375rem; font-weight: 650; line-height: 1.35; color: var(--ink); }
+.st-caps.list { gap: 8px; }
+.st-caps.list .st-cap { grid-area: auto; opacity: 1; }
+.st-n { flex: none; display: inline-grid; place-items: center; width: 24px; height: 24px; margin-top: 0; border-radius: 50%; background: var(--c, #3B4658); color: #fff; font-size: .8125rem; font-weight: 800; line-height: 1; }
+.st-ct { min-width: 0; padding-top: 2px; }
+
+.st-dots { display: flex; gap: 6px; padding: 0 4px; }
+.st-dot { position: relative; flex: 1 1 0; max-width: 64px; height: 5px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.st-dot i { position: absolute; inset: 0; display: block; border-radius: inherit; background: var(--c, var(--ink)); transform: scaleX(0); transform-origin: 0 50%; }
+
+.st-ctl { display: flex; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
+.st-ctl:empty { display: none; }
+.st-ctl .demo-toggle { margin: 0; }
+.st-btn svg { flex: none; }
+
+/* ---------- shared classes used inside the pictures ---------- */
+.st-svg text { font-family: var(--font); }
+.st-lbl { font-size: 12.5px; font-weight: 700; fill: var(--st-pill-ink); }
+.st-lbl-halo { font-size: 12.5px; font-weight: 700; fill: var(--st-pill-ink); paint-order: stroke; stroke: var(--st-halo); stroke-width: 3.4px; stroke-linejoin: round; }
+.st-pill { fill: var(--st-pill); stroke: var(--st-contour); stroke-width: .8; }
+.st-leader { fill: none; stroke: var(--st-guide); stroke-width: 1.4; stroke-linecap: round; }
+.st-leader-dot { fill: var(--st-guide); stroke: var(--st-halo); stroke-width: 1.4; }
+.st-badge-bg { fill: var(--c, #3B4658); stroke: var(--st-halo); stroke-width: 1.6; }
+.st-badge-tx { fill: #fff; font-weight: 800; }
+.st-trail { fill: none; stroke: var(--st-guide); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.st-ghost { fill: none; stroke: var(--st-guide); stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; opacity: .2; }
+.st-tip-ring { fill: var(--st-guide); fill-opacity: .22; stroke: var(--st-guide); stroke-width: 2; }
+.st-tip-dot { fill: var(--st-guide); stroke: var(--st-halo); stroke-width: 1.6; }
+.st-ring { fill: none; stroke: var(--st-guide); stroke-width: 2.2; }
+.st-ring-dash { fill: none; stroke: var(--st-guide); stroke-width: 2; stroke-dasharray: 4 3; }
+.st-arrow { fill: none; stroke: var(--st-guide); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.st-arrow-head { fill: var(--st-guide); }
+.st-ok { fill: none; stroke: var(--st-ok); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.st-warn { fill: none; stroke: var(--st-warn); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.st-contour { fill: none; stroke: var(--st-contour); stroke-linecap: round; stroke-linejoin: round; }
+.st-crease { fill: none; stroke: rgb(var(--st-shadow)); stroke-linecap: round; }
+.st-lens-ring { fill: none; stroke: var(--st-halo); stroke-width: 3; }
+.st-lens-edge { fill: none; stroke: var(--st-contour); stroke-width: 1.2; }
+.st-scale { stroke: var(--st-pill-ink); stroke-width: 1.6; fill: none; stroke-linecap: round; }
+.st-tick { stroke: var(--st-pill-ink); stroke-width: 1; stroke-linecap: round; }

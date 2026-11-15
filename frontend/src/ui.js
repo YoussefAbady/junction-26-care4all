@@ -739,7 +739,7 @@ import { NOTICE, NOTICE_INTRO } from "./privacy-copy.js";
     }
     var hint = D.STEP_HINTS && D.STEP_HINTS[guide.topic] && D.STEP_HINTS[guide.topic][i];
     var h = '<p class="small" style="font-weight:700;color:var(--ink)">Step ' + (i + 1) + ' of ' + steps.length + '</p><div class="dots-nav" aria-hidden="true">' + steps.map(function (x, k) { return '<span class="' + (k <= i ? 'on' : '') + '"></span>'; }).join('') + '</div>' +
-      '<figure class="step-art" id="step-art">' + A.art.render(st.art, st.h, { demo: true }) + '</figure>' +
+      '<figure class="step-art" id="step-art">' + A.art.render(st.art, st.h, { demo: true, controls: true }) + '</figure>' +
       (hint ? '<div class="hint-row"><p class="hint"><span class="cap">Your position</span>' + esc(hint.pose) + '</p><p class="hint"><span class="cap">What to do</span>' + esc(hint.move) + '</p></div>' : '') +
       '<div class="step-card"><span class="num" aria-hidden="true">' + (i + 1) + '</span><h3 class="h3" id="gstep">' + esc(st.h) + '</h3><p class="body">' + esc(st.t) + '</p>' +
       (st.look ? '<p class="look"><span class="cap">What to look for</span>' + esc(st.look) + '</p>' : '') + '</div>' +

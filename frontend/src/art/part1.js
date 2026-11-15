@@ -21,6 +21,7 @@ import { A as C4A } from "../app.js";
   art.render = function (id, label, o) {
     var inner;
     o = o || {};
+    if (A.stage && A.stage.has(id)) return A.stage.render(id, label, o);   /* the self-check scenes live on the stage (art/stage.js) */
     art._demo = !!o.demo;
     try {
       if (S[id]) inner = S[id](o);

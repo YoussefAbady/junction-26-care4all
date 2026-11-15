@@ -1,0 +1,9 @@
+/* selfcheck-skin.css: the skin self-check scenes. Tokens used only by scenes-skin.js (window, shorts tint, soft light). */
+:root {
+  --sk-sky-a: #BFDDF3; --sk-sky-b: #F4FAFF; --sk-frame: #F3F0EB;
+  --sk-warm: #FFF3D6; --sk-panel: rgba(255, 255, 255, .55);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --sk-sky-a: #44627C; --sk-sky-b: #8FB1CC; --sk-frame: #AEB6BF; --sk-warm: #E9D7AE; --sk-panel: rgba(20, 26, 34, .55); }
+}
+:root[data-theme="dark"] { --sk-sky-a: #44627C; --sk-sky-b: #8FB1CC; --sk-frame: #AEB6BF; --sk-warm: #E9D7AE; --sk-panel: rgba(20, 26, 34, .55); }

@@ -1,0 +1,6 @@
+/* selfcheck-breast.css: the breast self-check scenes. */
+
+/* the "mowing the lawn" path is drawn on a small body, so its line and ghost are finer than the kit's defaults */
+.br-lawn .st-ghost { stroke-width: 3.6px; opacity: .22; }
+.br-lawn .st-trail { stroke-width: 1.7px; }
+.br-lawn .st-tip-ring { stroke-width: 1.4px; }

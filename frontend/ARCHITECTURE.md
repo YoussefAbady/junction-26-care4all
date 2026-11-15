@@ -17,7 +17,8 @@ frontend/
     state/              S (shared state), svc (services), the content loader, text helpers. The only place backend data is normalised
     api/                fetch client and one function per backend endpoint
     core.js             helpers, icons, reminder time maths
-    art/                animated SVG illustrations and self-check guides
+    art/                animated SVG illustrations. part1 to part5 are the original flat pictures. stage.js, kit.js and scenes-breast.js,
+                        scenes-skin.js, scenes-testicular.js are the detailed self-check animations (see "Self-check animations")
     coach.js sessions.js  conversation modules
     views/              one module per area of the interface
     ui.js               the shell: navigation stack, tab bar, sheets, actions, events
@@ -34,6 +35,15 @@ The modules mirror the design's, so a revised design can be compared function by
 - A later assignment to `A.views[name]` replaces an earlier one. `ui.js` is imported last and merges `A.actions` into its table, so a module can override a built-in action.
 - Routes are URL fragments: `#home`, `#t-breast`, `#a-breast-screening`, `#chk-skin`. `A.go(name)`, `A.back()`, `A.refresh()` navigate and redraw.
 - Views are strings of HTML. **Every dynamic value goes through `A.esc()`**, including anything that came from the backend.
+
+## Self-check animations
+
+Every step of the breast, skin and testicle checks (and the three poster pictures) is a scene on the stage, `src/art/stage.js`. `A.art.render(id, label, opts)` hands any id the stage knows to `A.stage.render`, so the guide (`drawGuide` in `ui.js`), the check intro screens and the cards pick them up by themselves, and the older pictures in `part1` to `part5` stay as the fallback for ids the stage does not know.
+
+- A scene is `A.stage.define(id, { dur, phases: [{ at, cap: [en, fi, sv] }], desc: [en, fi, sv], draw(c) })`. All motion is one CSS keyframe timeline of `dur` seconds, with no JavaScript timers. Captions, progress dots and the Pause, Play and Replay buttons belong to the stage. With motion off (Profile, or reduced motion) a scene draws one still frame that carries every caption and marker.
+- `src/art/kit.js` (`A.kit`) holds the shared parts: skin gradients that follow the three skin tones and both themes, torsos, arms, hands, props (bed, shower, mirror, ruler, phone), and overlays (path trail with a fingertip, callout, lens, depth gauge, cross-section). Scene files: `scenes-breast.js`, `scenes-skin.js`, `scenes-testicular.js`, each with its own small CSS file in `styles/selfcheck-*.css`; shared classes and theme tokens are in `styles/selfcheck.css`.
+- Preview and review without the backend or an account: `npx vite --port 5201`, then open `http://localhost:5201/dev/stage.html?scene=<id>&t=4&skin=3&dark=1` (add `scene=all`, `motion=0` for the still, `lang=fi`). `node dev/shoot.mjs <ids> --port 5201 --times 0,2,4,6,8,10 --skins 1,3 --themes dark,light --out <dir>` renders PNG frames and one contact sheet per scene with the installed Chrome. `frontend/dev` is not part of the production build.
+- The Finnish and Swedish captions are drafts that a native speaker should check. A scene's markup is 25 to 100 KB, so the scripts add about 100 KB gzipped to the first load.
 
 ## Content
 
