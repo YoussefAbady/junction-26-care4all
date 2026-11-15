@@ -1,5 +1,6 @@
 import { A as C4A } from "./app.js";
 import { registerServiceWorker } from "./pwa.js";
+import { NOTICE, NOTICE_INTRO } from "./privacy-copy.js";
 
 /* care4all ui: the shell. Boot, navigation stack, tab bar, sheets, gestures, actions, reminders. Everything personal
    is read from A.S and changed through A.svc (src/state), which keeps the account on the server up to date. */
@@ -11,7 +12,8 @@ import { registerServiceWorker } from "./pwa.js";
   var TAB_ROOTS = { home: 1, me: 1 };
   /* Screens that start a navigation stack of their own. Every other screen is pushed on top of one of them. */
   var ROOTS = { home: 1, me: 1, welcome: 1, about: 1, plan: 1, unavailable: 1 };
-  var NAMED = { welcome: 1, signin: 1, signup: 1, about: 1, plan: 1, home: 1, learn: 1, ask: 1, reminders: 1, sources: 1, me: 1, edit: 1, notes: 1, privacy: 1, you: 1, assess: 1, next: 1, checks: 1, scans: 1, national: 1, talk: 1, symptom: 1, results: 1, unavailable: 1 };
+  /* interview and risk are the AI questions and the risk overview (views/interview.js, views/risk.js). They are behind the sign-in like every route that is not in PUBLIC. */
+  var NAMED = { welcome: 1, signin: 1, signup: 1, about: 1, plan: 1, home: 1, learn: 1, ask: 1, reminders: 1, sources: 1, me: 1, edit: 1, notes: 1, privacy: 1, you: 1, interview: 1, risk: 1, next: 1, checks: 1, scans: 1, national: 1, talk: 1, symptom: 1, results: 1, unavailable: 1 };
   /* Open to a signed-out visitor. Signed in without a profile, only "about" opens. Everything else needs the profile too. */
   var PUBLIC = { welcome: 1, signin: 1, signup: 1, privacy: 1, sources: 1 };
   var nav = { stack: [], pushed: 0, instant: false, pendingScroll: null };
@@ -23,7 +25,9 @@ import { registerServiceWorker } from "./pwa.js";
     liveEl.textContent = '';
     setTimeout(function () { liveEl.textContent = msg; }, 30);
   };
-  A.tap = function () { try { if (navigator.vibrate && !A.reduceMotion()) navigator.vibrate(6); } catch (e) { /* ignore */ } };
+  /* A very light tap, on phones that can do it, for the main controls. Never when animations are off or the device asks for reduced motion. */
+  A.haptic = function (ms) { try { if (navigator.vibrate && !A.reduceMotion()) navigator.vibrate(ms || 8); } catch (e) { /* ignore */ } };
+  A.tap = function () { A.haptic(6); };
   A.toast = function (msg, ms) {
     if (!toastsEl) return;
     var el = document.createElement('div');
@@ -122,6 +126,13 @@ import { registerServiceWorker } from "./pwa.js";
     var a;
     try { a = el.animate(frames, Object.assign({ duration: 400, easing: 'cubic-bezier(.32,.72,0,1)', fill: 'both' }, opts || {})); } catch (e) { return Promise.resolve(); }
     return a.finished.then(function () { try { a.cancel(); } catch (e) { /* ignore */ } }, function () { /* cancelled */ });
+  }
+  /* The content of a screen arrives with a short stagger, the first time the screen is shown (.screen.enter in app.css). The
+     class goes again before anything can be drawn a second time: a screen that is redrawn at once would otherwise play it twice. */
+  function enterFx(s) {
+    if (!s || A.reduceMotion()) return;
+    s.el.classList.add('enter');
+    setTimeout(function () { s.el.classList.remove('enter'); }, 950);
   }
 
   /* ---------- screens ----------
@@ -307,6 +318,7 @@ import { registerServiceWorker } from "./pwa.js";
     list.forEach(function (s, i) { stackEl.appendChild(s.el); if (i < list.length - 1) s.el.classList.add('under'); });
     syncInert(); chrome();
     list.forEach(effects);
+    enterFx(top());
     afterNav(top());
   }
   function push(r) {
@@ -319,6 +331,8 @@ import { registerServiceWorker } from "./pwa.js";
       s.el.classList.add('lift');
       ps.push(anim(s.el, [{ transform: 'translateX(100%)' }, { transform: 'translateX(0)' }]));
       ps.push(anim(prev.el, [{ transform: 'translateX(0)' }, { transform: 'translateX(-28%)' }]));
+      ps.push(anim(prev.el, [{ opacity: 0 }, { opacity: .14 }], { pseudoElement: '::after', easing: 'ease-out' }));   // dim the screen underneath
+      enterFx(s);
     }
     if (ps.length) Promise.all(ps).then(function () { s.el.classList.remove('lift'); if (top() !== prev) prev.el.classList.add('under'); });
     else prev.el.classList.add('under');
@@ -335,7 +349,8 @@ import { registerServiceWorker } from "./pwa.js";
     if (instant || A.reduceMotion() || !s.el.animate) done();
     else {
       s.el.classList.add('lift');
-      Promise.all([anim(s.el, [{ transform: 'translateX(0)' }, { transform: 'translateX(100%)' }]), anim(prev.el, [{ transform: 'translateX(-28%)' }, { transform: 'translateX(0)' }])]).then(done);
+      Promise.all([anim(s.el, [{ transform: 'translateX(0)' }, { transform: 'translateX(100%)' }]), anim(prev.el, [{ transform: 'translateX(-28%)' }, { transform: 'translateX(0)' }]),
+        anim(prev.el, [{ opacity: .14 }, { opacity: 0 }], { pseudoElement: '::after', easing: 'ease-out' })]).then(done);
       setTimeout(done, 1000);   // animations stand still while the page is hidden: never leave the old screen behind
     }
     focusScreen(prev);
@@ -352,7 +367,7 @@ import { registerServiceWorker } from "./pwa.js";
     syncInert(); chrome();
     function cleanup() { old.forEach(function (o) { if (o.el.parentNode) o.el.parentNode.removeChild(o.el); }); }
     if (A.reduceMotion() || !s.el.animate || !old.length) cleanup();
-    else { anim(s.el, [{ opacity: 0, transform: 'translateY(12px)' }, { opacity: 1, transform: 'none' }], { duration: 280, easing: 'ease-out' }).then(cleanup); setTimeout(cleanup, 1000); }
+    else { anim(s.el, [{ opacity: 0, transform: 'translateY(12px)' }, { opacity: 1, transform: 'none' }], { duration: 280, easing: 'ease-out' }).then(cleanup); setTimeout(cleanup, 1000); enterFx(s); }
     effects(s); focusScreen(s); afterNav(s);
   }
   function onHash() {
@@ -434,6 +449,7 @@ import { registerServiceWorker } from "./pwa.js";
       var y = s.sc ? s.sc.scrollTop : 0, hadSolid = s.navEl && s.navEl.hasAttribute('data-solid'), drafts = keepDrafts(s.el);
       s.out = (V[s.r.view] || V.notfound)(s.r.arg);
       if (i > 0) s.back = shortTitle(nav.stack[i - 1]);
+      s.el.classList.remove('enter');   // drawn again: the entrance belongs to the first view only
       fill(s);
       restoreDrafts(s.el, drafts);
       s.sc.scrollTop = y;
@@ -696,7 +712,7 @@ import { registerServiceWorker } from "./pwa.js";
     S.reminders.forEach(function (r) {
       if (r.status === 'active' && r.due <= Date.now() && !r.notified) {
         A.svc.markNotified(r.id); fired = true;
-        A.toast(tr('A reminder is due. Open Reminders.', 'Muistutus erääntyy. Avaa Muistutukset.', 'En påminnelse förfaller. Öppna Påminnelser.'), 7000);
+        A.toast(r.monitor ? tr('Time to log an update on how you are doing.', 'Aika kirjata päivitys siitä, miten voit.') : tr('A reminder is due. Open Reminders.', 'Muistutus erääntyy. Avaa Muistutukset.', 'En påminnelse förfaller. Öppna Påminnelser.'), 7000);
         pushNotify(n[0], n[1], r.id);
       }
     });
@@ -741,7 +757,7 @@ import { registerServiceWorker } from "./pwa.js";
       .concat(n.when ? [tr('First noticed: ', 'Huomasin ensimmäisen kerran: ') + n.when] : []).concat(n.still ? [tr('Still there: ', 'Onko vielä: ') + n.still] : [])
       .concat(n.where && n.where.length ? [tr('Where: ', 'Missä: ') + n.where.join(', ')] : [])
       .concat(n.trend ? [tr('Since then: ', 'Sen jälkeen: ') + n.trend.toLowerCase()] : []).concat(n.level != null ? [tr('How strong: ', 'Voimakkuus: ') + n.level + tr(' out of 10', ' / 10')] : [])
-      .concat(n.details && n.details.length ? n.details : []).concat(n.note ? [tr('Note: ', 'Huomautus: ') + n.note] : []).concat(n.outcome ? ['What care4all suggested: ' + o[n.outcome]] : [])
+      .concat(n.details && n.details.length ? n.details : []).concat(n.note ? [tr('Note: ', 'Huomautus: ') + n.note] : []).concat(A.monitorLines ? A.monitorLines(n) : []).concat(n.outcome ? ['What care4all suggested: ' + o[n.outcome]] : [])
       .concat(['', tr('This is a personal note. It is not a diagnosis.', 'Tämä on henkilökohtainen muistiinpano. Se ei ole diagnoosi.')]).join('\n');
   }
 
@@ -807,18 +823,11 @@ import { registerServiceWorker } from "./pwa.js";
     },
     privacy: {
       title: function () { return tr('Privacy notice', 'Tietosuojaseloste', 'Integritetspolicy'); },
+      /* The wording is in privacy-copy.js, where the welcome screen, the privacy page and the consent text read the same sentences. */
       body: function () {
-        function sec(h, text) { return '<div class="card"><p class="cap">' + esc(h) + '</p><p class="body">' + esc(text) + '</p></div>'; }
-        return '<p class="body">' + esc(tr('Short version: care4all is a fictional prototype. Your records are kept in a demo account on the server. There is no analytics, no advertising and no research collection.', 'Lyhyesti: care4all on kuvitteellinen prototyyppi. Tietosi säilytetään demotilillä palvelimella. Analytiikkaa, mainontaa tai tutkimuskeruuta ei ole.')) + '</p>' +
-          sec(tr('What we process', 'Mitä käsittelemme'), tr('Your username and a password (kept only as a salted hash), your first name (optional), year of birth, sex, county, symptom notes, self-check results, reminders and your answers to our questions. Some of this is health information, which GDPR treats as a special category. Please use fictional information only.', 'Käyttäjätunnuksesi ja salasanasi (tallennetaan vain suolattuna tiivisteenä), etunimesi (vapaaehtoinen), syntymävuotesi, sukupuolesi, maakuntasi, oiremuistiinpanosi, itsetarkistustulokset, muistutukset ja vastauksesi kysymyksiimme. Osa tiedoista on terveystietoa, jota GDPR pitää erityisenä henkilötietoryhmänä. Käytä vain kuvitteellisia tietoja.')) +
-          sec(tr('Why, and on what basis', 'Miksi ja millä perusteella'), tr('To show you information that fits your profile and to suggest next steps. By creating an account you agree that care4all keeps what you enter for this purpose (GDPR Art. 6(1)(a) and 9(2)(a)). You can withdraw your consent at any time by deleting your account.', 'Näyttääksemme profiiliisi sopivaa tietoa ja ehdottaaksemme seuraavia askeleita. Luomalla tilin hyväksyt, että care4all säilyttää antamasi tiedot tähän tarkoitukseen (GDPR 6 artiklan 1 kohdan a alakohta ja 9 artiklan 2 kohdan a alakohta). Voit peruuttaa suostumuksesi milloin tahansa poistamalla tilisi.')) +
-          sec(tr('Where it is kept', 'Missä tiedot säilytetään'), tr('On this demo’s server, inside your account. Other accounts cannot see it. A sign-in cookie that scripts cannot read keeps you signed in for 7 days. Server logs keep page addresses only, without search words, cookies or what you typed. Your browser keeps only display choices: language, text size, plain language, animations, skin tone and the install banner.', 'Tämän demon palvelimella, tilisi sisällä. Muut tilit eivät näe niitä. Kirjautumisevästeen komentosarjat eivät voi lukea, ja se pitää sinut kirjautuneena 7 päivää. Palvelinlokeihin tallentuu vain sivujen osoitteet, ei hakusanoja, evästeitä eikä kirjoittamaasi tekstiä. Selaimesi säilyttää vain näyttöasetukset: kielen, tekstin koon, selkokielen, animaatiot, ihonsävyn ja asennusilmoituksen.')) +
-          sec(tr('The AI assistant (Ask)', 'Tekoälyavustaja (Kysy)'), tr('When you ask a question in Ask, an AI model (Google Gemini) can write the answer. It is sent only what you typed in that question, the language and the public source passages that match it. It never receives your username, profile, saved answers, symptom notes, self-check results or reminders, and care4all keeps no copy of the question or the answer. Google handles the question under its own terms for the Gemini API, so please do not type personal details. Each answer says when an AI wrote it and shows the sources it used.', 'Kun kysyt jotain Kysy-näkymässä, tekoälymalli (Google Gemini) voi kirjoittaa vastauksen. Sille lähetetään vain kysymykseen kirjoittamasi teksti, kieli ja siihen sopivat julkiset lähdekatkelmat. Se ei koskaan saa käyttäjätunnustasi, profiiliasi, tallennettuja vastauksiasi, oiremuistiinpanojasi, itsetarkistustuloksiasi eikä muistutuksiasi, eikä care4all säilytä kopiota kysymyksestä tai vastauksesta. Google käsittelee kysymyksen Gemini API:n omien ehtojensa mukaan, joten älä kirjoita henkilötietoja. Jokaisessa vastauksessa kerrotaan, kun tekoäly on sen kirjoittanut, ja siinä näytetään käytetyt lähteet.')) +
-          sec(tr('AI review of your answers (optional)', 'Vastaustesi tekoälykatsaus (valinnainen)'), tr('If you choose “Review my answers with AI” after Get to know you, your answers to the health questions are sent to Google Gemini. It asks up to three more questions and writes a short review of risk factors worth raising with a professional. It is never sent your name, username, exact date of birth, city or anything you typed in your own words. care4all keeps no copy of the review or the extra questions, and Google handles the answers under its own terms. You are asked before anything is sent. The review is information, not a diagnosis.', 'Jos valitset Get to know you -keskustelun jälkeen ”Tarkista vastaukseni tekoälyllä”, terveyskysymyksiin antamasi vastaukset lähetetään Google Geminille. Se kysyy enintään kolme lisäkysymystä ja kirjoittaa lyhyen katsauksen riskitekijöistä, jotka kannattaa ottaa puheeksi ammattilaisen kanssa. Sille ei koskaan lähetetä nimeäsi, käyttäjätunnustasi, tarkkaa syntymäaikaasi, kaupunkiasi eikä mitään, minkä kirjoitit omin sanoin. care4all ei säilytä katsausta eikä lisäkysymyksiä, ja Google käsittelee vastaukset omien ehtojensa mukaan. Sinulta kysytään ennen kuin mitään lähetetään. Katsaus on tietoa, ei diagnoosi.')) +
-          sec(tr('Analytics and research', 'Analytiikka ja tutkimus'), tr('care4all does not collect usage statistics and does not add your answers to research totals. There is nothing to switch on or off.', 'care4all ei kerää käyttötilastoja eikä lisää vastauksiasi tutkimuksen yhteistuloksiin. Mitään ei tarvitse kytkeä päälle tai pois.')) +
-          sec(tr('Your rights', 'Oikeutesi'), tr('Access and export your data, correct it, delete it, restrict or object to its use, and withdraw consent (GDPR Arts. 15 to 21). Export and delete are in Profile. You can also complain to the Finnish Data Protection Ombudsman (tietosuoja.fi).', 'Voit tarkastella ja viedä tietosi, oikaista ne, poistaa ne, rajoittaa niiden käyttöä tai vastustaa sitä ja peruuttaa suostumuksesi (GDPR 15–21 artikla). Vienti ja poisto ovat Profiilissa. Voit myös tehdä valituksen tietosuojavaltuutetulle (tietosuoja.fi).')) +
-          sec(tr('How long', 'Kuinka kauan'), tr('Until you delete your account. “Delete account” in Profile removes the account and everything in it from the server at once.', 'Kunnes poistat tilisi. Profiilin toiminto ”Poista tili” poistaa tilin ja kaiken sen sisällön palvelimelta kerralla.')) +
-          '<div class="placeholder">' + esc(tr('Data controller, data protection officer contact and the final legal text: ', 'Rekisterinpitäjä, tietosuojavastaavan yhteystiedot ja lopullinen juridinen teksti: ')) + '[PENDING LEGAL REVIEW].</div>';
+        function sec(h, text) { return '<div class="card"><p class="cap">' + esc(tr.apply(null, h)) + '</p><p class="body">' + esc(tr.apply(null, text)) + '</p></div>'; }
+        var legal = '<div class="placeholder">' + esc(tr('Data controller, data protection officer contact and the final legal text: ', 'Rekisterinpitäjä, tietosuojavastaavan yhteystiedot ja lopullinen juridinen teksti: ')) + '[PENDING LEGAL REVIEW].</div>';
+        return '<p class="body">' + esc(tr.apply(null, NOTICE_INTRO)) + '</p>' + NOTICE.map(function (n) { return sec(n[0], n[1]); }).join('') + legal;
       }
     },
     install: {
@@ -858,6 +867,13 @@ import { registerServiceWorker } from "./pwa.js";
 
   /* ---------- actions ---------- */
   function setLang(l) { setPref('lang', l); A.refresh(); A.announce(LANG_NAMES[l]); }
+  /* Ends the close monitoring of a symptom. A.monitorStop (monitor.js) talks to the server, so it may answer later. */
+  function stopWatching(n) {
+    Promise.resolve(A.monitorStop(n, 'stopped')).then(function () {
+      A.refresh();
+      A.toast(tr('Stopped watching. Your note is kept.', 'Seuranta lopetettu. Muistiinpanosi säilyy.'));
+    }, function (error) { A.fail(error); });
+  }
   function setSeg(seg, i) { seg.style.setProperty('--i', String(i)); seg.removeAttribute('data-none'); }
   /* Forget what the screens remember about the person who just left. The shell clears its own state. Modules that keep
      personal data in memory (the conversations, the account views) add a function to A.resetters, and it runs here. */
@@ -960,12 +976,12 @@ import { registerServiceWorker } from "./pwa.js";
       var r = findRem(el.getAttribute('data-id'));
       if (!r) return;
       actionSheet({
-        title: (A.REM_KINDS[r.kind] || { label: r.kind }).label, message: A.fmtDue(r.due) + ' · ' + A.fmtDate(r.due),
-        actions: [
+        title: A.remLabel ? A.remLabel(r) : (A.REM_KINDS[r.kind] || { label: r.kind }).label, message: A.fmtDue(r.due) + ' · ' + A.fmtDate(r.due),
+        actions: (r.monitor && r.status !== 'done' && A.open.checkin ? [{ label: tr('Log an update', 'Kirjaa päivitys'), run: function () { A.open.checkin(r.monitor); } }] : []).concat([
           { label: r.status === 'done' ? tr('Mark as not done', 'Merkitse tekemättömäksi', 'Markera som ogjord') : tr('Mark as done', 'Merkitse tehdyksi', 'Markera som klar'), run: function () { A.svc.setReminderDone(r.id, r.status !== 'done').then(function () { A.refresh(); }, function (error) { A.fail(error); }); } },
           { label: tr('Add to calendar', 'Lisää kalenteriin', 'Lägg till i kalendern'), run: function () { saveCalendar(r.id); } },
           { label: tr('Delete reminder', 'Poista muistutus', 'Ta bort påminnelsen'), kind: 'destructive', run: function () { A.svc.removeReminder(r.id).then(function () { A.refresh(); A.toast(tr('Reminder deleted.', 'Muistutus poistettu.', 'Påminnelsen har tagits bort.')); }, function (error) { A.fail(error); }); } }
-        ]
+        ])
       });
     },
     'notif-test': function () {
@@ -995,14 +1011,16 @@ import { registerServiceWorker } from "./pwa.js";
     'note-menu': function (el) {
       var n = S.notes.filter(function (x) { return x.id === el.getAttribute('data-id'); })[0];
       if (!n) return;
-      var topic = A.topicLabel(n.topic);
-      actionSheet({
-        title: tr(topic + ' note', 'Muistiinpano: ' + topic, topic + ', anteckning'), message: A.fmtDate(n.ts),
-        actions: [
-          { label: tr('Copy note', 'Kopioi muistiinpano', 'Kopiera anteckningen'), run: function () { doCopy(noteText(n), tr('Copied. Paste it into a message or bring it to your appointment.', 'Kopioitu. Liitä se viestiin tai ota se mukaan vastaanotolle.', 'Kopierat. Klistra in det i ett meddelande eller ta med det till besöket.')); } },
-          { label: tr('Delete note', 'Poista muistiinpano', 'Ta bort anteckningen'), kind: 'destructive', run: function () { A.svc.removeObservation(n.id).then(function () { A.refresh(); A.toast(tr('Note deleted.', 'Muistiinpano poistettu.', 'Anteckningen har tagits bort.')); }, function (error) { A.fail(error); }); } }
-        ]
-      });
+      var topic = A.topicLabel(n.topic), watching = !!(A.monitorActive && A.monitorActive(n)), acts = [];
+      // The PDF and the close monitoring come from their own modules (pdf.js, doctor.js, monitor.js): an entry shows only when its opener exists.
+      if (A.open.doctorPdf) acts.push({ label: tr('PDF for my doctor', 'PDF lääkärilleni'), run: function () { A.open.doctorPdf(n.id); } });
+      acts.push({ label: tr('Copy note', 'Kopioi muistiinpano', 'Kopiera anteckningen'), run: function () { doCopy(noteText(n), tr('Copied. Paste it into a message or bring it to your appointment.', 'Kopioitu. Liitä se viestiin tai ota se mukaan vastaanotolle.', 'Kopierat. Klistra in det i ett meddelande eller ta med det till besöket.')); } });
+      var offer = A.monitorOffer ? A.monitorOffer(n) : null;   // "Watch this closely", only for a symptom note that can be watched
+      if (offer) acts.push(offer);
+      if (watching && A.open.checkin) acts.push({ label: tr('Log an update', 'Kirjaa päivitys'), run: function () { A.open.checkin(n.id); } });
+      if (watching) acts.push({ label: tr('Stop watching closely', 'Lopeta tarkka seuranta'), run: function () { stopWatching(n); } });
+      acts.push({ label: tr('Delete note', 'Poista muistiinpano', 'Ta bort anteckningen'), kind: 'destructive', run: function () { A.svc.removeObservation(n.id).then(function () { A.refresh(); A.toast(tr('Note deleted.', 'Muistiinpano poistettu.', 'Anteckningen har tagits bort.')); }, function (error) { A.fail(error); }); } });
+      actionSheet({ title: tr(topic + ' note', 'Muistiinpano: ' + topic, topic + ', anteckning'), message: A.fmtDate(n.ts), actions: acts });
     },
     'copy-note': function (el) {
       var n = S.notes.filter(function (x) { return x.id === el.getAttribute('data-id'); })[0];
@@ -1016,12 +1034,14 @@ import { registerServiceWorker } from "./pwa.js";
   /* Handlers registered by other files (account.js, coach.js, ask.js and so on) join the table, and win over the ones above. */
   Object.keys(A.actions).forEach(function (k) { ACTIONS[k] = A.actions[k]; });
   A.run = function (name, el) { var f = ACTIONS[name]; if (f) f(el || { getAttribute: function () { return ''; } }); };
-  A.open = { guide: openGuide, log: function (tp) { A.symStart(tp); }, reminder: openReminder, ask: openAsk, copy: doCopy, noteText: noteText, action: actionSheet };
+  /* Other modules add openers to A.open before this file loads (A.open.checkin, A.open.doctorPdf), so the table is extended, never replaced. */
+  A.open = Object.assign(A.open || {}, { guide: openGuide, log: function (tp) { A.symStart(tp); }, reminder: openReminder, ask: openAsk, copy: doCopy, noteText: noteText, action: actionSheet });
 
   function el_toggleClear(on) { var c = $('.searchbar .clear', top().el); if (c) c.hidden = !on; }
 
   /* ---------- events ---------- */
   function onClick(e) {
+    if (e.target && e.target.closest && e.target.closest('.tab, .sw, .btn.primary')) A.haptic(8);
     var el = e.target && e.target.closest ? e.target.closest('[data-action]') : null;
     if (el) {
       var fn = ACTIONS[el.getAttribute('data-action')];

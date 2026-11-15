@@ -10,7 +10,7 @@ type Suggestion = {
   label: string;
   request: { action: "start_intake" | "start_symptom"; language: Language } |
     { message: string; language: Language; topic?: string } |
-    { open: "library" | "professional_options"; topic?: string };
+    { open: "library" | "professional_options" | "interview" | "risk"; topic?: string };
 };
 
 export async function directChat(store: ContentStore, language: Language, plan: Plan, next: NextAction, config?: { apiKey?: string; model?: string }, request: typeof fetch = fetch) {
@@ -35,6 +35,8 @@ export async function directChat(store: ContentStore, language: Language, plan: 
     id: next.id, label: next.title,
     request: next.id === "complete_intake" ? { action: "start_intake", language }
       : next.id === "contact_professional" ? { open: "professional_options" }
+      : next.id === "continue_interview" ? { open: "interview" }
+      : next.id === "run_risk" || next.id === "see_risk" ? { open: "risk" }
       : { open: "library", topic: next.topic },
   };
   if (plan.kind === "emergency") return { priority: primary, suggestedTopics: [], directorProvider: "rules", directorFallback: false };

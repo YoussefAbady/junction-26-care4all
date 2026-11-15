@@ -12,6 +12,8 @@ const create = z.object({
 }).strict();
 const update = idInput.extend({ done: z.boolean() });
 const select = { id: true, kind: true, topic: true, dueAt: true, done: true, createdAt: true } as const;
+/** GET also says which note a recheck reminder belongs to: the observation id of its watch, else null. */
+const withMonitor = { ...select, monitor: { select: { observationId: true } } } as const;
 
 export const GET = privateRoute(async (request, owner) => {
   const calendar = new URL(request.url).searchParams.get("calendar");
@@ -24,9 +26,11 @@ export const GET = privateRoute(async (request, owner) => {
       headers: { "Cache-Control": "private, no-store", "Content-Type": "text/calendar; charset=utf-8", "Content-Disposition": 'attachment; filename="care4ll-reminder.ics"' },
     });
   }
-  const reminders = await db.careReminder.findMany({ where: { username: owner.username }, select, orderBy: [{ dueAt: "asc" }, { id: "asc" }] });
+  const reminders = await db.careReminder.findMany({ where: { username: owner.username }, select: withMonitor, orderBy: [{ dueAt: "asc" }, { id: "asc" }] });
   const now = Date.now();
-  return privateJson({ reminders: reminders.map(reminder => ({ ...reminder, due: !reminder.done && reminder.dueAt.getTime() <= now })) });
+  return privateJson({
+    reminders: reminders.map(({ monitor, ...reminder }) => ({ ...reminder, monitor: monitor?.observationId ?? null, due: !reminder.done && reminder.dueAt.getTime() <= now })),
+  });
 });
 
 export const POST = privateRoute(async (_request, owner, body) => {

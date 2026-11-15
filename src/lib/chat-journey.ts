@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { cancerTopic } from "./design-contract";
 import { bodyRegions } from "./intake/body";
-import { canDecline, canSkip, canUnsure, flow, helpOf, missing, optionsOf, titleOf } from "./intake/engine";
+import { basicsComplete, canDecline, canSkip, canUnsure, flow, helpOf, livePlan, missing, optionsOf, titleOf } from "./intake/engine";
 import type { Field, Progress } from "./intake/types";
 import type { Evidence } from "./chat-evidence";
 import { tr, type Copy, type Language } from "./survey";
@@ -19,8 +19,9 @@ export const journeyInput = z.discriminatedUnion("action", [
 export type JourneyInput = z.infer<typeof journeyInput>;
 export function intakeInteraction(progress: Progress, lang: Language) {
   if (progress.complete) return { type: "intake_complete", revision: progress.revision };
-  const unanswered = missing(progress.answers);
-  const questions = flow(progress.answers);
+  // The live flow is the basics only (section 5.1). Answers saved to the retired chapters stay in the progress but are not asked.
+  const unanswered = missing(progress.answers, livePlan);
+  const questions = flow(progress.answers, livePlan);
   const question = unanswered.find(item => item.id === progress.cursor) ?? unanswered[0];
   if (!question) return { type: "review_intake", revision: progress.revision, title: tr(lang, ["Review and confirm your answers", "Tarkista ja vahvista vastauksesi"]), answers: progress.answers };
   function localField(field: Field) {
@@ -85,15 +86,33 @@ export function symptomInteraction(id: string, draft: Draft, lang: Language) {
   };
 }
 
-export function nextAction(progress: Progress, facts: { symptom: boolean; checkTopic?: string; outsideFinland: boolean }, lang: Language, evidence: Evidence) {
+/**
+ * What the account has done in the AI part (docs/design-v2.md section 5.5). Both are left out when they are not known, and the
+ * next action is then what it was before the AI interview existed.
+ * interview: none (not started), active, or complete. risk: none, running, failed, or current (a complete assessment made after
+ * the interview was completed, with the current content).
+ */
+export type AiProgress = { interview?: "none" | "active" | "complete"; risk?: "none" | "running" | "failed" | "current" };
+
+export function nextAction(progress: Progress, facts: { symptom: boolean; checkTopic?: string; outsideFinland: boolean } & AiProgress, lang: Language, evidence: Evidence) {
   const response = (id: string, title: Copy, why: Copy, source = evidence.careOptions(lang, facts.outsideFinland).sources, topic?: string) =>
     ({ id, version: "1.0.0", title: tr(lang, title), why: tr(lang, why), sources: source, ...(topic ? { topic } : {}) });
-  if (!progress.complete || !progress.confirmed || missing(progress.answers).length) return response("complete_intake",
+  if (!progress.complete || !progress.confirmed || !basicsComplete(progress.answers)) return response("complete_intake",
     ["Continue getting to know you", "Jatka esitietojen täyttämistä"],
     ["Your health history is incomplete. Finish and review it so you have a clearer record for your next conversation.", "Esitietosi ovat kesken. Täydennä ja tarkista ne seuraavaa keskustelua varten."]);
+  // Basics are done: the AI interview, then the risk overview (section 5.5).
+  if (facts.interview !== undefined && facts.interview !== "complete") return response("continue_interview",
+    ["Continue with the AI questions", "Jatka tekoälykysymyksiin"],
+    ["Your basic answers are saved. A few more questions, one at a time, let me build your overview of risk factors from your own answers.", "Perusvastauksesi on tallennettu. Muutama kysymys lisää kerrallaan auttaa laatimaan omiin vastauksiisi perustuvan riskitekijäyhteenvedon."]);
+  if (facts.interview === "complete" && (facts.risk === "none" || facts.risk === "failed")) return response("run_risk",
+    ["Get your risk overview", "Katso riskiyhteenvetosi"],
+    ["Your questions are answered. An AI model works out your overview from your answers and from Finnish and European guidance. It is information, not a diagnosis.", "Kysymyksiin on vastattu. Tekoälymalli laatii yhteenvedon vastauksistasi sekä suomalaisista ja eurooppalaisista ohjeista. Se on tietoa, ei diagnoosi."]);
   if (facts.symptom || progress.answers.cancer_personal === "yes" || progress.answers.scr_pending === "yes") return response("contact_professional",
     ["Discuss your saved information with a healthcare professional", "Keskustele tallentamistasi tiedoista ammattilaisen kanssa"],
     ["Your account contains a symptom note or relevant health history. Bring your notes or questions to your health centre or existing care team.", "Tililläsi on oiremerkintä tai asiaan liittyviä esitietoja. Ota muistiinpanot tai kysymykset mukaan terveysasemalle tai hoitotiimille."]);
+  if (facts.interview === "complete" && (facts.risk === "current" || facts.risk === "running")) return response("see_risk",
+    ["See your risk overview", "Katso riskiyhteenvetosi"],
+    ["Your overview compares you with other people of your age and sex. It is information, not a diagnosis and not a prediction.", "Yhteenveto vertaa sinua muihin samanikäisiin ja samaa sukupuolta oleviin. Se on tietoa, ei diagnoosi eikä ennuste."]);
   if (facts.checkTopic) return response("review_body_awareness",
     ["Review body-awareness guidance", "Tutustu omatarkkailuohjeisiin"],
     ["You saved a self-check. The library explains which changes to discuss with a healthcare professional.", "Tallensit omatarkkailumerkinnän. Kirjastosta löydät tietoa muutoksista, joista kannattaa keskustella ammattilaisen kanssa."], undefined, facts.checkTopic);

@@ -2,6 +2,7 @@ import { assembleContent } from "./assemble";
 import type { Stat } from "./design";
 import type { ContentRows } from "./rows";
 import { canonicalTopic } from "./topic";
+import { riskPassageId, riskTipPassageId } from "./v2-types";
 
 /** One row of ContentPassage, without its generated search column. */
 export type PassageRow = { id: string; kind: string; topic: string; language: string; heading: string; text: string; sourceIds: string[] };
@@ -104,6 +105,29 @@ export function buildPassages(rows: ContentRows): PassageRow[] {
     const title = source && (row.language === "fi" ? source.nameFi ?? source.name : source.name);
     const id = ["evidence", row.id, row.language, ...(row.residence !== "any" || row.position > 0 ? [row.residence] : []), ...(row.position > 0 ? [String(row.position)] : [])].join(":");
     add(id, "evidence", row.topic, row.heading ?? title ?? row.id, [row.text], row.sourceIds, row.language);
+  }
+
+  // Design v2: each risk statement and each factor tip with sources, in both languages (docs/design-v2.md A.8). A query only
+  // returns them when it asks for kinds risk and risk-tip. The statement's effect class is on the fact that has the same
+  // passage id (RiskContent.facts), so the risk job reads it from there.
+  const typeName = new Map(rows.riskTypes.map(type => [type.id, { en: type.nameEn, fi: type.nameFi }]));
+  const factorOf = new Map(rows.riskFactors.map(factor => [factor.key, factor]));
+  for (const fact of rows.riskFacts) {
+    const factor = factorOf.get(fact.factor);
+    const type = typeName.get(fact.riskType);
+    if (!factor || !type) continue;
+    const state = factor.states.find(item => item.id === fact.state);
+    // The age statement has no state sentence worth searching for ("You are {age} years old"): its heading ends at the factor.
+    const part = (language: "en" | "fi") => factor.key === "age" ? [] : state ? [state.you[language]] : [];
+    add(riskPassageId(fact.riskType, fact.factor, fact.state), "risk", fact.riskType,
+      [type.en, factor.nameEn, ...part("en")].join(" · "), [fact.textEn], fact.sourceIds);
+    add(riskPassageId(fact.riskType, fact.factor, fact.state, "fi"), "risk", fact.riskType,
+      [type.fi, factor.nameFi, ...part("fi")].join(" · "), [fact.textFi], fact.sourceIds, "fi");
+  }
+  for (const factor of rows.riskFactors) {
+    if (factor.tipEn === null || factor.tipFi === null) continue;
+    add(riskTipPassageId(factor.key), "risk-tip", "general", factor.nameEn + " · What can help", [factor.tipEn], factor.tipSourceIds);
+    add(riskTipPassageId(factor.key, "fi"), "risk-tip", "general", factor.nameFi + " · Mikä auttaa", [factor.tipFi], factor.tipSourceIds, "fi");
   }
   return passages;
 }

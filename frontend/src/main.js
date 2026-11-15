@@ -5,6 +5,8 @@ import "./styles/app.css";
 import "./styles/account.css";
 import "./styles/content.css";
 import "./styles/chat.css";
+import "./styles/risk.css";
+import "./styles/monitor.css";
 
 import "./state/index.js";
 import "./core.js";
@@ -25,6 +27,16 @@ import "./sessions.js";
 // Modules that replace views defined above. A later assignment to A.views[name] wins.
 import "./views/account.js";
 import "./views/ask.js";
-import "./views/assess.js";
+
+// The AI interview, the risk overview, close monitoring and the doctor PDF. They add A.risk, A.interview, A.monitor* and A.pdf,
+// which ui.js and the screens above look up when a screen is drawn, so they load before the shell.
+import "./views/risk.js";
+import "./views/interview.js";
+import "./monitor.js";
+import "./pdf.js";
+import "./doctor.js";
+
+// The install button and its steps. It sets A.actions.install, which ui.js copies, so it loads before the shell.
+import "./install.js";
 
 import "./ui.js";

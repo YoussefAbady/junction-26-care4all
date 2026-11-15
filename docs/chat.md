@@ -4,7 +4,7 @@ The signed-in chat offers education and professional-care navigation in English 
 
 An AI model can write the answer. That is optional and off by default. With `CHAT_PROVIDER=catalog` no model is called and the chat shows the reviewed passages as they are. Whatever the model does or fails to do, the reviewed passages are the fallback and the reply is then exactly the deterministic one.
 
-The risk-factor review that a signed-in person can ask for after the intake is a separate feature with its own consent and data rules: see [the AI risk-factor review](ai-review.md). Everything below is about the chat, which never sends intake answers.
+The AI questions and the risk overview that a signed-in person can ask for after the basic questions are a separate feature with their own consent and data rules: see [the AI interview and risk overview](ai-interview-risk.md). Everything below is about the chat, which never sends intake answers.
 
 ## How a reply is made
 

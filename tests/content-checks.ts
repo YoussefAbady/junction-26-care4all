@@ -6,6 +6,8 @@ import { cancerCards } from "../src/lib/content/catalog";
 import type { DesignContent } from "../src/lib/content/design";
 import { cancersResponse, libraryResponse } from "../src/lib/content/responses";
 import type { ContentStore } from "../src/lib/content/types";
+import type { ContentSections } from "../src/lib/content/v2-types";
+import { riskSeed } from "../prisma/seed-data/risk-content";
 
 // Checks shared by the tests that use the in-memory store and the tests that use PostgreSQL: both must serve exactly the
 // content the seed holds, and exactly the responses captured before the content moved into the database.
@@ -16,7 +18,14 @@ const fixture = <T>(name: string): T => JSON.parse(readFileSync("tests/fixtures/
 const orderedMaps = ["SOURCES", "ARTICLES", "TOPICS", "JOURNEYS", "STATS", "VACC", "CHECK_META", "NAT", "COPY", "I18N"] as const;
 
 /** The PWA content has the keys and values of the seed's content, in the same order where the order matters. */
-export function expectContentMatchesSeed(content: DesignContent, seed: DesignContent) {
+export function expectContentMatchesSeed(served: DesignContent, seed: DesignContent) {
+  // Design v2 adds RISK, MONITOR and INTERVIEW after the PWA's own keys: they are checked by their own tests.
+  // SOURCES gains the design's risk sources after its own.
+  const { RISK, MONITOR, INTERVIEW, ...rest } = served as DesignContent & Partial<ContentSections>;
+  void RISK; void MONITOR; void INTERVIEW;
+  const own = Object.keys(seed.SOURCES).length;
+  assert.deepEqual(Object.keys(rest.SOURCES).slice(own), Object.keys(riskSeed.sources));
+  const content = { ...rest, SOURCES: Object.fromEntries(Object.entries(rest.SOURCES).slice(0, own)) };
   assert.deepStrictEqual(content, seed);
   assert.deepEqual(Object.keys(content), Object.keys(seed));
   for (const name of orderedMaps) assert.deepEqual(Object.keys(content[name]), Object.keys(seed[name]), name);

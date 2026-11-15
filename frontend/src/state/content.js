@@ -17,14 +17,20 @@ const REQUIRED = {
   TOPICS: "object", TOPIC_ORDER: "array", NATIONAL: "array", ARTICLES: "object", SOURCES: "object", JOURNEYS: "object",
   CHECK_META: "object", SCANS: "array", NAT: "object", STEP_HINTS: "object", SUGGESTIONS: "object",
   STATS: "object", STATS_SRC: "array", STATS_NOTE: "string",
+  RISK: "object", MONITOR: "object", INTERVIEW: "object",
 };
+
+/** What each part of the three AI-era sections must contain (docs/design-v2.md, A.6). Their texts and names are read when a screen is drawn. */
+const RISK_PARTS = { ORDER: "array", TIERS: "object", TYPES: "object", FACTORS: "object", RUBRIC: "object", IN_FINLAND: "object", COPY: "object", GUIDELINES: "array" };
+const MONITOR_PARTS = { STEPS: "array", TRENDS: "array", FLAGS: "array", TREND_WORD: "object", DOCTOR_TREND_WORD: "object", FLAG_WORD: "object", SERIOUS: "object", OUT: "object", SEX: "object", URGENCY: "object", COPY: "object" };
+const INTERVIEW_PARTS = { MIN: "number", MAX: "number" };
 
 const kind = value => Array.isArray(value) ? "array" : value === null ? "null" : typeof value;
 const isObject = value => kind(value) === "object";
 
 /**
  * Checks a GET /api/content payload, enough to reject anything that is not the content, such as an error page, an
- * empty object or a truncated copy. Returns { version, content }. Throws an ApiError("unavailable"): a server that sends
+ * empty object or a truncated copy. Returns { version, retrieved, content }. Throws an ApiError("unavailable"): a server that sends
  * something else is not serving the app right now. The error's `reason` says what was wrong, and carries no content.
  */
 export function checkContent(payload) {
@@ -39,8 +45,13 @@ export function checkContent(payload) {
   if (!content.TOPIC_ORDER.length || !content.TOPIC_ORDER.every(id => isObject(content.TOPICS[id]))) fail("TOPIC_ORDER names a topic that does not exist");
   if (!isObject(content.I18N.en)) fail("I18N has no English strings");
   if (typeof content.COPY.help !== "string" || typeof content.COPY.disclaimer !== "string") fail("COPY has no help or disclaimer text");
+  for (const [section, parts] of [["RISK", RISK_PARTS], ["MONITOR", MONITOR_PARTS], ["INTERVIEW", INTERVIEW_PARTS]]) {
+    for (const [key, expected] of Object.entries(parts)) {
+      if (kind(content[section][key]) !== expected) fail(section + "." + key + " should be " + expected + " but is " + kind(content[section][key]));
+    }
+  }
   if (!isObject(content.SUGGESTIONS.topics) || !Array.isArray(content.SUGGESTIONS.general)) fail("SUGGESTIONS is incomplete");
-  return { version: payload.version, content };
+  return { version: payload.version, retrieved: typeof payload.retrieved === "string" ? payload.retrieved : "", content };
 }
 
 /**
@@ -56,7 +67,8 @@ export async function loadContent() {
   } catch (error) {
     throw error instanceof ApiError && ["offline", "unavailable", "limited"].includes(error.code) ? error : new ApiError("unavailable", error && error.status);
   }
-  const { version, content } = checkContent(payload);
+  const { version, retrieved, content } = checkContent(payload);
   Object.assign(A.D, content);
   A.contentVersion = version;
+  A.contentRetrieved = retrieved;   // the date the sources were read: the risk screens show it beside each source link
 }

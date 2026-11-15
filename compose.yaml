@@ -50,6 +50,8 @@ services:
       GEMINI_API_KEY: ${GEMINI_API_KEY:-}
       GEMINI_MODEL: ${GEMINI_MODEL:-}
       AI_RATE_LIMIT: ${AI_RATE_LIMIT:-}
+      INTERVIEW_RATE_LIMIT: ${INTERVIEW_RATE_LIMIT:-}
+      RISK_RATE_LIMIT: ${RISK_RATE_LIMIT:-}
     ports:
       # Published for direct API checks such as /api/health. The PWA reaches it over the Compose network.
       - "127.0.0.1:${APP_PORT:-3000}:3000"

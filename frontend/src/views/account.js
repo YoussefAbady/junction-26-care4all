@@ -1,4 +1,5 @@
 import { A } from "../app.js";
+import { AI_CHOICE, CONSENT, FOOTER_LINE, ME_ROW, NEVER, PRIVACY_HANDLED, PRIVACY_IDENTITY, PRIVACY_IDENTITY_NOTE, SENT, WELCOME_PRIVATE } from "../privacy-copy.js";
 
 /*
  * Account views: welcome, sign-up and sign-in, about you, your plan, Profile, privacy, notes and reminders.
@@ -40,19 +41,26 @@ let exampleKey = "";
 const isExample = () => !!S.account && S.account.username.startsWith(EXAMPLE_PREFIX);
 const stageIn = () => !!S.account && !!S.profile;
 const initial = () => ((S.profile && S.profile.name) || (S.account && S.account.username) || "·").charAt(0).toUpperCase();
+/** A cell from the shared privacy wording (src/privacy-copy.js): { icon, tone, title, detail }, each text [English, Finnish, Swedish?]. */
+const copyCell = it => cell({ lead: lead(it.icon, it.tone), title: tr(...it.title), detail: tr(...it.detail) });
+/** The name of a reminder: the close-monitoring ones have a label of their own (monitor.js). */
+const remName = r => A.remLabel ? A.remLabel(r) : (A.REM_KINDS[r.kind] || { label: r.kind }).label;
 
 /* ---------- welcome ---------- */
 V.welcome = function () {
+  // The first two cells say, before anything is entered, where the records live and what the optional AI does and does not see.
   const feats = group([
+    copyCell(WELCOME_PRIVATE),
+    copyCell(AI_CHOICE),
     cell({ lead: lead("shield", "g"), title: tr("Understand your screening", "Ymmärrä seulontasi", "Förstå din screening"), detail: tr("See how breast, cervical and bowel screening work in Finland, and what happens at each step.", "Katso, miten rinta-, kohdunkaulan- ja suolistosyövän seulonta toimivat Suomessa ja mitä kussakin vaiheessa tapahtuu.") }),
     cell({ lead: lead("heart", "b"), title: tr("Care for everyone", "Hoitoa kaikille", "Vård för alla"), detail: tr("Large text, plain language, Finnish and English. Works with a screen reader.", "Suuri teksti, selkokieli, suomi ja englanti. Toimii ruudunlukijan kanssa.") }),
-    cell({ lead: lead("lock", "k"), title: tr("Private by design", "Yksityisyys edellä", "Privat från grunden"), detail: tr("Your records are kept in your own demo account. No tracking and no analytics. Export or delete them whenever you like.", "Tietosi säilytetään omalla demotililläsi. Ei seurantaa eikä analytiikkaa. Voit viedä tai poistaa ne milloin tahansa.") }),
     cell({ lead: lead("phone", "o"), title: tr("Anywhere, any time", "Missä ja milloin tahansa", "Var och när som helst"), detail: tr("On your phone or computer. Once installed, the app opens even without a connection.", "Puhelimella tai tietokoneella. Asennettuna sovellus aukeaa ilman yhteyttäkin.") })
   ], "i");
   return {
     title: tr("Welcome", "Tervetuloa", "Välkommen"),
     large: tr("Care for everyone, anywhere, any time", "Hoitoa kaikille, missä ja milloin tahansa", "Vård för alla, var och när som helst"),
-    pre: '<div class="welcome-art">' + A.art.hero() + "</div>", trailing: langBtn(), noBack: true, hero: true,
+    // The install button (install.js) sits next to the language button, small, above the first screen of text.
+    pre: '<div class="welcome-art">' + A.art.hero() + "</div>", trailing: (A.installIcon ? A.installIcon() : "") + langBtn(), noBack: true, hero: true,
     html: lede(tr("A private, easy companion to learn about cancer and cancer screening in Finland, and to take the next step. Every line has a source.", "Yksityinen ja helppo apu syövän ja syöväntarkistusten ymmärtämiseen Suomessa ja seuraavan askeleen ottamiseen. Jokaisella rivillä on lähde.")) + feats +
       note(tr("care4all is a prototype and a fictional demo. Please use fictional information only, and never enter your own health details.", "care4all on prototyyppi ja kuvitteellinen demo. Käytä vain kuvitteellisia tietoja äläkä koskaan syötä omia terveystietojasi.")) +
       '<div class="actionbar"><a class="btn primary block" href="#signup">' + esc(tr("Create account", "Luo tili", "Skapa konto")) + "</a>" +
@@ -64,7 +72,8 @@ V.welcome = function () {
 /* ---------- sign-up (the design's step 2, "Your privacy comes first", now with the account) ---------- */
 V.signup = function () {
   const privacy = group([
-    cell({ lead: lead("lock", "k"), title: tr("Saved in your demo account", "Tallennetaan demotilillesi", "Sparas i ditt demokonto"), detail: tr("Your profile, notes and reminders are stored on the server under your username. They are not shared, and there is no analytics.", "Profiilisi, muistiinpanosi ja muistutuksesi tallennetaan palvelimelle käyttäjätunnuksesi alle. Niitä ei jaeta, eikä analytiikkaa ole.") }),
+    cell({ lead: lead("lock", "k"), title: tr("Saved in your demo account", "Tallennetaan demotilillesi", "Sparas i ditt demokonto"), detail: tr("Your profile, notes, reminders and answers are stored on the server under your username. Other accounts cannot see them, and there is no analytics.", "Profiilisi, muistiinpanosi, muistutuksesi ja vastauksesi tallennetaan palvelimelle käyttäjätunnuksesi alle. Muut tilit eivät näe niitä, eikä analytiikkaa ole.") }),
+    copyCell(AI_CHOICE),
     cell({ lead: lead("heart", "r"), title: tr("Use fictional information only", "Käytä vain kuvitteellisia tietoja", "Använd bara fiktiva uppgifter"), detail: tr("care4all is a prototype, not a medical service. Please do not enter real health details or anything that identifies you.", "care4all on prototyyppi eikä lääketieteellinen palvelu. Älä syötä todellisia terveystietoja tai mitään, mikä tunnistaa sinut.") }),
     cell({ lead: lead("user", "b"), title: tr("You stay in control", "Pidät langat käsissäsi", "Du har kontrollen"), detail: tr("Export a copy of your data or delete the account at any time in Profile.", "Voit viedä kopion tiedoistasi tai poistaa tilin milloin tahansa Profiilissa.") })
   ], "i");
@@ -191,14 +200,14 @@ function profileFields(v) {
   ];
   const counties = A.countyOptions().map(c => '<option value="' + esc(c[0]) + '"' + (v.county === c[0] ? " selected" : "") + ">" + esc(c[1]) + "</option>").join("");
   return '<div class="fgroup"><div class="group"><label class="cell field" for="f-name"><span class="fl">' + esc(tr("First name", "Etunimi", "Förnamn")) + '</span><input class="fi" id="f-name" name="name" type="text" autocomplete="given-name" maxlength="40" placeholder="' + esc(tr("Optional", "Valinnainen", "Valfritt")) + '" aria-describedby="h-name" value="' + esc(v.name || "") + '"></label></div>' +
-    '<p class="fnote" id="h-name">' + esc(tr("Only used to greet you. Saved in your demo account.", "Käytetään vain tervehtimiseen. Tallennetaan demotilillesi.")) + "</p></div>" +
+    '<p class="fnote" id="h-name">' + esc(tr("Only used to greet you. Saved in your demo account, and never sent to the AI.", "Käytetään vain tervehtimiseen. Tallennetaan demotilillesi, eikä sitä koskaan lähetetä tekoälylle.")) + "</p></div>" +
     '<div class="fgroup"><div class="group"><label class="cell field" id="c-yob" for="f-yob"><span class="fl">' + esc(tr("Year of birth", "Syntymävuosi", "Födelseår")) + '</span><input class="fi" id="f-yob" name="yob" type="text" inputmode="numeric" autocomplete="bday-year" maxlength="4" placeholder="1974" aria-describedby="h-yob e-yob" value="' + esc(v.yob || "") + '"></label></div>' +
-    errP("e-yob") + '<p class="fnote" id="h-yob">' + esc(tr("Topics are ordered by age. care4all is for adults.", "Aiheet järjestetään iän mukaan. care4all on aikuisille.")) + "</p></div>" +
+    errP("e-yob") + '<p class="fnote" id="h-yob">' + esc(tr("Topics are ordered by age. care4all is for adults. If you use the AI questions, it gets your age in years, never your date of birth.", "Aiheet järjestetään iän mukaan. care4all on aikuisille. Jos käytät tekoälykysymyksiä, tekoäly saa ikäsi vuosina, ei koskaan syntymäaikaasi.")) + "</p></div>" +
     '<div class="fgroup"><p class="cap" id="sex-l" style="padding:0 4px">' + esc(tr("Sex registered at birth", "Syntymässä rekisteröity sukupuoli", "Kön registrerat vid födseln")) + "</p>" +
     '<div class="group" role="radiogroup" aria-labelledby="sex-l" aria-describedby="h-sex e-sex">' + sexes.map(x => U().opt("radio", "sex", x[0], x[1], "", v.sex === x[0])).join("") + "</div>" +
     errP("e-sex") + '<p class="fnote" id="h-sex">' + esc(tr("This only decides which topics come first. Nothing is hidden.", "Tämä määrää vain, mitkä aiheet näytetään ensin. Mitään ei piiloteta.")) + "</p></div>" +
     '<div class="fgroup"><div class="group"><label class="cell field" for="f-county"><span class="fl">' + esc(tr("County", "Maakunta", "Landskap")) + '</span><select class="fi" id="f-county" name="county" aria-describedby="h-county e-county"><option value=""' + (v.county ? "" : " selected") + " disabled>" + esc(tr("Choose", "Valitse", "Välj")) + "</option>" + counties + "</select></label></div>" +
-    errP("e-county") + '<p class="fnote" id="h-county">' + esc(tr("Your wellbeing services county organises screening, so what you are offered can differ. Choose “Not sure” if you do not know.", "Hyvinvointialueesi järjestää seulonnat, joten tarjonta voi vaihdella. Valitse ”En ole varma”, jos et tiedä.")) + "</p></div>" +
+    errP("e-county") + '<p class="fnote" id="h-county">' + esc(tr("Your wellbeing services county organises screening, so what you are offered can differ. Choose “Not sure” if you do not know. The AI only learns whether you live in Finland, never where.", "Hyvinvointialueesi järjestää seulonnat, joten tarjonta voi vaihdella. Valitse ”En ole varma”, jos et tiedä. Tekoäly saa tietää vain, asutko Suomessa, ei koskaan missä.")) + "</p></div>" +
     errP("e-pf");
 }
 A.profileFields = profileFields;
@@ -263,9 +272,9 @@ V.plan = function () {
   const p = S.profile || {};
   const steps = [
     ["book", tr("Learn about screening", "Opi seulonnoista", "Lär dig om screening"), tr("Short, sourced guides to breast, cervical and bowel screening, and to other cancer types.", "Lyhyitä, lähteisiin perustuvia oppaita rinta-, kohdunkaulan- ja suolistosyövän seulonnoista sekä muista syöpätyypeistä.")],
-    ["chat", tr("Tell us a little about you", "Kerro vähän itsestäsi", "Berätta lite om dig"), tr("A short chat so care4all can suggest the right next steps. You can pause at any time.", "Lyhyt keskustelu, jotta care4all voi ehdottaa sopivia seuraavia askeleita. Voit pitää tauon milloin tahansa.")],
+    ["chat", tr("Tell us a little about you", "Kerro vähän itsestäsi", "Berätta lite om dig"), tr("A short chat, then a few optional AI questions, so care4all can suggest the right next steps and work out a risk overview. You can pause at any time, and nothing goes to the AI until you agree.", "Lyhyt keskustelu ja sen jälkeen muutama valinnainen tekoälykysymys, jotta care4all voi ehdottaa sopivia seuraavia askeleita ja laatia riskikatsauksen. Voit pitää tauon milloin tahansa, eikä tekoälylle lähetetä mitään ennen kuin hyväksyt sen.")],
     ["bell", tr("Set a reminder", "Aseta muistutus", "Ställ in en påminnelse"), tr("A nudge to look out for a letter, do a self-check or book a visit. Notifications never name a cancer.", "Muistutus odottaa kutsua, tehdä itsetarkistus tai varata aika. Ilmoituksissa ei koskaan mainita syöpää.")],
-    ["lock", tr("Your records stay yours", "Tietosi pysyvät sinun", "Dina uppgifter är dina"), tr("Notes and reminders are saved in your demo account. Export or delete them any time in Profile.", "Muistiinpanot ja muistutukset tallennetaan demotilillesi. Voit viedä tai poistaa ne milloin tahansa Profiilissa.")]
+    ["lock", tr("Your records stay yours", "Tietosi pysyvät sinun", "Dina uppgifter är dina"), tr("Notes, reminders and answers are saved in your demo account. Export or delete them any time in Profile.", "Muistiinpanot, muistutukset ja vastaukset tallennetaan demotilillesi. Voit viedä tai poistaa ne milloin tahansa Profiilissa.")]
   ];
   return {
     title: tr("Your plan", "Suunnitelmasi", "Din plan"), large: t("hello") + (p.name ? ", " + p.name : ""),
@@ -291,19 +300,34 @@ V.plan = function () {
 };
 
 /* ---------- Profile ---------- */
+/** The "Your risk overview" row, from A.risk (views/risk.js). It shows once the AI questions are done, made or not yet. */
+function riskCell() {
+  const R = A.risk;
+  if (!R || !R.ready || !R.ready()) return "";
+  const result = R.result && R.result(), assessment = R.assessment && R.assessment();
+  const tier = result && result.overall && result.overall.tier;
+  const detail = tier
+    ? esc(tr("Overall ", "Kokonaistaso ", "Totalt ")) + R.tag(tier) + esc(tr(" · tap to see why", " · napauta nähdäksesi perustelut", " · tryck för att se varför"))
+    : esc(assessment && assessment.status === "running" ? tr("Being worked out. Tap to follow it.", "Laaditaan. Napauta seurataksesi sitä.") : tr("Ready to be worked out from your answers", "Valmis laadittavaksi vastaustesi perusteella"));
+  return cell({ href: "#risk", lead: lead("shield", "o"), title: tr("Your risk overview", "Riskikatsauksesi", "Din risköversikt"), rawDetail: detail });
+}
 V.me = function () {
   const p = S.profile || {}, acct = S.account || { username: "" };
   const sizeNames = A.sizeNames(), scale = [0, 1, 2].includes(S.prefs.scale) ? S.prefs.scale : 0, skin = [1, 2, 3].includes(+S.prefs.skin) ? +S.prefs.skin : 1;
-  let h = '<div class="me-head"><span class="avatar-lg" aria-hidden="true">' + esc(initial()) + '</span><div class="stack" style="gap:2px;min-width:0"><h2 class="h2">' + esc(p.name || tr("Your profile", "Profiilisi", "Din profil")) + "</h2>" +
-    '<p class="small">' + esc(tr("Age ", "Ikä ", "Ålder ") + A.age() + " · " + A.countyShort(p.county)) + "</p>" +
-    '<p class="small">' + esc(tr("Signed in as ", "Kirjautunut tunnuksella ", "Inloggad som ")) + "<b>" + esc(acct.username) + "</b></p></div></div>";
   const activeRem = S.reminders.filter(r => r.status === "active").sort((a, b) => a.due - b.due);
-  const kindLabel = r => (A.REM_KINDS[r.kind] || { label: r.kind }).label;
+  const stat = (href, n, label) => '<a href="' + href + '"><b>' + n + "</b><span>" + esc(label) + "</span></a>";
+  // The card: who you are, an edit button, and three counts that open the lists. The row under it is the privacy promise, kept true: see privacy-copy.js.
+  let h = '<section class="me-card" aria-label="' + esc(tr("Your profile", "Profiilisi", "Din profil")) + '"><div class="me-top"><span class="avatar-lg" aria-hidden="true">' + esc(initial()) + '</span><div class="me-id"><h2 class="h2">' + esc(p.name || tr("Your profile", "Profiilisi", "Din profil")) + "</h2>" +
+    "<p>" + esc(tr("Age ", "Ikä ", "Ålder ") + A.age() + " · " + A.countyShort(p.county)) + "</p>" +
+    "<p>" + esc(tr("Signed in as ", "Kirjautunut tunnuksella ", "Inloggad som ")) + "<b>" + esc(acct.username) + "</b></p></div>" +
+    '<a class="me-edit" href="#edit" aria-label="' + esc(tr("Edit profile", "Muokkaa profiilia", "Redigera profil")) + '">' + ic("pencil", 20) + "</a></div>" +
+    '<div class="me-stats">' + stat("#results", S.checklog.length, tr("Checks", "Tarkistukset", "Kontroller")) + stat("#reminders", activeRem.length, tr("Reminders", "Muistutukset", "Påminnelser")) + stat("#notes", S.notes.length, tr("Notes", "Muistiinpanot", "Anteckningar")) + "</div></section>" +
+    '<a class="priv-row" href="#privacy">' + ic("lock", 18) + "<span><b>" + esc(tr(...ME_ROW.bold)) + "</b> " + esc(tr(...ME_ROW.rest)) + "</span>" + ic("chev-r", 18) + "</a>";
   h += '<div class="group i">' +
-    cell({ href: "#reminders", lead: lead("bell", "o"), title: t("reminders"), detail: activeRem.length ? kindLabel(activeRem[0]) + " · " + A.fmtDue(activeRem[0].due) : tr("Get a nudge to look out for your letter", "Saat muistutuksen odottaa kutsua", "Få en påminnelse att vänta på brevet"), value: activeRem.length ? String(activeRem.length) : "" }) +
-    cell({ href: "#edit", lead: lead("pencil", "k"), title: tr("Edit profile", "Muokkaa profiilia", "Redigera profil"), detail: tr("Name, year of birth, sex and county", "Nimi, syntymävuosi, sukupuoli ja maakunta", "Namn, födelseår, kön och landskap") }) + "</div>";
+    cell({ href: "#reminders", lead: lead("bell", "o"), title: t("reminders"), detail: activeRem.length ? remName(activeRem[0]) + " · " + A.fmtDue(activeRem[0].due) : tr("Get a nudge to look out for your letter", "Saat muistutuksen odottaa kutsua", "Få en påminnelse att vänta på brevet"), value: activeRem.length ? String(activeRem.length) : "" }) + "</div>";
   h += '<div class="group i">' +
     cell({ href: "#you", lead: lead("chat", "b"), title: tr("Get to know you", "Kerro itsestäsi", "Berätta om dig"), detail: tr("A short chat so I can suggest next steps", "Lyhyt keskustelu, jotta voin ehdottaa seuraavia askeleita", "En kort pratstund så att jag kan föreslå nästa steg") }) +
+    riskCell() +
     cell({ href: "#next", lead: lead("checklist", "g"), title: tr("Your next steps", "Seuraavat askeleesi", "Dina nästa steg"), detail: tr("Suggestions based on what you have shared", "Ehdotuksia sen perusteella, mitä olet kertonut", "Förslag utifrån det du har delat") }) + "</div>";
   h += '<section class="sec"><p class="cap">' + esc(tr("Reading and display", "Lukeminen ja näyttö", "Läsning och visning")) + '</p><div class="group i">' +
     cell({ action: "lang-menu", lead: lead("globe", ""), title: t("language"), value: A.LANG_NAMES[S.prefs.lang] }) +
@@ -329,6 +353,7 @@ V.me = function () {
   h += '<section class="sec"><p class="cap">' + esc(tr("Your account", "Tilisi", "Ditt konto")) + "</p>" +
     (isExample() ? note(tr("This is a temporary example account. Its password was never shown, so once you sign out you cannot sign in to it again.", "Tämä on väliaikainen esimerkkitili. Sen salasanaa ei näytetty koskaan, joten uloskirjautumisen jälkeen et voi kirjautua siihen uudelleen.")) : "") +
     '<div class="group i">' +
+    (A.open && A.open.doctorPdf ? cell({ action: "doc-pdf", lead: lead("note", "o"), title: tr("PDF for my doctor", "PDF lääkärilleni"), detail: tr("A short summary, made in your browser, to hand over or share", "Lyhyt yhteenveto, tehty selaimessasi, luovutettavaksi tai jaettavaksi") }) : "") +
     cell({ action: "export", lead: lead("download", ""), title: tr("Export my data", "Vie tietoni", "Exportera mina uppgifter"), detail: tr("Everything in your account, as a JSON file", "Kaikki tilisi tiedot JSON-tiedostona", "Allt i ditt konto, som en JSON-fil") }) +
     cell({ action: "sign-out", lead: lead("arrow-r", ""), title: tr("Sign out", "Kirjaudu ulos", "Logga ut") }) +
     cell({ action: "delete-account", lead: lead("trash", "r"), title: tr("Delete account", "Poista tili", "Ta bort kontot"), cls: "danger" }) + "</div>" +
@@ -407,21 +432,18 @@ A.resetters.push(() => { exampleKey = ""; });
 /* ---------- privacy ---------- */
 V.privacy = function () {
   const signedIn = stageIn();
-  const cards = group([
-    cell({ lead: lead("lock", "k"), title: tr("Saved in your demo account", "Tallennetaan demotilillesi", "Sparas i ditt demokonto"), detail: tr("Your profile, notes, reminders and answers are stored on the server, under your username only. They are not shared.", "Profiilisi, muistiinpanosi, muistutuksesi ja vastauksesi tallennetaan palvelimelle vain käyttäjätunnuksesi alle. Niitä ei jaeta.") }),
-    cell({ lead: lead("heart", "r"), title: tr("Fictional information only", "Vain kuvitteellisia tietoja", "Bara fiktiva uppgifter"), detail: tr("This is a prototype. Please do not enter real health details or anything that identifies you.", "Tämä on prototyyppi. Älä syötä todellisia terveystietoja tai mitään, mikä tunnistaa sinut.") }),
-    cell({ lead: lead("shield", "g"), title: tr("No analytics, no research", "Ei analytiikkaa, ei tutkimuskäyttöä", "Ingen analys, ingen forskning"), detail: tr("care4all does not collect usage statistics and does not add your answers to research totals. There is nothing to switch on or off.", "care4all ei kerää käyttötilastoja eikä lisää vastauksiasi tutkimuksen yhteistuloksiin. Mitään ei tarvitse kytkeä päälle tai pois.") }),
-    cell({ lead: lead("chat", ""), title: tr("Questions you ask the assistant", "Avustajalle esittämäsi kysymykset", "Frågor du ställer till assistenten"), detail: tr("An AI model (Google Gemini) can write the answer. It receives only the question you type and public source passages, never your account or saved information. Google handles the question under its own terms, so please do not type personal details.", "Tekoälymalli (Google Gemini) voi kirjoittaa vastauksen. Se saa vain kirjoittamasi kysymyksen ja julkisia lähdekatkelmia, ei koskaan tiliäsi tai tallennettuja tietojasi. Google käsittelee kysymyksen omien ehtojensa mukaan, joten älä kirjoita henkilötietoja.") }),
-    cell({ lead: lead("sparkle", ""), title: tr("AI review of your answers (optional)", "Vastaustesi tekoälykatsaus (valinnainen)", "AI-granskning av dina svar (valfritt)"), detail: tr("Only if you choose it, and you are asked first. Your answers to the health questions go to Google Gemini. Your name, username, exact date of birth, city and anything you typed yourself never do.", "Vain jos valitset sen, ja sinulta kysytään ensin. Terveyskysymyksiin antamasi vastaukset menevät Google Geminille. Nimesi, käyttäjätunnuksesi, tarkka syntymäaikasi, kaupunkisi ja omin sanoin kirjoittamasi eivät mene koskaan.") }),
-    cell({ lead: lead("phone", ""), title: tr("On this device", "Tällä laitteella", "På den här enheten"), detail: tr("Only display choices stay in this browser: language, text size, plain language, animations, skin tone and the install banner.", "Vain näyttöasetukset jäävät tähän selaimeen: kieli, tekstin koko, selkokieli, animaatiot, ihonsävy ja asennusilmoitus.") })
-  ], "i");
-  let h = lede(tr("You are in charge of your information. Here is what care4all keeps and how to change it.", "Päätät itse tiedoistasi. Tässä mitä care4all säilyttää ja miten voit muuttaa sitä.")) + '<section class="sec"><p class="cap">' + esc(tr("How your information is handled", "Miten tietojasi käsitellään", "Hur dina uppgifter hanteras")) + "</p>" + cards + "</section>";
+  // The wording is in src/privacy-copy.js, so the welcome screen, this page, the notice sheet and the consent text agree.
+  const cards = list => group(list.map(copyCell), "i");
+  let h = lede(tr("You are in charge of your information. Here is what care4all keeps and how to change it.", "Päätät itse tiedoistasi. Tässä mitä care4all säilyttää ja miten voit muuttaa sitä.")) +
+    '<section class="sec priv-id"><p class="cap">' + esc(tr("Your identity stays private", "Henkilöllisyytesi pysyy yksityisenä")) + "</p>" + cards(PRIVACY_IDENTITY) + '<p class="fnote">' + esc(tr(...PRIVACY_IDENTITY_NOTE)) + "</p></section>" +
+    '<section class="sec"><p class="cap">' + esc(tr("How your information is handled", "Miten tietojasi käsitellään", "Hur dina uppgifter hanteras")) + "</p>" + cards(PRIVACY_HANDLED) + "</section>";
   if (signedIn) {
     h += '<section class="sec"><p class="cap">' + esc(tr("What care4all holds about you", "Mitä care4all säilyttää sinusta", "Vad care4all har om dig")) + '</p><div class="group i">' +
       cell({ href: "#edit", lead: lead("user", ""), title: tr("Profile", "Profiili", "Profil"), detail: tr("First name, year of birth, sex, county", "Etunimi, syntymävuosi, sukupuoli, maakunta", "Förnamn, födelseår, kön, landskap") }) +
       cell({ href: "#notes", lead: lead("note", ""), title: tr("Symptom notes", "Oiremuistiinpanot", "Symtomanteckningar"), detail: tr(S.notes.length + " saved", S.notes.length + " tallennettu", S.notes.length + " sparade") }) +
       cell({ href: "#results", lead: lead("hand", ""), title: tr("Self-check results", "Itsetarkistusten tulokset", "Resultat från självundersökningar"), detail: tr(S.checklog.length + " saved", S.checklog.length + " tallennettu", S.checklog.length + " sparade") }) +
-      cell({ href: "#reminders", lead: lead("bell", ""), title: t("reminders"), detail: tr(S.reminders.length + " saved", S.reminders.length + " tallennettu", S.reminders.length + " sparade") }) + "</div></section>";
+      cell({ href: "#reminders", lead: lead("bell", ""), title: t("reminders"), detail: tr(S.reminders.length + " saved", S.reminders.length + " tallennettu", S.reminders.length + " sparade") }) +
+      (V.risk ? cell({ href: "#risk", lead: lead("shield", ""), title: tr("AI questions and risk overview", "Tekoälykysymykset ja riskikatsaus"), detail: tr("Your answers to the AI’s questions, and the overview made from them", "Vastauksesi tekoälyn kysymyksiin ja niistä laadittu katsaus") }) : "") + "</div></section>";
     h += '<section class="sec"><p class="cap">' + esc(tr("Your rights", "Oikeutesi", "Dina rättigheter")) + '</p><div class="group i">' +
       cell({ action: "export", lead: lead("download", ""), title: tr("Get a copy of my data", "Hae kopio tiedoistani", "Få en kopia av mina uppgifter"), detail: tr("Access and portability", "Tiedonsaanti ja siirrettävyys", "Åtkomst och portabilitet") }) +
       cell({ href: "#edit", lead: lead("pencil", ""), title: tr("Correct my details", "Oikaise tietojani", "Rätta mina uppgifter"), detail: tr("Rectification", "Oikaiseminen", "Rättelse") }) +
@@ -435,8 +457,23 @@ V.privacy = function () {
 };
 
 /* ---------- symptom notes ---------- */
+/** What close monitoring adds to a note's line. The watch is kept by the server and read through monitor.js (A.monitorActive, A.monitorWhen). */
+function monLine(n) {
+  const m = n.monitor;
+  if (!m) return "";
+  if (m.status === "active") return tr("Watching closely: next update ", "Tarkka seuranta: seuraava päivitys ") + (A.monitorWhen ? A.monitorWhen(m.due) : A.fmtDate(m.due));
+  if (m.status === "resolved") return tr("Watch closed: it went away", "Seuranta päättyi: oire meni ohi");
+  if (m.status === "escalated") return tr("Watch ended: see a doctor", "Seuranta päättyi: hakeudu lääkäriin");
+  return "";
+}
 function noteLine(n) {
-  return [A.fmtDate(n.ts), n.when && tr("First noticed: ", "Huomasin ensimmäisen kerran: ", "Först märkt: ") + n.when, n.still && tr("Still there: ", "Onko vielä: ", "Finns kvar: ") + n.still].filter(Boolean).join(" · ");
+  return [A.fmtDate(n.ts), n.when && tr("First noticed: ", "Huomasin ensimmäisen kerran: ", "Först märkt: ") + n.when, n.still && tr("Still there: ", "Onko vielä: ", "Finns kvar: ") + n.still, monLine(n)].filter(Boolean).join(" · ");
+}
+/** The chip on a note that is being watched closely: "Close monitoring · day 5". */
+function monChip(n) {
+  if (!A.monitorActive || !A.monitorActive(n)) return "";
+  const days = Math.floor((Date.now() - n.monitor.start) / 864e5);
+  return '<span class="mon-chip">' + ic("eye", 14) + " " + esc(tr("Close monitoring", "Tarkka seuranta") + (days >= 0 ? tr(" · day ", " · päivä ") + days : "")) + "</span>";
 }
 V.notes = function () {
   let h = lede(tr("Notes are for you and your appointment. They are not a diagnosis.", "Muistiinpanot ovat sinua ja vastaanottoasi varten. Ne eivät ole diagnoosi."));
@@ -445,14 +482,18 @@ V.notes = function () {
   } else {
     h += '<div class="group" id="notes-list">' + S.notes.map(n =>
       '<button class="cell tap" type="button" data-action="note-menu" data-id="' + esc(n.id) + '"><span class="cell-b"><span class="cell-t">' + esc(A.topicLabel(n.topic)) + ": " + esc(n.symptoms.join(", ")) + "</span>" +
-      '<span class="cell-d">' + esc(noteLine(n)) + "</span>" + (n.note ? '<span class="cell-d">“' + esc(n.note) + "”</span>" : "") + "</span>" + ic("more", 20) + "</button>").join("") + "</div>";
+      '<span class="cell-d">' + esc(noteLine(n)) + "</span>" + monChip(n) + (n.note ? '<span class="cell-d">“' + esc(n.note) + "”</span>" : "") + "</span>" + ic("more", 20) + "</button>").join("") + "</div>";
   }
-  return { title: tr("My notes", "Muistiinpanoni", "Mina anteckningar"), large: tr("My notes", "Muistiinpanoni", "Mina anteckningar"), html: h };
+  return {
+    title: tr("My notes", "Muistiinpanoni", "Mina anteckningar"), large: tr("My notes", "Muistiinpanoni", "Mina anteckningar"), html: h,
+    // The PDF for the doctor is made by doctor.js. Without it there is no button.
+    trailing: S.notes.length && A.open && A.open.doctorPdf ? '<button class="nav-btn round" type="button" data-action="doc-pdf" aria-label="' + esc(tr("Save a PDF for my doctor", "Tallenna PDF lääkärilleni")) + '">' + ic("download", 22) + "</button>" : ""
+  };
 };
 
 /* ---------- reminders ---------- */
 function remItem(r) {
-  const label = (A.REM_KINDS[r.kind] || { label: r.kind }).label, isDue = r.status === "active" && r.due <= Date.now();
+  const label = remName(r), isDue = r.status === "active" && r.due <= Date.now();
   return '<div class="cell rem' + (r.status === "done" ? " done" : "") + '" data-id="' + esc(r.id) + '">' +
     '<button class="rchk" type="button" data-action="reminder-done" data-id="' + esc(r.id) + '" aria-pressed="' + (r.status === "done") + '" aria-label="' + esc(tr("Mark " + label + " as done", "Merkitse tehdyksi: " + label, "Markera som klar: " + label)) + '"><i>' + ic("check", 14) + "</i></button>" +
     '<button class="cell-main" type="button" data-action="reminder-menu" data-id="' + esc(r.id) + '" aria-label="' + esc(tr("Options for " + label, "Vaihtoehdot: " + label, "Alternativ för " + label)) + '"><span class="cell-b"><span class="cell-t">' + esc(label) + "</span>" +
@@ -484,4 +525,18 @@ V.unavailable = function () {
     html: '<section class="empty" aria-label="' + esc(tr("No connection", "Ei yhteyttä", "Ingen anslutning")) + '"><span class="ic o" aria-hidden="true">' + ic("info", 28) + '</span><h2 class="h3">' + esc(sentence) + '</h2><p class="body">' + esc(tr("Your information is kept on the server, so care4all needs a connection to open it. Nothing is lost. Check your connection and try again.", "Tietosi säilytetään palvelimella, joten care4all tarvitsee yhteyden niiden avaamiseen. Mitään ei ole hävinnyt. Tarkista yhteytesi ja yritä uudelleen.")) + "</p>" +
       '<button class="btn primary" type="button" data-action="retry-boot">' + esc(tr("Try again", "Yritä uudelleen", "Försök igen")) + "</button></section>"
   };
+};
+
+/* ---------- wording the other screens share ----------
+   The footer line (views/screens.js) and the text a person agrees to before the AI questions or the risk overview start
+   (views/interview.js, views/risk.js) are read from here when those screens are drawn, so every screen says the same, true
+   thing. The sentences are in src/privacy-copy.js. */
+A.privacy = {
+  /** The paragraph for the end of the footer: a lock and one line. */
+  footer: () => '<p class="small priv-foot">' + ic("lock", 14) + "<span>" + esc(tr(...FOOTER_LINE)) + "</span></p>",
+  /** What the AI questions and the risk overview send, and what they never send, as plain text without a final full stop. */
+  sent: () => tr(...SENT),
+  never: () => tr(...NEVER),
+  /** The whole text a person agrees to before the AI starts. */
+  consent: () => tr(...CONSENT),
 };

@@ -1,0 +1,6 @@
+/* care4all monitor and doctor PDF: the few pieces design v2's own stylesheet does not name. Everything else (.mon-ctx, .mon-steps, .mon-chip,
+   .sx-out, .find-opt, .scale and the rest) is in app.css. */
+.mon-lv { display: flex; flex-direction: column; gap: 4px; }
+[data-form="mon"] .result, [data-form="docpdf"] .err { scroll-margin-top: 16px; }
+#doc-bg { display: contents; }
+[data-form="docpdf"] .find-t small { overflow-wrap: anywhere; }

@@ -54,6 +54,9 @@ import { A as C4A } from "../app.js";
       '<p>' + esc(T(
       'An AI model, Google Gemini, can write the answer from the reviewed source passages that match your question. Then it is sent only your typed question and those public passages: no account details, saved information or notes. Each answer says when an AI wrote it. I do not keep what you type, and Google handles the question under its own terms, so please do not type personal details.',
       'Tekoälymalli, Google Gemini, voi kirjoittaa vastauksen kysymykseesi sopivien tarkistettujen lähdekatkelmien pohjalta. Silloin sille lähetetään vain kirjoittamasi kysymys ja nämä julkiset katkelmat: ei tilitietoja, tallennettuja tietoja eikä muistiinpanoja. Jokaisessa vastauksessa kerrotaan, kun tekoäly on sen kirjoittanut. En tallenna kirjoittamaasi, ja Google käsittelee kysymyksen omien ehtojensa mukaan, joten älä kirjoita henkilötietoja.')) + '</p>' +
+      '<p class="small">' + esc(T(
+      'Separate from Ask: the optional AI questions and the risk overview (under Get to know you) also use Google Gemini. They send it your answers to those questions, your age in years and whether you live in Finland, after you agree on screen. They never send your name, username, any ID, exact date of birth, city or county, or anything you typed.',
+      'Erillään Kysy-näkymästä: valinnaiset tekoälykysymykset ja riskikatsaus (Tutustutaan sinuun -osiossa) käyttävät myös Google Geminiä. Ne lähettävät sille vastauksesi näihin kysymyksiin, ikäsi vuosina ja tiedon siitä, asutko Suomessa, sen jälkeen kun olet antanut suostumuksesi näytöllä. Ne eivät koskaan lähetä nimeäsi, käyttäjätunnustasi, tunnisteita, tarkkaa syntymäaikaasi, kaupunkiasi tai maakuntaasi eikä mitään itse kirjoittamaasi.')) + '</p>' +
       '<p class="small">' + esc(T('This is a demo. Please use made-up details.', 'Tämä on demo. Käytä kuvitteellisia tietoja.')) + '</p></div>';
   }
 

@@ -3,6 +3,7 @@ import { z } from "zod";
 import { currentAccount, privateJson, refuseOrigin, sameOrigin } from "@/lib/account-session";
 import { database } from "@/lib/database";
 import { noteDetails } from "@/lib/design-contract";
+import { monitorsOf } from "@/lib/monitor/store";
 
 const draft = z.object({
   kind: z.enum(["symptom", "observation"]),
@@ -31,7 +32,9 @@ export async function GET(request: Request) {
       ] } : {}) },
       orderBy: [{ createdAt: "desc" }, { id: "desc" }], take: 51, select,
     });
-    const observations = rows.slice(0, 50);
+    const page = rows.slice(0, 50);
+    const monitors = await monitorsOf(db, account.username, page.map(row => row.id));
+    const observations = page.map(row => ({ ...row, monitor: monitors.get(row.id) ?? null }));
     return privateJson({ observations, nextCursor: rows.length > 50 ? observations[49].id : null });
   } catch { return privateJson({ error: "unavailable" }, 503); }
 }
@@ -57,7 +60,7 @@ async function mutate(request: Request, action: "save" | "delete") {
       data: { ...parsed.data, id: randomUUID(), username: account.username, observedAt: parsed.data.observedAt ? new Date(parsed.data.observedAt) : null },
       select,
     });
-    return privateJson({ observation }, 201);
+    return privateJson({ observation: { ...observation, monitor: null } }, 201);
   } catch (error) {
     if (error instanceof SyntaxError) return privateJson({ error: "invalid" }, 400);
     return privateJson({ error: "unavailable" }, 503);

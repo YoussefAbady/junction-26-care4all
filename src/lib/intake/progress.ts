@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { isComplete, prune, sanitize } from "./engine";
+import { basicsComplete, prune, sanitize } from "./engine";
 import { importLegacyAnswers } from "./legacy";
 import type { Progress } from "./types";
 
@@ -27,7 +27,8 @@ export function parseProgress(value: unknown): Progress | null {
   const answers = sanitize(parsed.data.answers);
   if (!answers) return null;
   if (!parsed.data.complete) return { ...parsed.data, answers };
-  return isComplete(answers) && parsed.data.confirmed ? { ...parsed.data, answers: prune(answers) } : null;
+  // Finished means the basics are answered: the other chapters are replaced by the AI interview. Answers saved earlier are kept (prune uses the full plan).
+  return basicsComplete(answers) && parsed.data.confirmed ? { ...parsed.data, answers: prune(answers) } : null;
 }
 
 /** Reads stored progress. Import compatible answers from the earlier questionnaire into a new draft. */

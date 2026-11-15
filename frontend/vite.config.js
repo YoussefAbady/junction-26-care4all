@@ -8,6 +8,8 @@ import { renderServiceWorker } from "./scripts/render-sw.js";
 const publicDir = "public";
 // The file the database is seeded from. The interface itself bundles no content: it reads /api/content.
 const seedFile = fileURLToPath(new URL("../prisma/seed-data/design-content.json", import.meta.url));
+// Development only: small fictional stand-ins for RISK, MONITOR and INTERVIEW, which the backend serves from the database.
+const v2File = fileURLToPath(new URL("./dev/v2-content.json", import.meta.url));
 
 /** Every file in public/, as the URL the browser requests it by. */
 function publicUrls(dir = "", found = []) {
@@ -51,14 +53,15 @@ function devContent() {
     apply: "serve",
     configureServer(server) {
       if (process.env.CONTENT_FROM === "backend") return;
-      server.config.logger.info("  /api/content is served from prisma/seed-data/design-content.json. Set CONTENT_FROM=backend to use the backend.");
+      server.config.logger.info("  /api/content is served from prisma/seed-data/design-content.json and frontend/dev/v2-content.json. Set CONTENT_FROM=backend to use the backend.");
       server.middlewares.use((request, response, next) => {
         if (request.method !== "GET" || new URL(request.url, "http://localhost").pathname !== "/api/content") return next();
         response.setHeader("Content-Type", "application/json; charset=utf-8");
         response.setHeader("Cache-Control", "no-store");
         try {
           const { source, content } = JSON.parse(readFileSync(seedFile, "utf8"));
-          response.end(JSON.stringify({ version: "dev", retrieved: source && source.retrieved, content }));
+          const v2 = JSON.parse(readFileSync(v2File, "utf8"));
+          response.end(JSON.stringify({ version: "dev", retrieved: source && source.retrieved, content: { ...content, ...v2 } }));
         } catch (error) {
           server.config.logger.error("care4all: cannot read " + seedFile + ": " + error.message);
           response.statusCode = 503;

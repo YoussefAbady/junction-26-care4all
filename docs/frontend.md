@@ -21,7 +21,8 @@ browser  ->  frontend (nginx :8080)  ->  backend (Next.js :3000)  ->  db (Postgr
 | Sign-up, sign-in, profile, display preferences | `/api/account`, `/api/profile` |
 | Next action and suggestions | `/api/chat/next-action` |
 | Ask, Get to know you, Talk about symptoms | `/api/chat`: grounded answers, which an AI model can write from the reviewed passages (drawn under a "Written by AI" label with the sources it used), and the intake and symptom conversations, which the server leads without a model |
-| AI review of the intake answers (optional) | `/api/assess`: after the person agrees on screen, the server reads the saved answers, removes everything that identifies them (name, username, exact date of birth, city, typed text) and has a model ask up to three more questions and write a short review of risk factors worth raising with a professional. See [`docs/ai-review.md`](ai-review.md) |
+| AI questions and risk overview (optional) | `/api/interview`, `/api/risk`: after the person agrees on screen, the server removes everything that identifies them (name, username, exact date of birth, city, typed text) and has a model ask one question at a time, then rate each cancer type from Finnish guidance with a reason for every rating. See [`docs/ai-interview-risk.md`](ai-interview-risk.md) |
+| Close monitoring of a symptom note | `/api/monitors`: check-ins on day 3, 7, 14 and 21, decided by rules in the database (no model) |
 | Notes, self-check results, scan dates | `/api/observations` |
 | Reminders and calendar files | `/api/reminders` |
 | Source library search and official topic information | `/api/library`, `/api/cancers` |

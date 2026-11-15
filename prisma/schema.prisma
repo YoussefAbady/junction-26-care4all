@@ -28,6 +28,9 @@ model ScreeningAccount {
   profile CareProfile?
   reminders CareReminder[]
   reports ContentReport[]
+  interview AiInterview?
+  riskAssessment RiskAssessment?
+  monitors SymptomMonitor[]
 }
 model ScreeningLogin {
   id String @id
@@ -56,6 +59,8 @@ model HealthObservation {
   observedAt DateTime?
   createdAt DateTime @default(now())
   account ScreeningAccount @relation(fields: [username], references: [username], onDelete: Cascade)
+  /// The close monitoring of this symptom note, when it has one.
+  monitor SymptomMonitor?
   @@index([username, createdAt, id])
 }
 
@@ -74,8 +79,12 @@ model CareReminder {
   dueAt DateTime
   done Boolean @default(false)
   createdAt DateTime @default(now())
+  /// The close monitoring this reminder belongs to (kind recheck): the one active reminder of a watch. Null for every other reminder.
+  monitorId String?
   account ScreeningAccount @relation(fields: [username], references: [username], onDelete: Cascade)
+  monitor SymptomMonitor? @relation(fields: [monitorId], references: [id], onDelete: Cascade)
   @@index([username, dueAt, id])
+  @@index([monitorId])
 }
 
 /// A problem a person reported with the content. Account data, not content: the content seed never touches it.
@@ -98,6 +107,122 @@ model ChatSymptomDraft {
 }
 
 // ---------------------------------------------------------------------------------------------------------------
+// Design v2 (docs/design-v2.md, section 10, and Appendix A for the values each column holds). These are account data,
+// not content: they belong to one account, are deleted with it and are part of its data export.
+// ---------------------------------------------------------------------------------------------------------------
+
+/// The AI interview of an account: after the basic questions a model asks one question at a time (docs/design-v2.md
+/// section 5). One per account. The questions asked and the answers given, in order, are its turns.
+model AiInterview {
+  id          String    @id @default(uuid())
+  username    String    @unique
+  account     ScreeningAccount @relation(fields: [username], references: [username], onDelete: Cascade)
+  /// en or fi: the language the interview is held in.
+  language    String
+  /// active or complete.
+  status      String    @default("active")
+  startedAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  completedAt DateTime?
+  turns       AiTurn[]
+}
+
+/// One question of an interview and, once the person has answered, the answer.
+model AiTurn {
+  id          String    @id @default(uuid())
+  interviewId String
+  interview   AiInterview @relation(fields: [interviewId], references: [id], onDelete: Cascade)
+  /// 1, 2, 3, ... in the order the questions were asked. The turn without answeredAt is the open question.
+  position    Int
+  /// A ContentAssessmentDomain id: what the question finds out.
+  domain      String
+  /// choice, multi or number.
+  kind        String
+  title       String
+  help        String?
+  /// [{ id, label, exclusive? }] for choice and multi, in the language of the interview. The ids are the server's: o1, o2, ...
+  options     Json?
+  /// { min, max, unit?, decimals? } for number.
+  range       Json?
+  /// model, or bank for the question that comes from the database when the model cannot be used.
+  source      String
+  provider    String?
+  model       String?
+  /// { value } (an option id, a list of option ids or a number) or { marker } ("unsure" or "declined"). Null while the turn is open.
+  answer      Json?
+  /// The answer as words, in the language of the interview. This is what a model is told, never the ids.
+  answerLabel String?
+  askedAt     DateTime  @default(now())
+  answeredAt  DateTime?
+  @@unique([interviewId, position])
+}
+
+/// The AI risk assessment of an account (docs/design-v2.md section 6). One per account, replaced by every run.
+model RiskAssessment {
+  id             String    @id @default(uuid())
+  username       String    @unique
+  account        ScreeningAccount @relation(fields: [username], references: [username], onDelete: Cascade)
+  /// running, complete or failed.
+  status         String
+  /// en or fi.
+  language       String
+  /// A hash of the facts, the interview transcript, the content version and the language it was made from. It decides `stale`.
+  inputHash      String
+  contentVersion String
+  /// The RiskResult of section 6.1, once complete.
+  result         Json?
+  /// { done, total } while running.
+  progress       Json?
+  /// A reason code when the status is failed.
+  failure        String?
+  provider       String?
+  model          String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  completedAt    DateTime?
+}
+
+/// Close monitoring of one symptom note that was not sent to a doctor (docs/design-v2.md section 7). One per observation.
+model SymptomMonitor {
+  id            String    @id @default(uuid())
+  username      String
+  account       ScreeningAccount @relation(fields: [username], references: [username], onDelete: Cascade)
+  observationId String    @unique
+  observation   HealthObservation @relation(fields: [observationId], references: [id], onDelete: Cascade)
+  /// active, resolved (it went away), escalated (see a doctor) or stopped (the person stopped it).
+  status        String    @default("active")
+  startedAt     DateTime  @default(now())
+  /// When the next update is due.
+  dueAt         DateTime
+  /// How strong the symptom was when the watch started, 0 to 10, when that was known.
+  level0        Int?
+  /// How the symptom had changed when the watch started (the note's course: same, worse, better, comes or unsure).
+  trend0        String?
+  checkins      MonitorCheckin[]
+  reminders     CareReminder[]
+  @@index([username, status])
+}
+
+/// One update the person logged while watching a symptom, with what the rules made of it.
+model MonitorCheckin {
+  id        String   @id @default(uuid())
+  monitorId String
+  monitor   SymptomMonitor @relation(fields: [monitorId], references: [id], onDelete: Cascade)
+  ts        DateTime @default(now())
+  /// gone, better, same or worse, compared with last time.
+  trend     String
+  /// How strong it is now, 0 to 10, when the person said.
+  level     Int?
+  /// ContentMonitorFlag ids of what is new since last time.
+  flags     String[]
+  /// The person said something serious is happening right now.
+  serious   Boolean  @default(false)
+  /// What the rules said: gone, watch, doctor or emergency.
+  result    String
+  @@index([monitorId, ts])
+}
+
+// ---------------------------------------------------------------------------------------------------------------
 // Public educational content. It holds no personal data and is the same for everyone. docs/content-database.md
 // explains how it is seeded, served and edited. The Content* tables below are replaced as a whole by the seed when the
 // seed input changes (ContentReport above is not one of them).
@@ -108,7 +233,8 @@ model ChatSymptomDraft {
 // ---------------------------------------------------------------------------------------------------------------
 
 /// Single values: contentVersion, contentRevision, retrieved, designSource, year, example, statsNote, statsSourceIds,
-/// triageIntro, triageSourceIds and catalogVersion.
+/// triageIntro, triageSourceIds and catalogVersion. Design v2 adds interviewLimits, riskRubric, riskInFinland,
+/// monitorRules and finnishReview (docs/design-v2.md Appendix A gives the JSON of each).
 model ContentMeta {
   key   String @id
   value Json
@@ -133,11 +259,15 @@ model ContentSource {
   use          String
   /// Language of the page itself, such as en or fi.
   language     String
+  /// finland, europe or international, by the host of the page. Null when the host is not one AI answers may cite.
+  tier         String?
+  /// True for the sources that a risk statement, a guideline list, a factor tip, the risk rubric or riskInFinland names (design v2, 57 today).
+  guideline    Boolean @default(false)
   @@index([listed, position])
 }
 
-/// Interface text. scope is copy (the English D.COPY lines), i18n (D.I18N, one row per language) or catalog (the notice
-/// the catalog API shows).
+/// Interface text. scope is copy (the English D.COPY lines), i18n (D.I18N, one row per language), catalog (the notice
+/// the catalog API shows), or risk, monitor or interview (design v2: the screen copy that is content, one row per language).
 model ContentString {
   scope    String
   key      String
@@ -462,6 +592,109 @@ model ContentEvidence {
   text      String
   sourceIds String[]
   @@id([id, language, residence, position])
+}
+
+// ---------------------------------------------------------------------------------------------------------------
+// Design v2 content (docs/design-v2.md section 9 and Appendix A). Bilingual text is two columns, nameEn and nameFi, and a
+// list of text is two text[] columns of the same length. Nested data that is always read whole is jsonb with { en, fi }
+// leaves. Every text has both languages; the Finnish is a draft until its ContentMeta.finnishReview entry says reviewed.
+// ---------------------------------------------------------------------------------------------------------------
+
+/// One cancer type the risk assessment rates (RULES in the design's risk script). The id is a ContentTopic id.
+model ContentRiskType {
+  id           String   @id
+  /// Order of the cancer types in the risk overview (ORDER in the design).
+  position     Int
+  /// any, female or male: the sex a profile must have for the type to apply.
+  sex          String
+  /// The full name of the cancer type, such as Lung cancer and Keuhkosyöpä.
+  nameEn       String
+  nameFi       String
+  /// What the questions cannot cover, copied into every assessment (RULES[type].not). The two lists are the same length.
+  notCoveredEn String[]
+  notCoveredFi String[]
+  facts        ContentRiskFact[]
+  guideline    ContentGuideline?
+}
+
+/// One factor the risk rules know (a key of LIB in the design's risk script).
+model ContentRiskFactor {
+  key          String   @id
+  /// Order of LIB.
+  position     Int
+  nameEn       String
+  nameFi       String
+  /// A short phrase for use inside a sentence, such as smoking (SHORT in the design).
+  shortEn      String
+  shortFi      String
+  /// What can help. Null for the age factor, which has no tip. Both languages are null together.
+  tipEn        String?
+  tipFi        String?
+  /// Sources that state the tip. Usually empty: the tip is then advice without a citation, and no passage is built for it.
+  tipSourceIds String[]
+  /// [{ id, you: { en, fi } }]: the states the factor can be in, in order, each with the sentence that says it about the person.
+  states       Json
+  facts        ContentRiskFact[]
+}
+
+/// One statement of the risk rules, for a cancer type, a factor and a state of that factor, with the sources behind it.
+model ContentRiskFact {
+  riskType  String
+  factor    String
+  state     String
+  /// Order inside the cancer type.
+  position  Int
+  /// How large the effect is: small, moderate, large, very-large, protective or info (from the design's weight).
+  effect    String
+  textEn    String
+  textFi    String
+  /// ContentSource ids, in display order.
+  sourceIds String[]
+  riskTypeRow   ContentRiskType   @relation(fields: [riskType], references: [id], onDelete: Cascade)
+  riskFactorRow ContentRiskFactor @relation(fields: [factor], references: [key], onDelete: Cascade)
+  @@id([riskType, factor, state])
+  @@unique([riskType, position])
+}
+
+/// The guideline sources of a cancer type in priority order: Finnish first, then European, then international.
+model ContentGuideline {
+  riskType  String   @id
+  sourceIds String[]
+  riskTypeRow ContentRiskType @relation(fields: [riskType], references: [id], onDelete: Cascade)
+}
+
+/// One thing the AI interview must find out, and the question the server asks when the model cannot (the bank).
+model ContentAssessmentDomain {
+  id        String  @id
+  /// The order the coverage list shows, and the bank asks in.
+  position  Int
+  nameEn    String
+  nameFi    String
+  /// The interview cannot finish before every essential domain that applies to the person is covered.
+  essential Boolean
+  /// any, female or male.
+  appliesTo String
+  /// The domain applies from this age in years. Null: no lower limit.
+  minAge    Int?
+  /// The domain applies up to this age in years. Null: no upper limit.
+  maxAge    Int?
+  /// What to find out, in English. The model is told this text.
+  ask       String
+  /// { en, fi }: a complete question for the bank, { kind, title, help?, options?: [{ label, exclusive? }], number?: { min, max, unit?, decimals? } }.
+  fallback  Json
+}
+
+/// A check-in flag of close monitoring, and the wording of the "something serious right now" checkbox.
+model ContentMonitorFlag {
+  id       String @id
+  position Int
+  /// flag, or serious for the one row that holds the serious-now wording.
+  kind     String
+  labelEn  String
+  labelFi  String
+  /// The words used inside sentences and in the doctor PDF (FLAG_WORD in the design). Null for serious.
+  wordEn   String?
+  wordFi   String?
 }
 
 /// Every quotable passage of the content above, in plain text, for retrieval. Rebuilt from the tables whenever the

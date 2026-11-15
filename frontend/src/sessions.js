@@ -651,20 +651,32 @@ import { A as C4A } from "./app.js";
     return T('Open', 'Avaa');
   }
   /* The server's next action, as a card. Its sources are shown with it. */
+  /* The next actions of the AI questions and the risk overview open their own screens. The server's request for them is only a library fallback. */
+  const AI_NEXT = {
+    continue_interview: ['#interview', 'Continue with the AI questions', 'Jatka tekoälykysymyksiin'],
+    run_risk: ['#risk', 'Work out my risk overview', 'Laadi riskikatsaukseni'],
+    see_risk: ['#risk', 'Open my risk overview', 'Avaa riskikatsaukseni']
+  };
   function nextCard(e) {
     const st = e.st, n = st.next;
     if (!n) return '';
-    const r = st.priority && st.priority.request;
+    const ai = AI_NEXT[n.id], r = ai ? null : st.priority && st.priority.request;
+    if (ai) {
+      return '<article class="fu lvl-plan" data-fu="' + esc(n.id) + '"><p class="fu-tag"><span class="fu-dot" aria-hidden="true"></span>' + esc(T('Your next step', 'Seuraava askeleesi')) + '</p><h3 class="h3">' + esc(n.title) + '</h3><p class="body">' + esc(n.why) + '</p>' +
+        sourceChips(n.sources) + '<div class="btn-row"><a class="btn sm tint" href="' + ai[0] + '">' + esc(T(ai[1], ai[2])) + '</a></div></article>';
+    }
     return '<article class="fu lvl-plan" data-fu="' + esc(n.id) + '"><p class="fu-tag"><span class="fu-dot" aria-hidden="true"></span>' + esc(T('Your next step', 'Seuraava askeleesi')) + '</p><h3 class="h3">' + esc(n.title) + '</h3><p class="body">' + esc(n.why) + '</p>' +
       sourceChips(n.sources) + (r ? '<div class="btn-row"><button class="btn sm tint" type="button" data-action="conv-go" data-r="' + reg(r) + '">' + esc(requestLabel(r)) + '</button></div>' : '') + '</article>';
   }
   function doneHtml(e, cls) {
     const name = A.firstName();
     return bubble(T('That is everything for now' + (name ? ', ' + name : '') + '. Thank you. Your answers are saved on your account.', 'Siinä kaikki toistaiseksi' + (name ? ', ' + name : '') + '. Kiitos. Vastauksesi on tallennettu tilillesi.'), '', cls) +
+      (A.risk && A.risk.card && A.risk.card() ? '<div class="rk-wrap">' + A.risk.card() + '</div>' : '') +
       '<div class="' + (cls ? 'fu-wrap fresh f2' : 'fu-wrap') + '">' + nextCard(e) + '</div>';
   }
   const doneBar = () => '<div class="btn-row"><a class="btn primary sm" href="#next">' + esc(T('See all my next steps', 'Katso kaikki seuraavat askeleeni')) + '</a><a class="btn tint sm" href="#home">' + esc(T('Back to home', 'Takaisin etusivulle')) + '</a></div>' +
-    '<div class="btn-row"><button class="btn tint sm" type="button" data-action="assess-open">' + ic('sparkle', 16) + ' ' + esc(T('Review my answers with AI', 'Tarkista vastaukseni tekoälyllä')) + '</button></div>' +
+    '<div class="btn-row"><button class="btn primary sm" type="button" data-action="interview-open">' + ic('sparkle', 16) + ' ' + esc(T('Continue with the AI questions', 'Jatka tekoälykysymyksiin')) + '</button></div>' +
+    '<p class="small reply-n">' + esc(T('The AI questions are optional. An AI model (Google Gemini) asks them, and I ask you to agree first, on the next screen. Your name is never sent to it.', 'Tekoälykysymykset ovat vapaaehtoisia. Ne esittää tekoälymalli (Google Gemini), ja pyydän suostumuksesi ensin seuraavalla näytöllä. Nimeäsi ei lähetetä sille koskaan.')) + '</p>' +
     '<p class="small reply-n">' + esc(T('You can look at or forget what I know with the eye button at the top.', 'Näet tai unohdat tallentamani tiedot yläreunan silmäpainikkeesta.')) + '</p>';
 
   /* The progress the intake reports, kept for the screens that show it without opening the conversation. */
@@ -767,7 +779,32 @@ import { A as C4A } from "./app.js";
   }
   function symSaved(e, cls) {
     return bubbleHtml('<p>' + esc(T('Saved to your symptom notes.', 'Tallennettu oiremerkintöihisi.')) + '</p>' + (e.st.saved ? symList(e.st.saved) : '') +
-      '<p class="why">' + esc(T('This is not a diagnosis. If it gets worse or you notice something new, tell me again. ', 'Tämä ei ole diagnoosi. Jos oire pahenee tai huomaat jotain uutta, kerro minulle uudelleen. ') + D.COPY.help) + '</p>', cls);
+      '<p class="why">' + esc(T('This is not a diagnosis. If it gets worse or you notice something new, tell me again. ', 'Tämä ei ole diagnoosi. Jos oire pahenee tai huomaat jotain uutta, kerro minulle uudelleen. ') + D.COPY.help) + '</p>', cls) + symOutcome(e);
+  }
+  /* What the server says to do next (level, urgency, why), the same words the check-in result uses. Nothing is worked out here. */
+  const bi = v => (v && typeof v === 'object' ? (v[lang()] || v.en || '') : typeof v === 'string' ? v : '');
+  const monCopy = (key, vars) => String(bi(((D.MONITOR || {}).COPY || {})[key])).replace(/\{(\w+)\}/g, (all, k) => (vars && vars[k] != null ? vars[k] : all));
+  function symOutcome(e) {
+    const it = e.st.interaction, o = it && it.outcome, M = D.MONITOR;
+    if (!o || !M || !['emergency', 'doctor', 'watch'].includes(o.level)) return '';
+    const note = S.notes.find(n => n.id === it.id), watching = !!(note && A.monitorActive && A.monitorActive(note));
+    const title = bi(M.OUT && M.OUT[o.level]);
+    const when = o.level === 'emergency' ? monCopy('emergency_when') : o.level === 'doctor' ? bi(M.URGENCY && (M.URGENCY[o.urgency] || M.URGENCY.weeks))
+      : watching ? monCopy('watching', { next: A.monitorWhen(note.monitor.due) }) : monCopy('keep_eye');
+    const why = (o.why || []).length ? '<ul class="tick">' + o.why.map(x => '<li>' + esc(x) + '</li>').join('') + '</ul>' : '';
+    const id = esc(it.id || '');
+    let acts;
+    if (o.level === 'emergency') acts = '<a class="btn primary" href="tel:112">' + esc(T('Call 112', 'Soita 112')) + '</a><button class="btn" type="button" data-action="mon-gp">' + esc(T('Other ways to get help', 'Muita tapoja saada apua')) + '</button>';
+    else if (o.level === 'doctor') {
+      acts = '<button class="btn primary" type="button" data-action="mon-gp">' + esc(T('How to get seen', 'Näin pääset vastaanotolle')) + '</button>' +
+        (A.open.doctorPdf ? '<button class="btn tint" type="button" data-action="mon-pdf" data-id="' + id + '">' + esc(T('PDF for my doctor', 'PDF lääkärilleni')) + '</button>' : '');
+    } else {
+      const steps = watching && A.MONITOR_STEPS.length ? '<ol class="mon-steps" aria-label="' + esc(T('Check-in days', 'Seurantapäivät')) + '">' + A.MONITOR_STEPS.map(d => '<li><span>' + esc(T('Day ', 'Päivä ') + d) + '</span></li>').join('') + '</ol><p class="small" style="flex:1 1 100%">' + esc(monCopy('reminders')) + '</p>' : '';
+      acts = steps + '<button class="btn tint" type="button" data-action="mon-gp">' + esc(T('See a doctor anyway', 'Hakeudu silti lääkäriin')) + '</button>' +
+        (watching ? '<button class="btn ghost" type="button" data-action="mon-stop" data-id="' + id + '">' + esc(T('Stop watching', 'Lopeta seuranta')) + '</button>' : '');
+    }
+    return '<section class="sx-out lvl-' + o.level + '" aria-label="' + esc(T('What I would do next', 'Mitä tekisin seuraavaksi')) + '"><p class="cap">' + esc(T('What I would do next', 'Mitä tekisin seuraavaksi')) + '</p><h3 class="h2">' + esc(title) + '</h3><p class="sx-when">' + esc(when) + '</p>' + why +
+      '<p class="small">' + esc(monCopy('suggestion') + ' ' + D.COPY.help) + '</p><div class="btn-row">' + acts + '</div></section>';
   }
   const symSavedBar = () => '<div class="btn-row"><a class="btn primary sm" href="#home">' + esc(T('Done', 'Valmis')) + '</a><button class="btn tint sm" type="button" data-action="sx-copy" data-e="sym">' + esc(T('Copy my note', 'Kopioi merkintäni')) + '</button>' +
     '<a class="btn ghost sm" href="#notes">' + esc(T('See my notes', 'Katso merkintäni')) + '</a><button class="btn ghost sm" type="button" data-action="sym-new">' + esc(T('Start a new note', 'Aloita uusi merkintä')) + '</button></div>';
@@ -782,7 +819,8 @@ import { A as C4A } from "./app.js";
       Object.assign(st, { saved: it.draft || null, hist: [], log: [], notices: [], owned: true, canReplay: false });
       e.accept(res);
       append(e, e.current(true).chat, { focus: true });
-      await Promise.all([A.svc.loadObservations(), A.svc.loadNext()]).catch(() => { /* the note is saved. The lists catch up on the next visit */ });
+      await Promise.all([A.svc.loadObservations(), A.svc.loadNext(), A.svc.loadReminders(), A.svc.loadMonitors()]).catch(() => { /* the note is saved. The lists catch up on the next visit */ });
+      if (st.interaction && st.interaction.outcome && st.interaction.outcome.level === 'watch') repaint(e);   // the watch the server started is known now
       /* The screens beneath this one catch up. The top screen is left alone while it is the conversation. A person who has
          already tapped through to My notes is looking at a list drawn before the note was in it, so that one is redrawn too. */
       const cur = A.current();

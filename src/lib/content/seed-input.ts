@@ -3,6 +3,9 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { catalogSeed } from "../../../prisma/seed-data/catalog";
 import { evidenceSeed } from "../../../prisma/seed-data/evidence";
+import { interviewSeed } from "../../../prisma/seed-data/interview-content";
+import { monitorSeed } from "../../../prisma/seed-data/monitor-content";
+import { riskSeed } from "../../../prisma/seed-data/risk-content";
 import { designSeedSchema } from "./design";
 import type { SeedInput } from "./types";
 
@@ -12,10 +15,16 @@ import type { SeedInput } from "./types";
  */
 const seedFormat = 1;
 
-/** The seed: the PWA's export from prisma/seed-data/design-content.json, the backend catalog and the chat evidence. */
+/**
+ * The seed: the PWA's export from prisma/seed-data/design-content.json, the backend catalog and the chat evidence, and the
+ * three modules of design v2 (risk-content.ts, interview-content.ts and monitor-content.ts).
+ */
 export function loadSeedInput(): SeedInput {
   const file = resolve(process.cwd(), "prisma", "seed-data", "design-content.json");
-  return { design: designSeedSchema.parse(JSON.parse(readFileSync(file, "utf8"))), catalog: catalogSeed, evidence: evidenceSeed };
+  return {
+    design: designSeedSchema.parse(JSON.parse(readFileSync(file, "utf8"))), catalog: catalogSeed, evidence: evidenceSeed,
+    risk: riskSeed, interview: interviewSeed, monitor: monitorSeed,
+  };
 }
 
 function canonicalJson(value: unknown): string {

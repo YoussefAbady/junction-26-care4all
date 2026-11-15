@@ -9,6 +9,7 @@
  */
 import { api } from "../api/index.js";
 import { ApiError } from "../api/client.js";
+import { A } from "../app.js";
 import { loadContent } from "./content.js";
 
 /* ---------- topics ---------- */
@@ -45,7 +46,8 @@ export const S = {
     skin: [1, 2, 3].includes(display.skin) ? display.skin : 1,
   },
   dismissInstall: display.dismissInstall === true,
-  reminders: [],                // { id, kind, topic, due (ms), dueAt (ISO), status: "active" | "done", created, channels, notified }
+  reminders: [],                // { id, kind, topic, due (ms), dueAt (ISO), status: "active" | "done", created, channels, notified, monitor? (the note id of a watch) }
+  monitors: [],                 // close monitoring: the list GET /api/monitors returns. Each watch is also on its note as note.monitor
   notes: [],                    // symptom notes, newest first
   checklog: [],                 // self-check results, newest first
   checks: {},                   // topic -> latest self-check result
@@ -77,8 +79,28 @@ async function loadReminders() {
     id: item.id, kind: item.kind, topic: designTopic(item.topic), dueAt: item.dueAt,
     due: Date.parse(item.dueAt), created: Date.parse(item.createdAt),
     status: item.done ? "done" : "active", channels: [], notified: notified.has(item.id),
+    ...(item.monitor ? { monitor: item.monitor } : {}),
   }));
 }
+
+/** A watch of GET /api/monitors as the shape the monitor and doctor modules read: times in milliseconds, check-ins oldest first. */
+const msOf = iso => { const t = Date.parse(iso); return Number.isNaN(t) ? 0 : t; };
+function watchOf(item) {
+  return {
+    id: item.id, status: item.status, start: msOf(item.startedAt), due: msOf(item.dueAt),
+    level0: item.level0 == null ? null : item.level0, trend0: item.trend0 || "",
+    log: (item.checkins || []).map(c => ({ ts: msOf(c.ts), trend: c.trend, level: c.level == null ? null : c.level, flags: (c.flags || []).slice(), result: c.result })),
+  };
+}
+
+/** Close monitoring: every watch the account has. */
+async function loadMonitors() {
+  const { monitors } = await api.monitors.list();
+  S.monitors = Array.isArray(monitors) ? monitors : [];
+}
+
+/** The AI risk overview, when the risk module is loaded (it keeps the answer in S.risk). */
+const loadRisk = () => (A.risk && A.risk.load ? A.risk.load() : Promise.resolve());
 
 /** Observations are one table on the server. The design shows them as notes, self-check results and scan dates. */
 async function loadObservations() {
@@ -108,6 +130,7 @@ async function loadObservations() {
         id: item.id, ts, kind: item.kind, topic: topic || "general",
         symptoms: details.symptoms && details.symptoms.length ? details.symptoms : [item.label],
         when: ONSET[details.onset] || "", still: COURSE[details.course] || "", note: item.notes,
+        ...(item.monitor ? { monitor: watchOf(item.monitor) } : {}),
       });
     }
   }
@@ -128,15 +151,17 @@ async function hydrate() {
   S.profile = profile && Object.keys(profile).length ? profile : null;
   Object.assign(S.prefs, preferences);
   persistDisplay();
-  await Promise.all([loadReminders(), loadObservations(), loadNext().catch(() => {})]);
+  // The risk overview and the watches are extras: a failure leaves them empty and never stops the app from opening.
+  await Promise.all([loadReminders(), loadObservations(), loadNext().catch(() => {}), loadMonitors().catch(() => {}), loadRisk().catch(() => {})]);
 }
 
 function reset() {
   Object.assign(S, {
-    account: null, profile: null, reminders: [], notes: [], checklog: [], checks: {}, scans: {}, next: null,
+    account: null, profile: null, reminders: [], monitors: [], notes: [], checklog: [], checks: {}, scans: {}, next: null,
     read: {}, seen: {}, fu: {}, answers: {}, consent: null, sym: { draft: null },
   });
   notified.clear();
+  if (S.risk) Object.assign(S.risk, { loaded: false, enabled: false, ready: false, assessment: null });
 }
 
 /** Finds out whether there is a signed-in account and loads its records. */
@@ -219,6 +244,7 @@ export const svc = {
   },
 
   loadReminders,
+  loadMonitors,
   /** @param {{ kind: string, topic?: string, due: number }} reminder due is a time in milliseconds. */
   async addReminder({ kind, topic, due }) {
     const { reminder } = await api.reminders.add({ kind, topic: apiTopic(topic) ?? null, dueAt: new Date(due).toISOString() });
@@ -234,12 +260,12 @@ export const svc = {
   /** @param {{ kind: "symptom" | "observation", label: string, notes?: string, observedAt?: string | null, details?: object }} draft */
   async addObservation(draft) {
     const { observation } = await api.observations.add(draft);
-    await Promise.all([loadObservations(), loadNext().catch(() => {})]);
+    await Promise.all([loadObservations(), loadReminders().catch(() => {}), loadMonitors().catch(() => {}), loadNext().catch(() => {})]);
     return observation;
   },
   async removeObservation(id) {
     await api.observations.remove(id);
-    await Promise.all([loadObservations(), loadNext().catch(() => {})]);
+    await Promise.all([loadObservations(), loadReminders().catch(() => {}), loadMonitors().catch(() => {}), loadNext().catch(() => {})]);
   },
 
   loadNext,

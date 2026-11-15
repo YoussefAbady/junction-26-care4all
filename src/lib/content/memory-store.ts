@@ -1,4 +1,5 @@
 import { assembleCatalog, assembleContent, evidenceEntries, versionOf } from "./assemble";
+import { assembleInterview, assembleMonitor, assembleRisk, contentSections } from "./assemble-v2";
 import { assertConsistent } from "./check";
 import { buildPassages, type PassageRow } from "./passages";
 import { clampLimit, placeAnchors, retrievedPassages, searchTerms, topicAnchors } from "./retrieve";
@@ -6,6 +7,7 @@ import { toRows } from "./rows";
 import { contentVersion, loadSeedInput } from "./seed-input";
 import { canonicalTopic } from "./topic";
 import type { ContentStore, PassageQuery, SeedInput } from "./types";
+import { riskPassageKinds } from "./v2-types";
 
 // Words the database's dictionaries leave out of a search: the commonest English and Finnish function words.
 const fillerWords = new Set((
@@ -46,8 +48,10 @@ function rankPassages(passages: readonly PassageRow[], query: PassageQuery): Pas
 }
 
 /** The passages a question finds: the ranked ones, and the anchors of its topic placed among them. */
-function findPassages(passages: readonly PassageRow[], query: PassageQuery): PassageRow[] {
+function findPassages(all: readonly PassageRow[], query: PassageQuery): PassageRow[] {
   if (!searchTerms(query.question).length) return [];
+  // Without `kinds` a query never returns the risk statements (docs/design-v2.md A.8).
+  const passages = all.filter(passage => (query.kinds ? query.kinds.includes(passage.kind as never) : !riskPassageKinds.includes(passage.kind as never)));
   const ranked = rankPassages(passages, query);
   const limit = clampLimit(query.limit);
   const topic = query.topic ? canonicalTopic(query.topic) : undefined;
@@ -64,7 +68,10 @@ export function memoryContentStore(input: SeedInput = loadSeedInput()): ContentS
   const rows = toRows(input, contentVersion(input));
   assertConsistent(rows);
   const version = versionOf(rows);
-  const content = assembleContent(rows);
+  const content = { ...assembleContent(rows), ...contentSections(rows) };
+  const risk = assembleRisk(rows);
+  const interview = assembleInterview(rows);
+  const monitor = assembleMonitor(rows);
   const catalog = assembleCatalog(rows);
   const evidence = evidenceEntries(rows);
   const passages = buildPassages(rows);
@@ -75,5 +82,8 @@ export function memoryContentStore(input: SeedInput = loadSeedInput()): ContentS
     loadCatalog: async () => catalog,
     loadEvidence: async () => evidence,
     retrievePassages: async query => retrievedPassages(findPassages(passages, query), sources),
+    loadRisk: async () => risk,
+    loadInterview: async () => interview,
+    loadMonitor: async () => monitor,
   };
 }

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
-  alerts, after, before, check, clock, derive, firstOpen, flow, isComplete, minutesLeft, missing, optionsOf, prune, registry, sanitize, summarise,
+  alerts, after, before, check, clock, derive, firstOpen, flow, isComplete, livePlan, minutesLeft, missing, optionsOf, prune, registry, sanitize, summarise,
   type Answer, type Answers, type Entry, type Field, type Question,
 } from "../src/lib/intake";
 
@@ -277,15 +277,18 @@ test("a finished interview that has gained a question is reopened with its answe
   const answers = finish({ dob: "1975-01-01", sex: "male", cancer_personal: "no" });
   const saved = { v: 2, answers, cursor: "review", complete: true, confirmed: true, acks: [], language: "en", revision: 3 };
   assert.equal(readProgress(saved, 3).complete, true, "a finished interview that is still finished stays finished");
-  // The same interview as it was saved before the questions about concerns and screening letters were asked this way.
-  const older = Object.fromEntries(Object.entries(answers).filter(([id]) => id !== "areas" && id !== "scr_gate"));
+  // The live flow is the basics only: the answers to the retired chapters stay saved, and are not asked again.
+  assert.equal(readProgress(saved, 3).answers.scr_gate, answers.scr_gate, "answers to the retired chapters are kept");
+  assert.equal(readProgress({ ...saved, answers: Object.fromEntries(Object.entries(answers).filter(([id]) => id !== "areas" && id !== "scr_gate")) }, 3).complete, true, "a missing retired answer does not reopen it");
+  // The same interview as it was saved before a question of the basics was asked this way.
+  const older = Object.fromEntries(Object.entries(answers).filter(([id]) => id !== "weight_change"));
   const reopened = readProgress({ ...saved, answers: { ...older, reason: ["checkup"] } }, 3);
   assert.equal(reopened.complete, false);
   assert.equal(reopened.confirmed, false);
   assert.equal(reopened.upgraded, undefined, "it is not a fresh start");
   assert.equal(reopened.answers.dob, "1975-01-01");
   assert.ok(!("reason" in reopened.answers), "the retired answer is gone");
-  assert.equal(firstOpen(reopened.answers), "areas", "only what is new is asked");
+  assert.equal(firstOpen(reopened.answers, livePlan), "weight_change", "only what is new is asked");
   assert.equal(readProgress({ ...saved, answers: { sex: "robot" } }, 3).upgraded, true, "an answer that is simply wrong still starts over");
 });
 

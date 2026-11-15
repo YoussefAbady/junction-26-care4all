@@ -98,7 +98,8 @@ describe("content in PostgreSQL", { skip: url ? false : "set CONTENT_TEST_DATABA
     assert.equal(first.headers.get("cache-control"), "public, max-age=300, stale-while-revalidate=86400");
     const body = await first.json();
     assert.equal(body.version, hash);
-    assert.deepEqual(body.content, seed.design.content);
+    expectContentMatchesSeed(body.content, seed.design.content);
+    assert.deepEqual(Object.keys(body.content).slice(-3), ["RISK", "MONITOR", "INTERVIEW"]);
     const again = await contentResponse(new Request(url, { headers: { "If-None-Match": '"' + hash + '"' } }), store);
     assert.equal(again.status, 304);
     assert.equal(await again.text(), "");

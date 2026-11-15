@@ -11,7 +11,7 @@ export type GeneralIntent = "symptoms" | "prevention" | "guides" | "appointment"
 type AdditionalFocus = "symptoms" | "riskFactors" | "overview";
 
 const tierOrder: Tier[] = ["finland", "europe", "international"];
-const tiers: Record<string, Tier> = {
+export const tiers: Record<string, Tier> = {
   "cancerregistry.fi": "finland", "syoparekisteri.fi": "finland", "www.terveyskirjasto.fi": "finland",
   "allaboutcancer.fi": "finland", "kaikkisyovasta.fi": "finland", "www.suomi.fi": "finland",
   // Finnish clinical guidance and the Cancer Society, named by the design's risk overview (design v2).

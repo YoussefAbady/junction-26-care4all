@@ -1,5 +1,7 @@
 import type { Column, Letter, Link, Stat, Video } from "./design";
 import { sectionKeys, type SeedInput } from "./types";
+import { sourceTierOf } from "./source-tier";
+import type { FallbackTurn, RiskFactorState } from "./v2-types";
 
 // The content as table rows, one array per table of prisma/schema.prisma. toRows turns the seed into rows, assemble.ts
 // turns rows back into the objects the API serves, and the database store reads and writes the same rows. Nothing here
@@ -9,6 +11,10 @@ export type MetaRow = { key: string; value: unknown };
 export type SourceRow = {
   id: string; listed: boolean; position: number; organisation: string; name: string; nameFi: string | null;
   url: string; published: string; retrieved: string; use: string; language: string;
+  /** finland, europe or international, by the host of the page; null when the host is not one AI answers may cite. */
+  tier: string | null;
+  /** True for the sources that a risk statement, a guideline list, a factor tip, the risk rubric or riskInFinland names. */
+  guideline: boolean;
 };
 export type StringRow = { scope: string; key: string; language: string; position: number; text: string };
 export type CountyRow = { id: string; position: number; name: string };
@@ -75,6 +81,25 @@ export type EvidenceRow = {
   id: string; language: string; residence: string; position: number; topic: string; heading: string | null; text: string;
   sourceIds: string[];
 };
+// Design v2 (docs/design-v2.md Appendix A). Each row type is one table of prisma/schema.prisma.
+export type RiskTypeRow = {
+  id: string; position: number; sex: string; nameEn: string; nameFi: string; notCoveredEn: string[]; notCoveredFi: string[];
+};
+export type RiskFactorRow = {
+  key: string; position: number; nameEn: string; nameFi: string; shortEn: string; shortFi: string; tipEn: string | null;
+  tipFi: string | null; tipSourceIds: string[]; states: RiskFactorState[];
+};
+export type RiskFactRow = {
+  riskType: string; factor: string; state: string; position: number; effect: string; textEn: string; textFi: string; sourceIds: string[];
+};
+export type GuidelineRow = { riskType: string; sourceIds: string[] };
+export type DomainRow = {
+  id: string; position: number; nameEn: string; nameFi: string; essential: boolean; appliesTo: string; minAge: number | null;
+  maxAge: number | null; ask: string; fallback: { en: FallbackTurn; fi: FallbackTurn };
+};
+export type MonitorFlagRow = {
+  id: string; position: number; kind: string; labelEn: string; labelFi: string; wordEn: string | null; wordFi: string | null;
+};
 
 export type ContentRows = {
   meta: MetaRow[]; sources: SourceRow[]; strings: StringRow[]; counties: CountyRow[];
@@ -84,10 +109,15 @@ export type ContentRows = {
   checks: CheckRow[]; scans: ScanRow[]; programmes: ProgrammeRow[]; stats: StatRow[];
   vaccines: VaccineRow[]; triageRules: TriageRuleRow[]; faqs: FaqRow[]; suggestions: SuggestionRow[];
   catalogCards: CatalogCardRow[]; catalogSections: CatalogSectionRow[]; evidence: EvidenceRow[];
+  riskTypes: RiskTypeRow[]; riskFactors: RiskFactorRow[]; riskFacts: RiskFactRow[]; guidelines: GuidelineRow[];
+  domains: DomainRow[]; monitorFlags: MonitorFlagRow[];
 };
 
-/** What assembleContent reads: the PWA's own content, without the backend's catalog and the chat evidence. */
-export type DesignRows = Omit<ContentRows, "catalogCards" | "catalogSections" | "evidence">;
+/** The tables of design v2 that no PWA-content, catalog or evidence reader needs: the read models of loadRisk, loadInterview and loadMonitor are built from them. */
+type V2Keys = "riskTypes" | "riskFactors" | "riskFacts" | "guidelines" | "domains" | "monitorFlags";
+export type V2Rows = Pick<ContentRows, V2Keys>;
+/** What assembleContent reads: the PWA's own content, without the backend's catalog, the chat evidence and the design v2 tables. */
+export type DesignRows = Omit<ContentRows, "catalogCards" | "catalogSections" | "evidence" | V2Keys>;
 /** What assembleCatalog reads. */
 export type CatalogRows = Pick<ContentRows, "meta" | "sources" | "strings" | "catalogCards" | "catalogSections">;
 /** What evidenceEntries reads. */
@@ -133,13 +163,22 @@ export function toRows(input: SeedInput, version: string): ContentRows {
     if (topic.check && c.STEP_HINTS[topic.id].length !== topic.check.steps.length) throw new Error("STEP_HINTS." + topic.id + " does not match the steps of its guide");
   }
 
-  const designSources: SourceRow[] = Object.entries(c.SOURCES).map(([id, source], position) => ({
+  // The sources the risk statements add to the PWA's list follow the design's own. Their retrieved date is the design's export
+  // date: the statements come from the design and were not read again from the pages (docs/design-v2.md Appendix A).
+  // tier comes from the host of the page and guideline from the risk seed: a source that a statement, a guideline list, a tip, the
+  // rubric or riskInFinland names (docs/design-v2.md A.8).
+  const named = new Set([
+    ...input.risk.facts.flatMap(fact => fact.sourceIds), ...input.risk.guidelines.flatMap(guideline => guideline.sourceIds),
+    ...input.risk.factors.flatMap(factor => factor.tipSourceIds), ...input.risk.rubric.sourceIds, ...input.risk.inFinland.sourceIds,
+  ]);
+  const designSources: SourceRow[] = [...Object.entries(c.SOURCES), ...Object.entries(input.risk.sources)].map(([id, source], position) => ({
     id, listed: true, position, organisation: source.org, name: source.name, nameFi: null, url: source.url, published: source.date,
-    retrieved: design.source.retrieved, use: source.use, language: pageLanguage(source.url),
+    retrieved: design.source.retrieved, use: source.use, language: pageLanguage(source.url), tier: sourceTierOf(source.url), guideline: named.has(id),
   }));
   const ownSources: SourceRow[] = [...catalog.sources, ...evidence.sources].map((source, index) => ({
     id: source.id, listed: false, position: designSources.length + index, organisation: source.organisation, name: source.title,
     nameFi: source.titleFi ?? null, url: source.url, published: "", retrieved: source.retrieved, use: source.use, language: source.language,
+    tier: sourceTierOf(source.url), guideline: named.has(source.id),
   }));
   const sources = [...designSources, ...ownSources];
   if (new Set(sources.map(source => source.id)).size !== sources.length) throw new Error("A source id is used twice");
@@ -149,11 +188,26 @@ export function toRows(input: SeedInput, version: string): ContentRows {
     ...Object.entries(c.I18N).flatMap(([language, table]) => Object.entries(table).map(([key, text]) => ({ scope: "i18n" as const, key, language, text }))),
     { scope: "catalog", key: "notice", language: "en", text: catalog.notice[0] },
     { scope: "catalog", key: "notice", language: "fi", text: catalog.notice[1] },
+    // Design v2: the screen copy that is content, a row per language like I18N.
+    ...[...input.risk.strings, ...input.interview.strings, ...input.monitor.strings].flatMap(row => [
+      { scope: row.scope, key: row.key, language: "en", text: row.text.en },
+      { scope: row.scope, key: row.key, language: "fi", text: row.text.fi },
+    ]),
   ];
   const suggestions = [
     ...Object.entries(c.SUGGESTIONS.topics).flatMap(([topic, questions]) => questions.map(question => ({ topic, question }))),
     ...c.SUGGESTIONS.general.map(question => ({ topic: "general", question })),
   ];
+  // A risk statement's position is its place among the statements of its cancer type, in the order of the seed.
+  const placed = new Map<string, number>();
+  const riskFacts: RiskFactRow[] = input.risk.facts.map(fact => {
+    const position = placed.get(fact.riskType) ?? 0;
+    placed.set(fact.riskType, position + 1);
+    return {
+      riskType: fact.riskType, factor: fact.factor, state: fact.state, position, effect: fact.effect, textEn: fact.text.en, textFi: fact.text.fi,
+      sourceIds: fact.sourceIds,
+    };
+  });
 
   return {
     meta: [
@@ -168,6 +222,12 @@ export function toRows(input: SeedInput, version: string): ContentRows {
       { key: "triageIntro", value: c.TRIAGE.watchIntro },
       { key: "triageSourceIds", value: c.TRIAGE.src },
       { key: "catalogVersion", value: catalog.version },
+      // Design v2 (docs/design-v2.md Appendix A gives the JSON of each).
+      { key: "interviewLimits", value: input.interview.limits },
+      { key: "riskRubric", value: input.risk.rubric },
+      { key: "riskInFinland", value: input.risk.inFinland },
+      { key: "monitorRules", value: input.monitor.rules },
+      { key: "finnishReview", value: { risk: input.risk.finnish, interview: input.interview.finnish, monitor: input.monitor.finnish } },
     ],
     sources,
     strings: strings.map((row, position) => ({ ...row, position })),
@@ -248,5 +308,28 @@ export function toRows(input: SeedInput, version: string): ContentRows {
       id: passage.id, language: passage.language, residence: passage.residence, position: passage.position, topic: passage.topic,
       heading: passage.heading ?? null, text: passage.text, sourceIds: passage.sourceIds,
     })),
+    riskTypes: input.risk.types.map((type, position) => ({
+      id: type.id, position, sex: type.sex, nameEn: type.name.en, nameFi: type.name.fi, notCoveredEn: type.notCovered.en, notCoveredFi: type.notCovered.fi,
+    })),
+    riskFactors: input.risk.factors.map((factor, position) => ({
+      key: factor.key, position, nameEn: factor.name.en, nameFi: factor.name.fi, shortEn: factor.short.en, shortFi: factor.short.fi,
+      tipEn: factor.tip?.en ?? null, tipFi: factor.tip?.fi ?? null, tipSourceIds: factor.tipSourceIds, states: factor.states,
+    })),
+    riskFacts,
+    guidelines: input.risk.guidelines.map(guideline => ({ riskType: guideline.riskType, sourceIds: guideline.sourceIds })),
+    domains: input.interview.domains.map((domain, position) => ({
+      id: domain.id, position, nameEn: domain.name.en, nameFi: domain.name.fi, essential: domain.essential, appliesTo: domain.appliesTo,
+      minAge: domain.minAge, maxAge: domain.maxAge, ask: domain.ask, fallback: domain.fallback,
+    })),
+    // The check-in flags, then the one row that holds the serious-now wording (none while the monitor seed is a skeleton).
+    monitorFlags: [
+      ...input.monitor.flags.map((flag, position) => ({
+        id: flag.id, position, kind: "flag", labelEn: flag.label.en, labelFi: flag.label.fi, wordEn: flag.word.en as string | null, wordFi: flag.word.fi as string | null,
+      })),
+      ...(input.monitor.serious.en ? [{
+        id: "serious", position: input.monitor.flags.length, kind: "serious", labelEn: input.monitor.serious.en, labelFi: input.monitor.serious.fi,
+        wordEn: null as string | null, wordFi: null as string | null,
+      }] : []),
+    ],
   };
 }

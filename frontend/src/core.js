@@ -204,6 +204,11 @@ import { A as C4A } from "./app.js";
     doctor: '<path d="M7 4v6a5 5 0 0 0 10 0V4"/><path d="M12 15v2a3 3 0 0 0 6 0v-1"/><circle cx="18" cy="14" r="1.600"/>',
     eyeoff: '<path d="M3 3l18 18M9.500 5.800A9.500 9.500 0 0 1 12 5.500c6 0 9.500 6.500 9.500 6.500a15 15 0 0 1-3 3.700M6.500 7.700A15 15 0 0 0 2.500 12S6 18.500 12 18.500a9 9 0 0 0 3-.5"/>',
     phone: '<rect x="7" y="3.5" width="10" height="17" rx="2.5"/><path d="M11 17.5h2"/>',
+    /* Install: a phone with an arrow into it, the iPhone share button, its "Add to Home Screen" square and the Android menu dots. */
+    'app-get': '<rect x="6.500" y="3" width="11" height="18" rx="2.600"/><path d="M12 7.500v6.200M9.400 11.300l2.600 2.600 2.600-2.600"/><path d="M10.800 17.600h2.400"/>',
+    'share-ios': '<path d="M12 14.500V4M8.600 7.400 12 4l3.400 3.400"/><path d="M8 10H6.800A1.800 1.800 0 0 0 5 11.800v6.400A1.800 1.800 0 0 0 6.800 20h10.400a1.800 1.800 0 0 0 1.800-1.800v-6.400A1.800 1.800 0 0 0 17.200 10H16"/>',
+    'add-sq': '<rect x="4.500" y="4.500" width="15" height="15" rx="3.400"/><path d="M12 8.500v7M8.500 12h7"/>',
+    'dots-v': '<circle cx="12" cy="5.500" r="1.400" fill="currentColor"/><circle cx="12" cy="12" r="1.400" fill="currentColor"/><circle cx="12" cy="18.500" r="1.400" fill="currentColor"/>',
     send: '<path d="M12 19V6M6.5 11.5 12 6l5.5 5.5"/>',
     pencil: '<path d="M5 19l1-4L16.5 4.5a2 2 0 0 1 3 3L9 18z"/>',
     note: '<path d="M6 4h12v16H6z"/><path d="M9 9h6M9 13h6M9 17h3"/>',

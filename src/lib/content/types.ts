@@ -1,5 +1,7 @@
+import type { InterviewSeed, MonitorSeed, RiskSeed } from "../../../prisma/seed-data/v2-types";
 import type { Copy, Language } from "../survey";
 import type { DesignContent, DesignSeed } from "./design";
+import type { ContentSections, InterviewContent, MonitorContent, PassageKind, RiskContent } from "./v2-types";
 
 // What the content layer hands to the rest of the backend. The database and the in-memory store (built from the seed,
 // for tests) both implement ContentStore, so callers never know which one they hold.
@@ -31,6 +33,11 @@ export type PassageQuery = {
   /** A topic id of the PWA ("bowel") or of the chat ("colorectal"). Passages of this topic come first. */
   topic?: string;
   limit: number;
+  /**
+   * Only passages of these kinds. Without it a query returns what it always did: every kind except `risk` and `risk-tip`,
+   * so chat answers never quote the risk statements. The risk job asks for them (docs/design-v2.md Appendix A).
+   */
+  kinds?: readonly PassageKind[];
 };
 export type PassageSource = {
   id: string; name: string; organisation: string; url: string; published: string; retrieved: string; use: string; language: string;
@@ -45,17 +52,24 @@ export type ContentVersion = {
   /** The day the content was read from its sources. */
   retrieved: string;
 };
-export type LoadedContent = ContentVersion & { content: DesignContent };
+/** The PWA's own content plus the three sections design v2 adds (RISK, MONITOR, INTERVIEW): what GET /api/content serves. */
+export type LoadedContent = ContentVersion & { content: DesignContent & ContentSections };
 
 export type ContentStore = {
   /** Cheap: no content is assembled. */
   contentVersion(): Promise<ContentVersion>;
-  /** The PWA's content, with the same keys and values as the seed's `content`. */
+  /** The PWA's content, with the same keys and values as the seed's `content`, and RISK, MONITOR and INTERVIEW after them. */
   loadContent(): Promise<LoadedContent>;
   loadCatalog(): Promise<Catalog>;
   loadEvidence(): Promise<EvidenceEntry[]>;
   /** Passages ranked for the question: those of the topic first, then the rest. Never an account's data. */
   retrievePassages(query: PassageQuery): Promise<RetrievedPassage[]>;
+  /** Design v2: everything the risk job needs. Cached by content version like the rest. */
+  loadRisk(): Promise<RiskContent>;
+  /** Design v2: the coverage domains, their fallback questions and the limits of the AI interview. */
+  loadInterview(): Promise<InterviewContent>;
+  /** Design v2: the rules, the flags and the wording of close monitoring. */
+  loadMonitor(): Promise<MonitorContent>;
 };
 
 /** A source the backend cites itself. The title is English unless titleFi is given. */
@@ -81,5 +95,8 @@ export type EvidenceSeed = {
     heading?: string; text: string; sourceIds: string[];
   }[];
 };
-/** Everything the seed loads: the PWA's content, the backend's catalog and the chat evidence. */
-export type SeedInput = { design: DesignSeed; catalog: CatalogSeed; evidence: EvidenceSeed };
+/**
+ * Everything the seed loads: the PWA's content, the backend's catalog and the chat evidence, and the three modules of design
+ * v2 (prisma/seed-data/risk-content.ts, interview-content.ts and monitor-content.ts).
+ */
+export type SeedInput = { design: DesignSeed; catalog: CatalogSeed; evidence: EvidenceSeed; risk: RiskSeed; interview: InterviewSeed; monitor: MonitorSeed };

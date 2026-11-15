@@ -1,0 +1,77 @@
+{
+  "RISK": {
+    "ORDER": ["lung", "bowel", "skin"],
+    "TIERS": {
+      "high": { "en": "High", "fi": "Korkea" },
+      "raised": { "en": "Raised", "fi": "Kohonnut" },
+      "average": { "en": "Average", "fi": "Keskimääräinen" },
+      "unknown": { "en": "Need answers", "fi": "Tarvitsee vastauksia" }
+    },
+    "TYPES": {
+      "lung": { "sex": "any", "name": { "en": "Lung cancer", "fi": "Keuhkosyöpä" }, "notCovered": { "en": ["Lung cancer in a relative"], "fi": ["Keuhkosyöpä sukulaisella"] } },
+      "bowel": { "sex": "any", "name": { "en": "Bowel cancer", "fi": "Suolistosyöpä" }, "notCovered": { "en": ["Bowel cancer in a relative"], "fi": ["Suolistosyöpä sukulaisella"] } },
+      "skin": { "sex": "any", "name": { "en": "Skin cancer", "fi": "Ihosyöpä" }, "notCovered": { "en": ["Moles you have not had checked"], "fi": ["Luomet, joita ei ole tarkastettu"] } }
+    },
+    "FACTORS": {
+      "smoke": { "name": { "en": "Smoking", "fi": "Tupakointi" }, "short": { "en": "smoking", "fi": "tupakointi" }, "tip": { "en": "Fictional development text.", "fi": "Kuvitteellinen kehitysteksti." } },
+      "sun": { "name": { "en": "Sun", "fi": "Aurinko" }, "short": { "en": "sun", "fi": "aurinko" }, "tip": { "en": "Fictional development text.", "fi": "Kuvitteellinen kehitysteksti." } }
+    },
+    "GUIDELINES": [],
+    "RUBRIC": { "tiers": {}, "overall": { "en": "Fictional.", "fi": "Kuvitteellinen." }, "comparison": { "en": "Fictional.", "fi": "Kuvitteellinen." }, "sources": [] },
+    "IN_FINLAND": { "text": { "en": "Fictional development text.", "fi": "Kuvitteellinen kehitysteksti." }, "sources": [] },
+    "COPY": {
+      "lede": { "en": "Development stand-in. Run the backend (CONTENT_FROM=backend) to see the real texts.", "fi": "Kehityksen paikkamerkki. Käynnistä palvelin (CONTENT_FROM=backend) nähdäksesi oikeat tekstit." },
+      "how_title": { "en": "How this is worked out", "fi": "Näin tämä lasketaan" },
+      "how_1": { "en": "Fictional development text.", "fi": "Kuvitteellinen kehitysteksti." },
+      "how_2": { "en": "Fictional development text.", "fi": "Kuvitteellinen kehitysteksti." }
+    }
+  },
+  "MONITOR": {
+    "STEPS": [3, 7, 14, 21],
+    "TRENDS": [
+      { "id": "gone", "label": { "en": "It has gone", "fi": "Se on mennyt ohi" } },
+      { "id": "better", "label": { "en": "Better", "fi": "Parempi" } },
+      { "id": "same", "label": { "en": "About the same", "fi": "Suunnilleen sama" } },
+      { "id": "worse", "label": { "en": "Worse", "fi": "Huonompi" } }
+    ],
+    "TREND_WORD": { "gone": { "en": "gone", "fi": "mennyt" }, "better": { "en": "better", "fi": "parempi" }, "same": { "en": "about the same", "fi": "suunnilleen sama" }, "worse": { "en": "worse", "fi": "huonompi" } },
+    "DOCTOR_TREND_WORD": { "gone": { "en": "it has gone", "fi": "se on mennyt ohi" }, "better": { "en": "better", "fi": "parempi" }, "same": { "en": "about the same", "fi": "suunnilleen sama" }, "worse": { "en": "worse", "fi": "huonompi" } },
+    "FLAGS": [
+      { "id": "blood", "label": { "en": "Blood where there was none before", "fi": "Verta, jota ei ollut ennen" } },
+      { "id": "other", "label": { "en": "Something else that worries me", "fi": "Jokin muu, joka huolestuttaa" } }
+    ],
+    "FLAG_WORD": { "blood": { "en": "blood", "fi": "verta" }, "other": { "en": "something else", "fi": "jotain muuta" } },
+    "SERIOUS": { "en": "Something serious right now: chest pain, heavy bleeding, or I cannot breathe", "fi": "Jotain vakavaa juuri nyt: rintakipua, runsasta verenvuotoa tai en saa henkeä" },
+    "OUT": { "emergency": { "en": "Go to emergency (call 112)", "fi": "Hakeudu päivystykseen (soita 112)" }, "doctor": { "en": "See a doctor about this", "fi": "Hakeudu lääkäriin" }, "watch": { "en": "Keep watching closely", "fi": "Seuraa tarkasti" } },
+    "SEX": { "female": { "en": "Female", "fi": "Nainen" }, "male": { "en": "Male", "fi": "Mies" }, "intersex": { "en": "Intersex", "fi": "Intersukupuolinen" }, "none": { "en": "Not specified", "fi": "Ei määritelty" } },
+    "URGENCY": {
+      "weeks": { "en": "Book an appointment in the next week or two", "fi": "Varaa aika viikon tai kahden sisällä" },
+      "days": { "en": "Within the next few days", "fi": "Lähipäivien aikana" },
+      "today": { "en": "Contact your health centre today. In the evening or at weekends, call 116 117.", "fi": "Ota yhteys terveyskeskukseen tänään. Illalla ja viikonloppuna soita 116 117." }
+    },
+    "COPY": {
+      "emergency_title": { "en": "Get help now", "fi": "Hae apua heti" },
+      "emergency_when": { "en": "Call 112 or go to emergency.", "fi": "Soita 112 tai mene päivystykseen." },
+      "doctor_title": { "en": "Time to see a doctor", "fi": "On aika käydä lääkärissä" },
+      "doctor_body": { "en": "Your updates are in your note, so you can show how it changed.", "fi": "Päivityksesi ovat muistiinpanossasi, joten voit näyttää, miten se muuttui." },
+      "watch_title": { "en": "Keep watching closely", "fi": "Seuraa tarkasti" },
+      "watch_body": { "en": "I have set a reminder. If it gets worse or something new comes up before then, log an update straight away.", "fi": "Olen asettanut muistutuksen. Jos oire pahenee tai ilmaantuu jotain uutta ennen sitä, kirjaa päivitys heti." },
+      "gone_title": { "en": "Good. I have closed the watch.", "fi": "Hyvä. Olen sulkenut seurannan." },
+      "gone_body": { "en": "Your note is kept as gone.", "fi": "Muistiinpanosi säilyy mennyttä ohi -tilassa." },
+      "suggestion": { "en": "This is a suggestion, not a diagnosis.", "fi": "Tämä on ehdotus, ei diagnoosi." },
+      "privacy": { "en": "Your updates are saved on your account. Nothing is sent to a doctor or to an AI model.", "fi": "Päivityksesi tallennetaan tilillesi. Mitään ei lähetetä lääkärille eikä tekoälymallille." },
+      "reminders": { "en": "I will remind you on each of these days to log how it is.", "fi": "Muistutan sinua jokaisena näistä päivistä kirjaamaan, miten voit." },
+      "due_why": { "en": "You have been keeping an eye on this since {start} (day {day}). Tell me how it is now.", "fi": "Seuraat tätä alkaen {start} (päivä {day}). Kerro, miten se on nyt." },
+      "wait_why": { "en": "Next update: {next}. If it gets worse, log an update now.", "fi": "Seuraava päivitys: {next}. Jos oire pahenee, kirjaa päivitys heti." },
+      "watching": { "en": "I will watch it with you. Next update: {next}. I will remind you.", "fi": "Seuraan sitä kanssasi. Seuraava päivitys: {next}. Muistutan sinua." },
+      "keep_eye": { "en": "Keep an eye on it. If it gets worse, tell me again.", "fi": "Pidä sitä silmällä. Jos se pahenee, kerro minulle uudelleen." }
+    }
+  },
+  "INTERVIEW": {
+    "MIN": 10,
+    "MAX": 28,
+    "COPY": {
+      "consent": { "en": "To ask each next question, an AI model (Google Gemini) reads your basic answers and the questions and answers so far. It is sent your age, sex, weight group, your answers, and whether you live in Finland. It is never sent your name, exact date of birth, place of residence or any ID. The questions and your answers are saved on your account and are deleted with it.", "fi": "Seuraavien kysymysten esittämiseksi tekoälymalli (Google Gemini) lukee perusvastauksesi sekä tähän asti esitetyt kysymykset ja vastaukset. Sille lähetetään ikäsi, sukupuolesi, painoluokkasi, vastauksesi ja tieto siitä, asutko Suomessa. Sille ei koskaan lähetetä nimeäsi, tarkkaa syntymäaikaasi, asuinpaikkaasi eikä tunnisteita. Kysymykset ja vastauksesi tallennetaan tilillesi ja poistetaan sen mukana." }
+    }
+  }
+}

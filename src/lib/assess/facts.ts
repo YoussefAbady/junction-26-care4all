@@ -1,7 +1,7 @@
 import { clock, isMarker, val } from "../intake/access";
-import { copyOf, flow } from "../intake/engine";
+import { copyOf, flow, fullPlan } from "../intake/engine";
 import { derive, describe, type Derived } from "../intake/report";
-import type { Answers, Field, Question } from "../intake/types";
+import type { Answers, Field, Plan, Question } from "../intake/types";
 import { tr } from "../survey";
 
 // What a model may be told about a person when it asks a follow-up question or writes a risk-factor review. The person
@@ -26,6 +26,8 @@ export type Facts = {
   /** Whether the person lives in Finland. Never where. */
   inFinland?: boolean;
   bmiBand?: Derived["bmiBand"];
+  /** True when BMI is 40 or more (the risk statements tell 30 to 39.9 from 40 and over). Only the fact, never the height or the weight. */
+  severeObesity?: true;
   packYears?: number;
   answers: Fact[];
 };
@@ -40,17 +42,18 @@ export const mayBeSent = (question: Question) =>
 const wording = (question: Question) => tr("en", copyOf(question.label ?? question.title, {})).replace(/,?\s*\{name\}/g, "");
 
 /** The facts a model may be told, from the answers a person saved. Hidden branches and "not sure" answers are left out. */
-export function factsOf(answers: Answers, now = clock.now()): Facts {
+export function factsOf(answers: Answers, now = clock.now(), entries: readonly Plan[] = fullPlan): Facts {
   const derived = derive(answers, now);
   const residence = val(answers, "residence");
   const facts: Facts = {
     ...(derived.age !== undefined ? { age: derived.age } : {}),
     ...(typeof residence === "string" ? { inFinland: residence !== "abroad" } : {}),
     ...(derived.bmiBand ? { bmiBand: derived.bmiBand } : {}),
+    ...(derived.severeObesity ? { severeObesity: true as const } : {}),
     ...(derived.packYears !== undefined ? { packYears: derived.packYears } : {}),
     answers: [],
   };
-  for (const question of flow(answers)) {
+  for (const question of flow(answers, entries)) {
     const answer = answers[question.id];
     if (answer === undefined || isMarker(answer) || replaced.has(question.id) || unrelated.has(question.id) || !mayBeSent(question)) continue;
     facts.answers.push({ id: question.id, question: wording(question), answer: describe(question, answer, "en") });

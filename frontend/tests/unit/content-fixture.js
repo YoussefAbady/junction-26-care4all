@@ -25,6 +25,18 @@ export const fixture = {
   STATS: { bowel: { site: "Colon and rectum", risk: 3.4, both: 4349 } },
   STATS_SRC: ["example"],
   STATS_NOTE: "Fictional numbers for tests.",
+  // Small fictional sections, only so the loader's checks pass. The real ones come from the database.
+  RISK: {
+    ORDER: ["skin"], TIERS: { high: { en: "High" }, raised: { en: "Raised" }, average: { en: "Average" }, unknown: { en: "Need answers" } },
+    TYPES: { skin: { sex: "any", name: { en: "Skin cancer" }, notCovered: { en: [] } } }, FACTORS: { sun: { name: { en: "Sun" }, short: { en: "sun" }, tip: { en: "Fictional." } } },
+    GUIDELINES: [], RUBRIC: { tiers: {}, overall: { en: "Fictional." }, comparison: { en: "Fictional." }, sources: [] }, IN_FINLAND: { text: { en: "Fictional." }, sources: [] }, COPY: { lede: { en: "Fictional." } },
+  },
+  MONITOR: {
+    STEPS: [3, 7], TRENDS: [{ id: "better", label: { en: "Better" } }], FLAGS: [{ id: "other", label: { en: "Something else" } }], TREND_WORD: { better: { en: "better" } },
+    DOCTOR_TREND_WORD: { better: { en: "better" } }, FLAG_WORD: { other: { en: "something else" } }, SERIOUS: { en: "Something serious right now" },
+    OUT: { watch: { en: "Keep watching closely" } }, SEX: { none: { en: "Not specified" } }, URGENCY: { weeks: { en: "In a week or two" } }, COPY: {},
+  },
+  INTERVIEW: { MIN: 10, MAX: 28, COPY: {} },
 };
 
 /** A whole GET /api/content body. Pass `content` to replace parts of the fixture. */

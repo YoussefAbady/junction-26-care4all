@@ -78,11 +78,6 @@ export const api = {
     remove: password => request("my-data", { method: "DELETE", body: { confirm: true, password } }),
   },
 
-  /** The earlier AI review of the saved intake answers. Superseded by the interview and the risk assessment below; the integrate package removes it. */
-  assess: {
-    send: body => request("assess", { method: "POST", body: { consent: true, ...body } }),
-  },
-
   /**
    * The AI interview: after the basic questions the model asks one question at a time, each based on all earlier answers
    * (docs/design-v2.md section 5). The server keeps the whole transcript. The person has agreed on screen before any call.

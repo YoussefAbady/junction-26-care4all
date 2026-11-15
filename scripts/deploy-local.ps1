@@ -59,6 +59,8 @@ $payload = $served.Content | ConvertFrom-Json
 $topics = @($payload.content.TOPIC_ORDER).Count
 if ($payload.version -ne $direct.content -or $topics -lt 1) { throw "$origin/api/content did not return the seeded content (version '$($payload.version)', $topics topics)." }
 Check "the database serves $topics topics, $(@($payload.content.ARTICLES.PSObject.Properties).Count) articles and $(@($payload.content.SOURCES.PSObject.Properties).Count) sources through $origin/api/content (version $($payload.version.Substring(0, [Math]::Min(12, $payload.version.Length))))"
+foreach ($key in "RISK", "MONITOR", "INTERVIEW") { if (-not $payload.content.$key) { throw "$origin/api/content has no $key section, so the AI interview, risk overview or monitoring content was not seeded (check the migrate service logs)." } }
+Check "the database serves the risk ($(@($payload.content.RISK.TYPES.PSObject.Properties).Count) cancer types), monitoring and interview content"
 $etag = $served.Headers["ETag"]
 if ($etag -and (Status { Invoke-WebRequest "$origin/api/content" -Headers @{ "If-None-Match" = $etag } -UseBasicParsing }) -ne 304) { throw "$origin/api/content ignored If-None-Match." }
 Check "the content is cacheable: an unchanged copy answers 304"
@@ -71,6 +73,11 @@ if ($ai.provider -eq "catalog") {
 } else {
   Write-Host "  warn CHAT_PROVIDER is $($ai.provider) but it is not fully configured (key or model missing), so answers fall back to the reviewed passages" -ForegroundColor Yellow
 }
+
+foreach ($path in "/api/interview", "/api/risk", "/api/monitors") {
+  if ((Status { Invoke-WebRequest "$origin$path" -UseBasicParsing }) -ne 401) { throw "$path did not answer 401 to a signed-out request." }
+}
+Check "the interview, risk and monitoring endpoints are there and refuse a signed-out request"
 
 $page = Invoke-WebRequest "$origin/" -UseBasicParsing
 if ($page.Content -notmatch "care4all" -or -not $page.Headers["Content-Security-Policy"]) { throw "$origin did not serve the care4all app with its security headers." }

@@ -16,7 +16,7 @@ import { A as C4A } from "../app.js";
       h += '<div class="empty"><span class="ic o" aria-hidden="true">' + ic('info', 28) + '</span><h2 class="h3">' + esc(tr('Your next step is not available right now', 'Seuraava askeleesi ei ole nyt saatavilla')) + '</h2>' +
         '<p class="body">' + esc(tr('Check your connection and try again.', 'Tarkista yhteytesi ja yritä uudelleen.')) + '</p><button class="btn primary" type="button" data-action="next-retry">' + esc(tr('Try again', 'Yritä uudelleen')) + '</button></div>';
     } else {
-      h += H.nextCard(nx);
+      h += H.monCards() + H.nextCard(nx);
       if (nx.suggestedTopics && nx.suggestedTopics.length) {
         h += '<section class="sec" aria-labelledby="more-h">' + secH(tr('More ways to continue', 'Lisää tapoja jatkaa'), '', 'more-h') + H.suggestChips(nx.suggestedTopics) + '</section>';
       }

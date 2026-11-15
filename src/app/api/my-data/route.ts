@@ -16,9 +16,18 @@ export const GET = privateRoute(async (_request, owner) => {
       chatSymptomDraft: { select: { data: true } },
       survey: { select: { progress: true, revision: true, legacyProgress: true } },
       profile: { select: { profile: true, preferences: true } },
-      reminders: { select: { id: true, kind: true, topic: true, dueAt: true, done: true, createdAt: true } },
+      reminders: { select: { id: true, kind: true, topic: true, dueAt: true, done: true, createdAt: true, monitorId: true } },
       observations: { select: { id: true, kind: true, label: true, notes: true, details: true, observedAt: true, createdAt: true } },
       reports: { select: { id: true, topic: true, message: true, createdAt: true } },
+      interview: { select: {
+        language: true, status: true, startedAt: true, completedAt: true,
+        turns: { orderBy: { position: "asc" }, select: { position: true, domain: true, kind: true, title: true, help: true, options: true, range: true, source: true, answer: true, answerLabel: true, askedAt: true, answeredAt: true } },
+      } },
+      riskAssessment: { select: { status: true, language: true, contentVersion: true, result: true, failure: true, createdAt: true, completedAt: true } },
+      monitors: { select: {
+        id: true, observationId: true, status: true, startedAt: true, dueAt: true, level0: true, trend0: true,
+        checkins: { orderBy: { ts: "asc" }, select: { ts: true, trend: true, level: true, flags: true, serious: true, result: true } },
+      } },
     },
   });
   if (!data) return privateJson({ error: "expired" }, 401);

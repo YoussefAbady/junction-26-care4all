@@ -10,6 +10,8 @@ import type { Answer, Answers, Entry, Field, Level, Marker, ModuleId, Question }
 export type Derived = {
   age?: number; heightCm?: number; weightKg?: number; bmi?: number; bmiBand?: "under" | "healthy" | "over" | "obese";
   packYears?: number; auditC?: number; phq2?: number; gad2?: number; activityDays?: number; sleepHours?: number;
+  /** True when BMI is 40 or more. Only ever set when true, and bmiBand stays "obese" for it. */
+  severeObesity?: true;
 };
 
 const round = (value: number, places = 1) => Math.round(value * 10 ** places) / 10 ** places;
@@ -30,6 +32,7 @@ export function derive(answers: Answers, now = clock.now()): Derived {
   if (typeof height === "number" && typeof weight === "number") {
     out.bmi = round(weight / (height / 100) ** 2);
     out.bmiBand = out.bmi < 18.5 ? "under" : out.bmi < 25 ? "healthy" : out.bmi < 30 ? "over" : "obese";
+    if (out.bmi >= 40) out.severeObesity = true;
   }
   const perDay = field(answers, "smoke_amount", "per_day");
   const years = field(answers, "smoke_amount", "years");

@@ -2,7 +2,7 @@ import { tr, type Copy, type Language } from "../survey";
 import { ageOn, clock, isMarker, parseDate, val } from "./access";
 import { bodyIds } from "./body";
 import { modules, plan } from "./content";
-import type { Answer, Answers, Field, Generator, ModuleId, Opt, Question } from "./types";
+import type { Answer, Answers, Field, Generator, ModuleId, Opt, Plan, Question } from "./types";
 
 type Dynamic<T> = T | ((answers: Answers) => T);
 
@@ -32,6 +32,19 @@ export const registry: ReadonlyMap<string, Question> = (() => {
   return map;
 })();
 
+/* --------------------------------------------------------------------- plans */
+
+/** Every question the intake has ever had. Saved answers are checked against it, so none of them stops being valid. */
+export const fullPlan: readonly Plan[] = plan;
+
+/**
+ * What a person is asked now: only the basics (chapter "you", docs/design-v2.md section 5.1). The other chapters were replaced
+ * by the AI interview, but they stay in the registry and in `fullPlan`, so every answer saved earlier still loads. Pass
+ * `livePlan` to the functions below to ask only the basics. Without a plan they use `fullPlan`, as they always did.
+ */
+const basicIds = new Set(fullPlan.filter(entry => !("gen" in entry) && entry.module === "you").map(entry => (entry as Question).id));
+export const livePlan: readonly Plan[] = fullPlan.filter(entry => "gen" in entry ? basicIds.has(entry.source) : entry.module === "you");
+
 /* ---------------------------------------------------------------------- flow */
 
 /**
@@ -39,7 +52,7 @@ export const registry: ReadonlyMap<string, Question> = (() => {
  * Conditions only ever see answers to questions that are themselves shown, so changing an
  * earlier answer can never leave a hidden answer steering the rest of the interview.
  */
-export function flow(answers: Answers): Question[] {
+export function flow(answers: Answers, entries: readonly Plan[] = fullPlan): Question[] {
   const live: Answers = {};
   const out: Question[] = [];
   const push = (question: Question) => {
@@ -47,7 +60,7 @@ export function flow(answers: Answers): Question[] {
     const answer = answers[question.id];
     if (answer !== undefined) live[question.id] = answer;
   };
-  for (const entry of plan) {
+  for (const entry of entries) {
     if ("gen" in entry) {
       const picked = live[entry.source];
       const source = registry.get(entry.source);
@@ -61,41 +74,43 @@ export function flow(answers: Answers): Question[] {
   return out;
 }
 
-export const missing = (answers: Answers) => flow(answers).filter(question => answers[question.id] === undefined);
-export const isComplete = (answers: Answers) => missing(answers).length === 0;
-export const firstOpen = (answers: Answers) => missing(answers)[0]?.id ?? null;
+export const missing = (answers: Answers, entries: readonly Plan[] = fullPlan) => flow(answers, entries).filter(question => answers[question.id] === undefined);
+export const isComplete = (answers: Answers, entries: readonly Plan[] = fullPlan) => missing(answers, entries).length === 0;
+export const firstOpen = (answers: Answers, entries: readonly Plan[] = fullPlan) => missing(answers, entries)[0]?.id ?? null;
+/** True when every question of the live flow, the basics, is answered or marked ("not sure", "prefer not to say"). */
+export const basicsComplete = (answers: Answers) => isComplete(answers, livePlan);
 
 /** Keeps only answers to questions that are still part of the interview. */
-export function prune(answers: Answers): Answers {
+export function prune(answers: Answers, entries: readonly Plan[] = fullPlan): Answers {
   const out: Answers = {};
-  for (const question of flow(answers)) if (answers[question.id] !== undefined) out[question.id] = answers[question.id];
+  for (const question of flow(answers, entries)) if (answers[question.id] !== undefined) out[question.id] = answers[question.id];
   return out;
 }
 
 /** The id to show after `id`, given the answers so far. "review" when nothing is left. */
-export function after(answers: Answers, id: string): string {
-  const questions = flow(answers);
+export function after(answers: Answers, id: string, entries: readonly Plan[] = fullPlan): string {
+  const questions = flow(answers, entries);
   const index = questions.findIndex(question => question.id === id);
-  if (index < 0) return firstOpen(answers) ?? "review";
+  if (index < 0) return firstOpen(answers, entries) ?? "review";
   return questions[index + 1]?.id ?? "review";
 }
-export function before(answers: Answers, id: string): string | null {
-  const questions = flow(answers);
+export function before(answers: Answers, id: string, entries: readonly Plan[] = fullPlan): string | null {
+  const questions = flow(answers, entries);
   const index = id === "review" ? questions.length : questions.findIndex(question => question.id === id);
   return index > 0 ? questions[index - 1].id : null;
 }
 
 /** Roughly how many minutes remain, from `id` onwards. */
 const seconds: Record<Question["type"], number> = { choice: 8, multi: 14, number: 10, year: 8, date: 15, scale: 8, text: 25, body: 20, form: 25, list: 45 };
-export function minutesLeft(answers: Answers, id: string) {
-  const questions = flow(answers);
+export function minutesLeft(answers: Answers, id: string, entries: readonly Plan[] = fullPlan) {
+  const questions = flow(answers, entries);
   const start = Math.max(0, questions.findIndex(question => question.id === id));
   const total = questions.slice(start).reduce((sum, question) => sum + seconds[question.type], 0);
   return Math.max(1, Math.round(total / 60));
 }
 
-export function chapters(answers: Answers) {
-  const questions = flow(answers);
+export function chapters(answers: Answers, entries: readonly Plan[] = fullPlan) {
+  const questions = flow(answers, entries);
   return modules.map(module => {
     const own = questions.filter(question => question.module === module.id);
     return { ...module, total: own.length, answered: own.filter(question => answers[question.id] !== undefined).length };

@@ -78,6 +78,8 @@ import { A as C4A } from "../app.js";
   /* The persistent next action. The id says where its button goes. */
   function goNextAction(na) {
     if (na.id === 'complete_intake') A.go('you');
+    else if (na.id === 'continue_interview') A.go('interview');
+    else if (na.id === 'run_risk' || na.id === 'see_risk') A.go('risk');
     else if (na.id === 'contact_professional') askOpen(appointmentQ());
     else if (topicRoute(na.topic)) {
       var id = A.designTopic(na.topic);
@@ -98,7 +100,8 @@ import { A as C4A } from "../app.js";
     try { return window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true; } catch (e) { return false; }
   };
   function topicName(id) { return id === 'general' ? 'General' : D.TOPICS[id].name; }
-  function tIc(id, size) { return '<span class="ic" data-t="' + id + '" aria-hidden="true">' + A.organ(id, size || 22) + '</span>'; }
+  /* The organ icon. A cancer type's icon carries its small risk badge (A.risk.dot) once the overview exists. plain leaves it off. */
+  function tIc(id, size, plain) { return '<span class="ic" data-t="' + id + '" aria-hidden="true">' + A.organ(id, size || 22) + (!plain && A.risk ? A.risk.dot(id) : '') + '</span>'; }
   function lead(name, cls) { return '<span class="ic ' + (cls || '') + '" aria-hidden="true">' + ic(name, 20) + '</span>'; }
   function dataAttrs(d) { var s = ''; for (var k in d) s += ' data-' + k + '="' + esc(d[k]) + '"'; return s; }
   function chev(name) { return ic(name || 'chev-r', 18).replace('<svg ', '<svg class="chev" '); }
@@ -116,13 +119,13 @@ import { A as C4A } from "../app.js";
   function group(cells, cls) { return '<div class="group' + (cls ? ' ' + cls : '') + '">' + cells.join('') + '</div>'; }
   function secH(title, right, id) { return '<div class="sec-h"><h2 class="h2"' + (id ? ' id="' + id + '"' : '') + '>' + esc(title) + '</h2>' + (right || '') + '</div>'; }
   function footer() {
-    return '<footer class="foot"><p class="small"><b>' + esc(D.COPY.disclaimer) + '</b></p><p class="small">Notice a change? Contact your health centre. ' + esc(D.COPY.help) + '</p></footer>';
+    return '<footer class="foot"><p class="small"><b>' + esc(D.COPY.disclaimer) + '</b></p><p class="small">Notice a change? Contact your health centre. ' + esc(D.COPY.help) + '</p>' + (A.privacy ? A.privacy.footer() : '') + '</footer>';
   }
   function articleCell(a) {
     var s0 = null;
     a.sections.forEach(function (s) { if (!s0 && s.src && s.src.length) s0 = s.src[0]; });
     var org = s0 && D.SOURCES[s0] ? D.SOURCES[s0].org : '', read = A.isRead(a.id);
-    return cell({ href: '#a-' + a.id, lead: tIc(a.topic), title: a.title, cls: read ? 'is-read' : '',
+    return cell({ href: '#a-' + a.id, lead: tIc(a.topic, 22, true), title: a.title, cls: read ? 'is-read' : '',
       rawDetail: (read ? '<span class="rd on">' + ic('check', 12) + ' Read</span> ' : '<span class="rd">New</span> ') + esc(a.minutes + ' min read' + (org ? ' · ' + org : '') + (A.offlineReady ? ' · Saved offline' : '')) });
   }
   /* Unread first, in the order given. Read ones follow. */
@@ -157,13 +160,13 @@ import { A as C4A } from "../app.js";
   /* A small topic card: organ icon, name, one line, and the services it offers. */
   function tile(id) {
     var T = D.TOPICS[id], st = A.stat(id);
-    return '<a class="tile" href="#t-' + id + '" data-t="' + id + '">' + tIc(id, 26) + (forYou(id) ? '<span class="sug">For you</span>' : '') +
+    return '<a class="tile" href="#t-' + id + '" data-t="' + id + '">' + tIc(id, 26) + (A.risk ? A.risk.sr(id) : '') + (forYou(id) ? '<span class="sug">For you</span>' : '') +
       '<span class="tl-b"><span class="t-name">' + esc(T.name) + '</span>' + (T.national ? '<span class="tl-tag">National screening</span>' : '') +
       (st ? '<span class="tl-stat">' + esc(st.text) + '</span>' : '') + '<span class="t-blurb">' + esc(T.blurb) + '</span></span>' + svcDots(id) + '</a>';
   }
   function rankRow(id, i) {
     var T = D.TOPICS[id], st = A.stat(id);
-    return '<a class="cr" href="#t-' + id + '" data-t="' + id + '"><span class="cr-n" aria-hidden="true">' + (i + 1) + '</span>' + tIc(id, 22) +
+    return '<a class="cr" href="#t-' + id + '" data-t="' + id + '"><span class="cr-n" aria-hidden="true">' + (i + 1) + '</span>' + tIc(id, 22) + (A.risk ? A.risk.sr(id) : '') +
       '<span class="cr-b"><span class="t-name">' + esc(T.name) + '</span>' + (T.national ? '<span class="tl-tag">Screening</span>' : '') + '</span>' +
       '<span class="cr-s"><b>' + esc(st.text) + '</b></span>' + chev() + '</a>';
   }
@@ -204,6 +207,17 @@ import { A as C4A } from "../app.js";
       return x[0] === 'a' ? '<a class="qa" href="' + x[1] + '">' + inner + '</a>' : '<button class="qa" type="button" data-action="' + x[1] + '">' + inner + '</button>';
     }).join('') + '</div></section>';
   }
+  /* Close monitoring (monitor.js): each symptom that is being watched, as a card. The buttons run the monitor's own verbs. */
+  function monCards() {
+    var items = A.monitorItems ? A.monitorItems() : [];
+    if (!items.length) return '';
+    return '<div class="fu-list">' + items.map(function (it) {
+      var btns = (it.actions || []).map(function (a, i) {
+        return '<button class="btn sm ' + (i === 0 ? (it.level === 'soon' ? 'primary' : 'tint') : 'ghost') + '" type="button" data-action="mon-do" data-do="' + esc(a.do) + '" data-arg="' + esc(a.arg || '') + '">' + esc(a.label) + '</button>';
+      }).join('');
+      return '<article class="fu lvl-' + esc(it.level) + '" data-fu="' + esc(it.id) + '"><p class="fu-tag"><span class="fu-dot" aria-hidden="true"></span>' + esc(it.tag) + '</p><h3 class="h3">' + esc(it.title) + '</h3><p class="body">' + esc(it.why) + '</p><div class="btn-row">' + btns + '</div></article>';
+    }).join('') + '</div>';
+  }
   /* Suggested topics from the backend: { id, label, request }. Where each goes is in goRequest. */
   function suggestChips(list) {
     list = (list || []).filter(function (x) { return x && x.id && x.label; });
@@ -230,6 +244,9 @@ import { A as C4A } from "../app.js";
   var NEXT_META = {
     complete_intake: { icon: 'chat', level: 'plan', tag: ['Getting to know you', 'Tutustuminen'], go: ['Continue', 'Jatka'] },
     contact_professional: { icon: 'heart', level: 'plan', tag: ['Your saved information', 'Tallentamasi tiedot'], go: ['Prepare my questions', 'Valmistele kysymykseni'] },
+    continue_interview: { icon: 'chat', level: 'plan', tag: ['AI questions', 'Tekoälykysymykset'], go: ['Continue with the AI questions', 'Jatka tekoälykysymyksiin'] },
+    run_risk: { icon: 'shield', level: 'plan', tag: ['Risk overview', 'Riskikatsaus'], go: ['Work out my risk overview', 'Laadi riskikatsaukseni'] },
+    see_risk: { icon: 'shield', level: 'info', tag: ['Risk overview', 'Riskikatsaus'], go: ['Open my risk overview', 'Avaa riskikatsaukseni'] },
     review_body_awareness: { icon: 'hand', level: 'info', tag: ['Body awareness', 'Omatarkkailu'], go: ['Read the guidance', 'Lue ohjeet'] },
     review_screening: { icon: 'shield', level: 'info', tag: ['Screening information', 'Seulontatieto'], go: ['See the programmes', 'Katso seulonnat'] }
   };
@@ -260,19 +277,16 @@ import { A as C4A } from "../app.js";
 
   /* ---------- Home ---------- */
   V.home = function () {
-    var p = S.profile, h = '', nx = S.next, due = S.reminders.filter(function (r) { return r.status === 'active' && r.due <= Date.now(); });
+    var p = S.profile, h = '', nx = S.next, due = S.reminders.filter(function (r) { return r.status === 'active' && r.due <= Date.now() && !r.monitor; });   // a watch has its own card
     if (due.length) {
       h += '<a class="banner alert" href="#reminders"><span class="ic k" aria-hidden="true">' + ic('bell', 20) + '</span><span class="cell-b"><b>Reminder due</b><span>You have ' + due.length + ' reminder' + (due.length > 1 ? 's' : '') + ' waiting.</span></span>' + chev() + '</a>';
     }
-    h += nextCard(nx) + youCard(nx) + homeCards() + suggested(nx);
-    if (!A.isStandalone() && !S.dismissInstall) {
-      h += '<section class="banner" aria-label="Install care4all"><span class="ic" aria-hidden="true">' + ic('phone', 20) + '</span><span class="cell-b"><b>Install care4all</b><span>Opens from your Home Screen. Your records need a connection.</span></span>' +
-        '<button class="btn sm dark" type="button" data-action="install">' + t('install') + '</button><button class="x" type="button" data-action="dismiss-install" aria-label="Dismiss install message">' + ic('close', 18) + '</button></section>';
-    }
+    h += monCards() + nextCard(nx) + youCard(nx) + homeCards() + suggested(nx);
     h += footer();
     return {
-      title: t('home'), large: t('hello') + (p.name ? ', ' + p.name : ''), html: h,
-      trailing: '<a class="nav-btn round" href="#me" aria-label="' + t('profile') + '"><span class="av">' + esc(p.name ? p.name.charAt(0).toUpperCase() : '·') + '</span></a>',
+      title: t('home'), large: t('hello') + (p.name ? ', ' + p.name : ''), html: (A.risk ? A.risk.userTag() : '') + h,
+      // The install button (install.js) sits above, next to the profile button, instead of a card at the end of the page.
+      trailing: (A.installIcon ? A.installIcon() : '') + '<a class="nav-btn round" href="#me" aria-label="' + t('profile') + '"><span class="av">' + esc(p.name ? p.name.charAt(0).toUpperCase() : '·') + '</span></a>',
       after: keepNextFresh
     };
   };
@@ -287,7 +301,7 @@ import { A as C4A } from "../app.js";
       var bo = A.burdenOrder(), who = bo.key === 'f' ? 'women' : bo.key === 'm' ? 'men' : 'everyone';
       var all = unreadFirst(READ_ORDER.map(function (id) { return D.ARTICLES[id]; }).filter(function (a) { return a && (a.topic === 'general' || A.isSuggested(a.topic)); })), unread = all.filter(function (a) { return !A.isRead(a.id); }), read = all.filter(function (a) { return A.isRead(a.id); });
       h += '<div class="sec"><p class="cap">Most common in Finland · ' + who + '</p><p class="small cr-note">Chance of a diagnosis before age 75. <button class="link" type="button" data-action="stat-info">What does it mean?</button></p>' +
-        '<div class="cr-list">' + bo.top.map(rankRow).join('') + '</div></div>';
+        '<div class="cr-list">' + bo.top.map(rankRow).join('') + '</div>' + (A.risk ? A.risk.legend() : '') + '</div>';
       h += '<div class="sec"><p class="cap">Other cancer types</p><p class="small">What it is, signs to watch for, self-checks and scans for each. Types with a national screening programme are marked.</p>' + tiles(bo.rest) + '</div>';
       if (unread.length) h += '<div class="sec"><p class="cap">Up next to read</p>' + group(unread.slice(0, 4).map(articleCell), 'i') + '</div>';
       else h += '<div class="sec"><p class="cap">Reading</p><p class="small">You have read all the short reads. Well done.</p></div>';
@@ -326,7 +340,7 @@ import { A as C4A } from "../app.js";
   }
   function libArticle(a) {
     var dt = A.designTopic(a.topic);
-    return '<article class="card lib-art" data-t="' + esc(dt) + '"><div class="scn-h"><div class="lib-t">' + tIc(dt, 22) + '<h3 class="h3">' + esc(a.title) + '</h3></div>' + statusPill(a.status) + '</div>' +
+    return '<article class="card lib-art" data-t="' + esc(dt) + '"><div class="scn-h"><div class="lib-t">' + tIc(dt, 22, true) + '<h3 class="h3">' + esc(a.title) + '</h3></div>' + statusPill(a.status) + '</div>' +
       itemsList(a.items) + srcLinks(a.sources) + '</article>';
   }
   function libOut() {
@@ -532,7 +546,7 @@ import { A as C4A } from "../app.js";
     h += '<header class="t-hero" data-t="' + id + '"><span class="glyph-bg" aria-hidden="true">' + A.organ(id, 230) + '</span>' +
       '<p class="cap">Cancer type</p>' +
       '<h1 class="large" id="h">' + esc(T.name + ' cancer') + '</h1><p class="lede">' + esc(T.lede) + '</p>' + chips(T.leadSrc) + '</header>';
-    h += statCard(id);
+    h += statCard(id) + (A.risk ? A.risk.strip(id) : '');
     if (T.national) {
       var N = D.NAT[id], inf = A.scanInfo(N.scan);
       h += '<section class="card up nat-link" data-t="' + id + '" aria-labelledby="nl-h"><p class="cap">National screening programme</p><h2 class="h3" id="nl-h">' + esc(A.sname(id)) + '</h2>' +
@@ -710,7 +724,7 @@ import { A as C4A } from "../app.js";
     unreadFirst: unreadFirst, uniq: uniq, chips: chips, tIc: tIc, lead: lead, dataAttrs: dataAttrs, chev: chev, cell: cell, group: group, secH: secH, footer: footer, articleCell: articleCell, tile: tile, askRow: askRow, reminderRow: reminderRow, dots: dots, langBtn: langBtn, checkCard: checkCard,
     // backend content: citations, language, next action and where it goes
     apiLang: apiLang, safeUrl: safeUrl, hostOf: hostOf, langName: langName, retrievedText: retrievedText, cites: cites, srcLinks: srcLinks, askOpen: askOpen, goRequest: goRequest,
-    nextCard: nextCard, suggestChips: suggestChips, firstSentences: firstSentences, loadingRow: loadingRow, failedBox: failedBox, statusPill: statusPill, itemsList: itemsList
+    nextCard: nextCard, monCards: monCards, suggestChips: suggestChips, firstSentences: firstSentences, loadingRow: loadingRow, failedBox: failedBox, statusPill: statusPill, itemsList: itemsList
   };
   V.notfound = function () {
     return { title: 'Not found', large: 'That page is not here', html: '<a class="btn primary" href="#home">Home</a>' };

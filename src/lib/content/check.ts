@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { metaValue } from "./assemble";
 import type { ContentRows } from "./rows";
+import { v2Problems } from "./check-v2";
 import { canonicalTopic } from "./topic";
 
 /**
@@ -75,6 +76,7 @@ export function referenceProblems(rows: ContentRows): string[] {
   const strings = z.array(z.string());
   cites("Statistics", metaValue(rows.meta, "statsSourceIds", strings));
   cites("Triage", metaValue(rows.meta, "triageSourceIds", strings));
+  problems.push(...v2Problems(rows));
   return problems;
 }
 

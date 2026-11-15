@@ -86,7 +86,8 @@ test("each source records the language of its page", () => {
   assert.equal(language("catalog-duodecim-breast"), "fi");
   assert.equal(language("catalog-fcr-breast-screening"), "en");
   assert.ok(rows.every(source => /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(source.retrieved)));
-  assert.equal(rows.filter(source => source.listed).length, Object.keys(seed.design.content.SOURCES).length);
+  // The design's own sources, then the 18 that its risk script adds.
+  assert.equal(rows.filter(source => source.listed).length, Object.keys(seed.design.content.SOURCES).length + Object.keys(seed.risk.sources).length);
 });
 
 test("the catalog is what it was when it lived in code", async () => {
@@ -108,7 +109,7 @@ test("/api/content has a validator, caches for five minutes and answers 304", as
   assert.deepEqual(Object.keys(body), ["version", "retrieved", "content"]);
   assert.equal(body.version, contentVersion(seed));
   assert.equal(body.retrieved, "2026-11-14");
-  assert.deepEqual(Object.keys(body.content), Object.keys(seed.design.content));
+  assert.deepEqual(Object.keys(body.content), [...Object.keys(seed.design.content), "RISK", "MONITOR", "INTERVIEW"]);
 
   for (const header of [etag, "W/" + etag, '"other", ' + etag, "*"]) {
     const same = await contentResponse(new Request(url, { headers: { "If-None-Match": header } }), store);
@@ -192,8 +193,10 @@ test("passages are quotable: unique, sourced and in plain text", () => {
   }
   const kinds = new Set(passages.map(passage => passage.kind));
   for (const kind of ["article", "topic", "symptom", "guide", "kit", "journey", "scan", "programme", "stat", "vaccine", "triage", "faq", "catalog", "evidence"]) assert.ok(kinds.has(kind), kind);
-  // Finnish passages come from the backend's own bilingual content only.
-  assert.ok(passages.filter(passage => passage.language === "fi").every(passage => passage.kind === "catalog" || passage.kind === "evidence"));
+  // Finnish passages come from the backend's own bilingual content only, and from the risk statements of design v2.
+  assert.ok(passages.filter(passage => passage.language === "fi").every(passage => ["catalog", "evidence", "risk", "risk-tip"].includes(passage.kind)));
+  assert.equal(passages.filter(passage => passage.kind === "risk").length, seed.risk.facts.length * 2);
+  assert.equal(passages.filter(passage => passage.kind === "risk-tip").length, 4);
   // A passage without a source cannot be quoted: the triage rule and the question that cite nothing are left out.
   assert.ok(!passages.some(passage => passage.id === "triage:4" || passage.id === "faq:9"));
   // Every catalog section and every chat passage is indexed in both languages.

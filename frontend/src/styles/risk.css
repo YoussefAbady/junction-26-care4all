@@ -1,0 +1,28 @@
+/* Styles for the risk overview and the AI interview. The tags, items and badges (.rtag, .rk-*) are in app.css; this adds only what is missing. */
+
+/* A source link with the retrieval date on a second line keeps a 44px target and wraps on a narrow phone. */
+.rk-src { height: auto; min-height: 44px; padding: 6px 12px; text-align: left; }
+.rk-sl { display: flex; flex-direction: column; gap: 1px; min-width: 0; line-height: 1.25; }
+.rk-sl small { font-size: .6875rem; font-weight: 500; color: var(--ink3); }
+
+/* Progress while the overview is worked out. */
+.rk-run { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+.rk-run > .h3, .rk-run > p { margin: 0; }
+.rk-prog { align-self: stretch; height: 6px; border-radius: 3px; background: var(--line2); overflow: hidden; }
+.rk-prog i { display: block; height: 100%; background: var(--ink); transition: width .4s; }
+
+/* The out-of-date and language notes above a finished overview. */
+.rk-banner { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; padding: 12px 14px; border-radius: 16px; background: var(--accent-soft); color: var(--ink); font-size: .9375rem; line-height: 1.4; }
+.rk-banner .btn-row { margin: 0; }
+.rk-banner .btn { min-height: 44px; }
+.rk-gate .btn, .rk-b .btn.sm { min-height: 44px; }
+
+/* The interview is a conversation like the basics chat. */
+.iv .msg-ai .why { font-size: .9375rem; line-height: 1.4; color: var(--ink3); }
+.iv .msg-user { text-align: right; white-space: pre-line; overflow-wrap: anywhere; }
+.iv .msg-ai p { overflow-wrap: anywhere; }
+.composer-bar.reply .btn[disabled] { opacity: .5; }
+
+@media (prefers-reduced-motion: reduce) {
+  .rk-prog i { transition: none; }
+}

@@ -205,7 +205,7 @@ import { A as C4A } from "../app.js";
   function checkTone(st) { return st.key === 'ok' ? 'on' : (st.key === 'change' || st.key === 'due') ? 'warn' : ''; }
   function checkRow(x) {
     var id = x.id, M = D.CHECK_META[id], st = checkStatus(id);
-    return '<a class="chk-row" href="#chk-' + id + '" data-t="' + id + '" data-check="' + id + '">' + H.tIc(id, 26) +
+    return '<a class="chk-row" href="#chk-' + id + '" data-t="' + id + '" data-check="' + id + '">' + H.tIc(id, 26) + (A.risk ? A.risk.sr(id) : '') +
       '<span class="chk-b"><span class="chk-h"><span class="chk-name">' + esc(M.name) + '</span>' + pill(st.label, checkTone(st)) + '</span>' +
       '<span class="chk-m"><span><span class="m-l">Last:</span> ' + esc(st.last.replace(/^Last: /, '').replace(/, you found something$/, '')) + '</span><span><span class="m-l">How often:</span> ' + esc(M.short) + '</span><span><span class="m-l">Takes:</span> about ' + M.min + ' min</span></span></span>' +
       H.chev() + '</a>';
@@ -389,7 +389,7 @@ import { A as C4A } from "../app.js";
     h += '<div class="note">Your invitation letter is the source of truth. It tells you whether and when you are invited, and where to go. This page describes the programmes, not your own invitation.</div>';
     ids.forEach(function (id) {
       var T = D.TOPICS[id], n = D.NAT[id], inf = A.scanInfo(n.scan);
-      h += '<article class="card nat-card" data-t="' + id + '" aria-labelledby="nat-' + id + '"><div class="nat-h"><span class="ic" data-t="' + id + '" aria-hidden="true">' + A.organ(id, 26) + '</span><div class="cell-b"><h2 class="h3" id="nat-' + id + '">' + esc(A.sname(id)) + '</h2>' +
+      h += '<article class="card nat-card" data-t="' + id + '" aria-labelledby="nat-' + id + '"><div class="nat-h"><span class="ic" data-t="' + id + '" aria-hidden="true">' + A.organ(id, 26) + (A.risk ? A.risk.dot(id) : '') + '</span><div class="cell-b"><h2 class="h3" id="nat-' + id + '">' + esc(A.sname(id)) + '</h2>' +
         '<span class="s-lab-d">' + esc(n.kind) + '</span></div></div><div>' + pill('By invitation letter') + '</div>' +
         '<p class="body">' + esc(H.firstSentences(T.screeningText, 2)) + '</p>' +
         '<div class="metas">' + meta('user', 'Who', n.ages) + meta('repeat', 'How often', n.freq.toLowerCase()) + meta('scan', 'The test', n.test) + meta('calendar', 'Last', inf.lastText) + '</div>' +
